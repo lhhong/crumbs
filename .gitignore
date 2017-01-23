@@ -2,3 +2,5 @@ app-main/node_modules
 app-main/bower_components
 /**/*.iml
 .idea
+/**/.DS_Store
+.DS_Store
