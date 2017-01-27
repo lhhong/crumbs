@@ -8,3 +8,5 @@ ethereum/logs
 ethereum/database
 ethereum/privateDB
 /**/target
+logs/
+privateDB/
