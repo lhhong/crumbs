@@ -2,11 +2,9 @@ package com.crumbs.rest;
 
 
 import com.crumbs.ethereum.EthereumBean;
+import org.ethereum.crypto.ECKey;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 
@@ -35,13 +33,13 @@ public class MyRestController {
     @RequestMapping(value = "/getBalance", method = POST, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public String getAccoutBal(@RequestBody String a) throws IOException {
-        return ethereumBean.getAccount(a).toString();
+        return ethereumBean.getAccountBal(a).toString();
     }
 
-    @RequestMapping(value = "/getBalance", method = POST, produces = APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/sendMockTx", method = POST, produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public String sendMockTx(@RequestBody String a) throws IOException {
-        return ethereumBean.getAccount(a).toString();
+    public void sendMockTx(@RequestParam ("sender") String sender, @RequestParam("receiver") String receiver) throws IOException {
+        ethereumBean.sendMockTx(sender, receiver);
     }
 
 }
