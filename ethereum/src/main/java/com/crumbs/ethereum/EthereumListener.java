@@ -1,16 +1,20 @@
 package com.crumbs.ethereum;
 
+import org.apache.log4j.spi.LoggerFactory;
 import org.ethereum.core.Block;
 import org.ethereum.core.TransactionReceipt;
 import org.ethereum.facade.Ethereum;
 import org.ethereum.listener.EthereumListenerAdapter;
+import org.ethereum.mine.MinerListener;
 import org.ethereum.util.BIUtil;
+import org.slf4j.Logger;
 
 import java.math.BigInteger;
 import java.util.List;
 
-public class EthereumListener extends EthereumListenerAdapter {
+public class EthereumListener extends EthereumListenerAdapter implements MinerListener {
 
+	Logger logger = org.slf4j.LoggerFactory.getLogger(EthereumListener.class);
     Ethereum ethereum;
     private boolean syncDone = false;
 
@@ -71,4 +75,28 @@ public class EthereumListener extends EthereumListenerAdapter {
 
     }
 
+    @Override
+    public void miningStarted() {
+        logger.info("Miner started");
+    }
+
+    @Override
+    public void miningStopped() {
+        logger.info("Miner stopped");
+    }
+
+    @Override
+    public void blockMiningStarted(Block block) {
+        logger.info("Start mining block: " + block.getShortDescr());
+    }
+
+    @Override
+    public void blockMined(Block block) {
+        logger.info("Block mined! : \n" + block);
+    }
+
+    @Override
+    public void blockMiningCanceled(Block block) {
+        logger.info("Cancel mining block: " + block.getShortDescr());
+    }
 }
