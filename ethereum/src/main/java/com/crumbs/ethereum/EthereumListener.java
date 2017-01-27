@@ -2,11 +2,13 @@ package com.crumbs.ethereum;
 
 import org.apache.log4j.spi.LoggerFactory;
 import org.ethereum.core.Block;
+import org.ethereum.core.Transaction;
 import org.ethereum.core.TransactionReceipt;
 import org.ethereum.facade.Ethereum;
 import org.ethereum.listener.EthereumListenerAdapter;
 import org.ethereum.mine.MinerListener;
 import org.ethereum.util.BIUtil;
+import org.ethereum.util.ByteUtil;
 import org.slf4j.Logger;
 
 import java.math.BigInteger;
@@ -27,6 +29,12 @@ public class EthereumListener extends EthereumListenerAdapter implements MinerLi
         System.out.println();
         System.out.println("Do something on block: " + block.getNumber());
 
+        List<Transaction> txs = block.getTransactionsList();
+
+        for (Transaction tx : txs) {
+            logger.info("RECEIVED TRANSACTION FROM: " + ByteUtil.toHexString(tx.getSender()));
+            logger.info("DATA: " + ByteUtil.toHexString(tx.getData()));
+        }
         if (syncDone)
             calcNetHashRate(block);
 
