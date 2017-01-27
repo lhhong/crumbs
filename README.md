@@ -1,5 +1,5 @@
 ### To start the app
-go to https://nodejs.org/en/blog/release/v0.8.23/ to download it
+go to https://nodejs.org/en/download/ to download it
 ```bash
 # To run the app
 cd crumbs/app-main
