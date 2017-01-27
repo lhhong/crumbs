@@ -4,3 +4,7 @@ app-main/bower_components
 .idea
 /**/.DS_Store
 .DS_Store
+ethereum/logs
+ethereum/database
+ethereum/privateDB
+/**/target
