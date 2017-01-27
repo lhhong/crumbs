@@ -3,6 +3,7 @@ package com.crumbs.rest;
 
 import com.crumbs.ethereum.EthereumBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,7 @@ import java.io.IOException;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 public class MyRestController {
@@ -30,5 +32,16 @@ public class MyRestController {
         return ethereumBean.getAdminInfo();
     }
 
+    @RequestMapping(value = "/getBalance", method = POST, produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String getAccoutBal(@RequestBody String a) throws IOException {
+        return ethereumBean.getAccount(a).toString();
+    }
+
+    @RequestMapping(value = "/getBalance", method = POST, produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public String sendMockTx(@RequestBody String a) throws IOException {
+        return ethereumBean.getAccount(a).toString();
+    }
 
 }

@@ -10,3 +10,4 @@ ethereum/privateDB
 /**/target
 logs/
 privateDB/
+ethereum/src/main/resources/user.conf
