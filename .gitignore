@@ -11,3 +11,4 @@ ethereum/privateDB
 logs/
 privateDB/
 ethereum/src/main/resources/user.conf
+datafile.mv.db
