@@ -16,46 +16,94 @@ import java.math.BigInteger;
 
 public class EthereumBean{
 
-    Ethereum ethereum;
-    public final Logger logger = LoggerFactory.getLogger(EthereumBean.class);
+	Ethereum ethereum;
+	public final Logger logger = LoggerFactory.getLogger(EthereumBean.class);
 
-    public void start(){
-        this.ethereum = EthereumFactory.createEthereum();
-        this.ethereum.addListener(new EthereumListener(ethereum));
-        this.ethereum.getBlockMiner().startMining();
-    }
+	public void start() {
+		logger.info("EtehreumBean started");
+		this.ethereum = EthereumFactory.createEthereum();
+		this.ethereum.addListener(new EthereumListener(ethereum));
+		this.ethereum.getBlockMiner().startMining();
+	}
 
 
-    public String getBestBlock(){
-        return "" + ethereum.getBlockchain().getBestBlock().getNumber();
-    }
+	public String getBestBlock(){
+		return "" + ethereum.getBlockchain().getBestBlock().getNumber();
+	}
 
-    public void sendMockTx(String sender, String receiver) {
-	    byte[] senderPrivateKey = ByteUtil.hexStringToBytes(sender);
-	    byte[] receiveAddress = ByteUtil.hexStringToBytes(receiver);
-	    byte[] fromAddress = ECKey.fromPrivate(senderPrivateKey).getAddress();
-	    byte[] data = {(byte) 0x3e};
-	    BigInteger nonce = ethereum.getRepository().getNonce(fromAddress);
-	    Transaction tx = new Transaction(
-			    ByteUtil.bigIntegerToBytes(nonce),
-			    ByteUtil.longToBytesNoLeadZeroes(ethereum.getGasPrice()),
-			    ByteUtil.longToBytesNoLeadZeroes(200000),
-			    receiveAddress,
-			    ByteUtil.bigIntegerToBytes(BigInteger.valueOf(1)),  // 1_000_000_000 gwei, 1_000_000_000_000L szabo, 1_000_000_000_000_000L finney, 1_000_000_000_000_000_000L ether
-			    data,
-			    ethereum.getChainIdForNextBlock());
+	public void sendMockTx(String sender, String receiver) {
+		byte[] senderPrivateKey = ByteUtil.hexStringToBytes(sender);
+		byte[] receiveAddress = ByteUtil.hexStringToBytes(receiver);
+		byte[] fromAddress = ECKey.fromPrivate(senderPrivateKey).getAddress();
+		byte[] data = {(byte) 0x3e};
+		BigInteger nonce = ethereum.getRepository().getNonce(fromAddress);
+		Transaction tx = new Transaction(
+				ByteUtil.bigIntegerToBytes(nonce),
+				ByteUtil.longToBytesNoLeadZeroes(ethereum.getGasPrice()),
+				ByteUtil.longToBytesNoLeadZeroes(200000),
+				receiveAddress,
+				ByteUtil.bigIntegerToBytes(BigInteger.valueOf(1)),  // 1_000_000_000 gwei, 1_000_000_000_000L szabo, 1_000_000_000_000_000L finney, 1_000_000_000_000_000_000L ether
+				data,
+				ethereum.getChainIdForNextBlock());
 
-	    tx.sign(ECKey.fromPrivate(senderPrivateKey));
-	    logger.info("<=== Sending transaction: " + tx);
-	    ethereum.submitTransaction(tx);
-    }
+		tx.sign(ECKey.fromPrivate(senderPrivateKey));
+		logger.info("<=== Sending transaction: " + tx);
+		ethereum.submitTransaction(tx);
+	}
 
-    public BigInteger getAccountBal(String addr) {
-    	return ethereum.getRepository().getBalance(ByteUtil.hexStringToBytes(addr));
-    }
+	public final String RICH_KEY = "9afb9a8e71fa44275fca9d421760cd712abb1493c396d4d36fd3f0a01f1cc9f6";
+	public final String RICH_ADDR = "c82f55da06ec7a3b1c878aa48ad0f8b78257e6d0";
 
-    public String getAdminInfo() {
-        return JSON.toJSONString(ethereum.getAdminInfo());
-    }
+	public void sendEtherFromRich (byte[] receiveAddr) {
+		ethereum.submitTransaction(createTx(RICH_KEY, receiveAddr, 100000000, null));
+	}
+
+	public Transaction createTx(String senderPrivKey, String receiverAddr, long etherToTransact, byte[] data) {
+		return createTx(ByteUtil.hexStringToBytes(senderPrivKey), receiverAddr, etherToTransact, data);
+	}
+
+	public Transaction createTx(String senderPrivKey, byte[] receiverAddr, long etherToTransact, byte[] data) {
+		return createTx(ByteUtil.hexStringToBytes(senderPrivKey), receiverAddr, etherToTransact, data);
+	}
+
+	public Transaction createTx(byte[] senderPrivKey, String receiverAddr, long etherToTransact, byte[] data) {
+		return createTx(senderPrivKey, ByteUtil.hexStringToBytes(receiverAddr), etherToTransact, data);
+	}
+
+	public Transaction createTx(ECKey senderKey, String receiverAddr, long etherToTransact, byte[] data) {
+		return createTx(senderKey, ByteUtil.hexStringToBytes(receiverAddr), etherToTransact, data);
+	}
+
+	public Transaction createTx(byte[] senderPrivKey, byte[] receiverAddr, long etherToTransact, byte[] data) {
+		ECKey senderKey = ECKey.fromPrivate(senderPrivKey);
+		return createTx(senderKey, receiverAddr, etherToTransact, data);
+	}
+
+	public Transaction createTx(ECKey senderKey, byte[] receiverAddr, long etherToTransact, byte[] data) {
+		BigInteger nonce = ethereum.getRepository().getNonce(senderKey.getAddress());
+		Transaction tx = new Transaction(
+				ByteUtil.bigIntegerToBytes(nonce),
+				ByteUtil.longToBytesNoLeadZeroes(ethereum.getGasPrice()),
+				ByteUtil.longToBytesNoLeadZeroes(4000000), //gas limit on computation, hard code to high value for prototype purpose
+				receiverAddr,
+				ByteUtil.bigIntegerToBytes(BigInteger.valueOf(etherToTransact)),
+				data,
+				ethereum.getChainIdForNextBlock()
+		);
+		tx.sign(senderKey);
+		return tx;
+	}
+
+	public BigInteger getAccountBal(String addr) {
+		return ethereum.getRepository().getBalance(ByteUtil.hexStringToBytes(addr));
+	}
+
+	public BigInteger getAccountBal(byte[] addr) {
+		return ethereum.getRepository().getBalance(addr);
+	}
+
+	public String getAdminInfo() {
+		return JSON.toJSONString(ethereum.getAdminInfo());
+	}
 
 }
