@@ -100,7 +100,7 @@ public class EthereumBean{
 	}
 
 	public void sendEtherFromRich (byte[] receiveAddr) {
-		sendTransaction(createTx(RICH_KEY, receiveAddr, 100000000, null));
+		sendTransaction(createTx(RICH_KEY, receiveAddr, 5800000000000000000L, null));
 	}
 
 	public Transaction createTx(byte[] data) {
