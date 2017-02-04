@@ -12,3 +12,4 @@ logs/
 privateDB/
 ethereum/src/main/resources/user.conf
 datafile.mv.db
+datafile.trace.db
