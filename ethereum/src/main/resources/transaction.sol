@@ -11,8 +11,8 @@ contract transaction {
 	struct Member {
 		address addr;
 		string name;
-		uint x; //x, y coordinate of member
-		uint y;
+		int x; //x, y coordinate of member
+		int y;
 	}
 	struct MemberList {
 		mapping(address => Member) members;
@@ -38,7 +38,7 @@ contract transaction {
 	TxList list;
 	MemberList memList;
 
-	function register(string _name, uint _x, uint _y) {
+	function register(string _name, int _x, int _y) {
 		uint key = 0;
 		while (key < memList.nextKey && !memList.keys[key].deleted && !(memList.keys[key].addr == msg.sender)) {
 			key++;
@@ -98,7 +98,7 @@ contract transaction {
 		}
 	}
 
-	function getTxById(string _uuid) constant returns (string _name, uint _x, uint _y, uint256 _price, string _item, uint32 _quantity, bool _toSell) {
+	function getTxById(string _uuid) constant returns (string _name, int _x, int _y, uint256 _price, string _item, uint32 _quantity, bool _toSell) {
 		if (list.txs[_uuid].pending || list.txs[_uuid].quantity == 0) {
 			throw;
 		}
@@ -111,7 +111,7 @@ contract transaction {
 		_toSell = list.txs[_uuid].toSell;
 	}
 
-	function checkStatus(string _uuid) constant returns (bool _pending, string _name, uint _x, uint _y, uint256 _transportPrice) {
+	function checkStatus(string _uuid) constant returns (bool _pending, string _name, int _x, int _y, uint256 _transportPrice) {
 		if (list.txs[_uuid].quantity == 0) {
 			throw;
 		}
@@ -146,10 +146,21 @@ contract transaction {
 			if (msg.value < totalPrice) {
 				throw;
 			}
-			list.txs[_uuid].from.addr.call.gas(2000000).value(totalPrice);
-		}	
-		list.txs[_uuid].accepter.addr.call.gas(2000000).value(totalPrice);
-		//TODO delete Tx
+			if (!list.txs[_uuid].from.addr.send(totalPrice)) {
+			    throw;
+			}
+		}
+		if (!list.txs[_uuid].accepter.addr.send(totalPrice)) {
+		    throw;
+		}
+		delete list.txs[_uuid];
+	}
+
+	function deleteTx(string _uuid) {
+	    if (msg.sender != list.txs[_uuid].from.addr) {
+	       throw;
+	    }
+	    delete list.txs[_uuid];
 	}
 }	
 
