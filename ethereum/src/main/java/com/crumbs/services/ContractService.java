@@ -11,6 +11,7 @@ import org.ethereum.core.Transaction;
 import org.ethereum.core.TransactionReceipt;
 import org.ethereum.solidity.compiler.CompilationResult;
 import org.ethereum.solidity.compiler.SolidityCompiler;
+import org.ethereum.util.ByteUtil;
 import org.ethereum.vm.program.ProgramResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +72,7 @@ public class ContractService {
 				crumbsContract.setBin(metadata.bin);
 				crumbsContract.setSolc(metadata.solInterface);
 				crumbsContract.setMetadata(metadata.metadata);
+				logger.info("CONTRACT ADDRESS ON CREATION: " + ByteUtil.toHexString(tx.getContractAddress()));
 				//crumbsContractRepo.delete("mortal_contract");
 				crumbsContractRepo.save(crumbsContract);
 			}
@@ -88,6 +90,10 @@ public class ContractService {
 
 		CrumbsContract testContract = crumbsContractRepo.findOne("mortal_contract");
 		logger.info("loaded contract : " + JSON.toJSONString(testContract, true) );
+		if (!testContract.isIncluded()) {
+			logger.warn("Contract not yet included to chain");
+			return;
+		}
 		logger.info("Calling the contract constructor");
 		CallTransaction.Contract contract = new CallTransaction.Contract(testContract.getAbi());
 		byte[] functionCallBytes = contract.getConstructor().encodeArguments("HI THERE!");
@@ -98,10 +104,17 @@ public class ContractService {
 
 	public void callMortalGreet() {
 		CrumbsContract testContract = crumbsContractRepo.findOne("mortal_contract");
+		logger.info("loaded contract : " + JSON.toJSONString(testContract, true) );
+		logger.info("Contract address: " + ByteUtil.toHexString(testContract.getContractAddr()));
+		if (!testContract.isIncluded()) {
+			logger.warn("Contract not yet included to chain");
+			return;
+		}
 		CallTransaction.Contract contract = new CallTransaction.Contract(testContract.getAbi());
 		ProgramResult r = ethereumBean.callConstantFunction(Hex.toHexString(testContract.getContractAddr()), accountBean.getKey(),
 				contract.getByName("greet"));
 		Object[] ret = contract.getByName("greet").decodeResult(r.getHReturn());
+		logger.info("result: " + JSON.toJSONString(ret));
 		logger.info("Current contract data member value: " + ret[0]);
 	}
 }
