@@ -40,7 +40,7 @@ public class ContractService {
 	@Autowired
 	private AccountBean accountBean;
 
-	private final String SAMPLE_CONTRACT = "contract mortal { address owner; function mortal() { owner = msg.sender; } function kill() { if (msg.sender == owner) selfdestruct(owner); } } contract greeter is mortal {string greeting = \"default\"; function greeter(string _greeting) public { greeting = _greeting; } function greet() constant returns (string) { return greeting; } }";
+	private final String SAMPLE_CONTRACT = "contract mortal { address owner; function mortal() { owner = msg.sender; } function kill() { if (msg.sender == owner) selfdestruct(owner); } } contract greeter is mortal {string greeting = \"default\"; function changeGreeter(string _greeting) public { greeting = _greeting; } function greet() constant returns (string) { return greeting; } }";
 
 	public void testContract() throws IOException{
 		compileAndSend(SAMPLE_CONTRACT);
@@ -96,7 +96,7 @@ public class ContractService {
 		}
 		logger.info("Calling the contract constructor");
 		CallTransaction.Contract contract = new CallTransaction.Contract(testContract.getAbi());
-		byte[] functionCallBytes = contract.getConstructor().encodeArguments("HI THERE!");
+		byte[] functionCallBytes = contract.getByName("changeGreeter").encode("HI THERE!");
 		ethereumBean.sendTransaction(testContract.getContractAddr(), functionCallBytes);
 		logger.info("Contract modified!");
 

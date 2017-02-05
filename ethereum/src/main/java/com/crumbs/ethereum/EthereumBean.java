@@ -40,30 +40,6 @@ public class EthereumBean{
 		return crumbsContractRepo;
 	}
 
-	public String getBestBlock(){
-		return "" + ethereum.getBlockchain().getBestBlock().getNumber();
-	}
-
-	public void sendMockTx(String sender, String receiver) {
-		byte[] senderPrivateKey = ByteUtil.hexStringToBytes(sender);
-		byte[] receiveAddress = ByteUtil.hexStringToBytes(receiver);
-		byte[] fromAddress = ECKey.fromPrivate(senderPrivateKey).getAddress();
-		byte[] data = {(byte) 0x3e};
-		BigInteger nonce = ethereum.getRepository().getNonce(fromAddress);
-		Transaction tx = new Transaction(
-				ByteUtil.bigIntegerToBytes(nonce),
-				ByteUtil.longToBytesNoLeadZeroes(ethereum.getGasPrice()),
-				ByteUtil.longToBytesNoLeadZeroes(200000),
-				receiveAddress,
-				ByteUtil.bigIntegerToBytes(BigInteger.valueOf(1)),  // 1_000_000_000 gwei, 1_000_000_000_000L szabo, 1_000_000_000_000_000L finney, 1_000_000_000_000_000_000L ether
-				data,
-				ethereum.getChainIdForNextBlock());
-
-		tx.sign(ECKey.fromPrivate(senderPrivateKey));
-		logger.info("<=== Sending transaction: " + tx);
-		ethereum.submitTransaction(tx);
-	}
-
 	public ProgramResult callConstantFunction(String receiveAddress, ECKey senderPrivateKey,
 	                                          CallTransaction.Function function, Object... funcArgs) {
 		return ethereum.callConstantFunction(receiveAddress, senderPrivateKey, function, funcArgs);
@@ -107,7 +83,7 @@ public class EthereumBean{
 	}
 
 	public void sendEtherFromRich (byte[] receiveAddr) {
-		sendTransaction(createTx(RICH_KEY, receiveAddr, 5800000000000000000L, null));
+		sendTransaction(createTx(RICH_KEY, receiveAddr, 9000000000000L , null));
 	}
 
 	public Transaction createTx(byte[] data) {
@@ -146,7 +122,7 @@ public class EthereumBean{
 				ByteUtil.longToBytesNoLeadZeroes(ethereum.getGasPrice()),
 				ByteUtil.longToBytesNoLeadZeroes(4000000), //gas limit on computation, hard code to high value for prototype purpose
 				receiverAddr,
-				ByteUtil.bigIntegerToBytes(BigInteger.valueOf(etherToTransact)),
+				ByteUtil.bigIntegerToBytes(new BigInteger(Long.toString(etherToTransact) + "000000000000000000")),
 				data,
 				ethereum.getChainIdForNextBlock()
 		);
@@ -166,4 +142,27 @@ public class EthereumBean{
 		return JSON.toJSONString(ethereum.getAdminInfo());
 	}
 
+	public void sendMockTx(String sender, String receiver) {
+		byte[] senderPrivateKey = ByteUtil.hexStringToBytes(sender);
+		byte[] receiveAddress = ByteUtil.hexStringToBytes(receiver);
+		byte[] fromAddress = ECKey.fromPrivate(senderPrivateKey).getAddress();
+		byte[] data = {(byte) 0x3e};
+		BigInteger nonce = ethereum.getRepository().getNonce(fromAddress);
+		Transaction tx = new Transaction(
+				ByteUtil.bigIntegerToBytes(nonce),
+				ByteUtil.longToBytesNoLeadZeroes(ethereum.getGasPrice()),
+				ByteUtil.longToBytesNoLeadZeroes(200000),
+				receiveAddress,
+				ByteUtil.bigIntegerToBytes(BigInteger.valueOf(1)),  // 1_000_000_000 gwei, 1_000_000_000_000L szabo, 1_000_000_000_000_000L finney, 1_000_000_000_000_000_000L ether
+				data,
+				ethereum.getChainIdForNextBlock());
+
+		tx.sign(ECKey.fromPrivate(senderPrivateKey));
+		logger.info("<=== Sending transaction: " + tx);
+		ethereum.submitTransaction(tx);
+	}
+
+	public String getBestBlock(){
+		return "" + ethereum.getBlockchain().getBestBlock().getNumber();
+	}
 }
