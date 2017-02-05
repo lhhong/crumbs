@@ -7,7 +7,6 @@ import com.crumbs.repositories.TestRepo;
 import com.crumbs.services.ContractService;
 import com.crumbs.services.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -43,10 +42,16 @@ public class TestControllers {
 		contractService.testContract();
 	}
 
-	@RequestMapping(value = "/run-sample-contract", method = GET)
+	@RequestMapping(value = "/modify-sample-contract", method = GET)
+	@ResponseBody
+	public void modifySampleContract() throws IOException {
+		contractService.modifyMortalGreeting();
+	}
+
+	@RequestMapping(value = "/test-sample-contract", method = GET)
 	@ResponseBody
 	public void testSampleContract() throws IOException {
-		contractService.getContractResult();
+		contractService.callMortalGreet();
 	}
 
 	@RequestMapping(value = "/test", method = POST, produces = APPLICATION_JSON_VALUE)

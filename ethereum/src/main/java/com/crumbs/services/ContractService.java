@@ -84,7 +84,7 @@ public class ContractService {
 		ethereumBean.sendTransaction(Hex.decode(metadata.bin), listener);
 	}
 
-	public void getContractResult() {
+	public void modifyMortalGreeting() {
 
 		CrumbsContract testContract = crumbsContractRepo.findOne("mortal_contract");
 		logger.info("loaded contract : " + JSON.toJSONString(testContract, true) );
@@ -94,6 +94,11 @@ public class ContractService {
 		ethereumBean.sendTransaction(testContract.getContractAddr(), functionCallBytes);
 		logger.info("Contract modified!");
 
+	}
+
+	public void callMortalGreet() {
+		CrumbsContract testContract = crumbsContractRepo.findOne("mortal_contract");
+		CallTransaction.Contract contract = new CallTransaction.Contract(testContract.getAbi());
 		ProgramResult r = ethereumBean.callConstantFunction(Hex.toHexString(testContract.getContractAddr()), accountBean.getKey(),
 				contract.getByName("greet"));
 		Object[] ret = contract.getByName("greet").decodeResult(r.getHReturn());
