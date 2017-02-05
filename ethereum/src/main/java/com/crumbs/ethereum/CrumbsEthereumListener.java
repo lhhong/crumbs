@@ -1,5 +1,7 @@
 package com.crumbs.ethereum;
 
+import com.crumbs.models.CrumbsContract;
+import com.crumbs.repositories.CrumbsContractRepo;
 import org.ethereum.core.Block;
 import org.ethereum.core.PendingState;
 import org.ethereum.core.Transaction;
@@ -11,6 +13,7 @@ import org.ethereum.util.BIUtil;
 import org.ethereum.util.ByteUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -21,8 +24,12 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 	private Ethereum ethereum;
 	private boolean syncDone = false;
 
-	public CrumbsEthereumListener(Ethereum ethereum) {
+	private EthereumBean bean;
+	private CrumbsContractRepo crumbsContractRepo;
+
+	public CrumbsEthereumListener(Ethereum ethereum, EthereumBean bean) {
 		this.ethereum = ethereum;
+		this.bean = bean;
 	}
 
 	@Override
@@ -35,6 +42,17 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 			//TODO check if database has the transaction and remove it
 		}
 		if (state.compareTo(PendingTransactionState.INCLUDED) == 0) {
+			Transaction tx = txReceipt.getTransaction();
+			if (txReceipt.getTransaction().isContractCreation()) {
+				if (crumbsContractRepo == null) {
+					crumbsContractRepo = bean.getCrumbsContractRepo();
+				}
+				CrumbsContract crumbsContract = crumbsContractRepo.findOne("mortal_contract");
+				crumbsContract.setTxHash(tx.getHash());
+				crumbsContract.setContractAddr(tx.getContractAddress());
+				crumbsContract.setIncluded(true);
+				crumbsContractRepo.save(crumbsContract);
+			}
 			//TODO process and save transaction to db
 		}
 	}

@@ -1,6 +1,7 @@
 package com.crumbs.ethereum;
 
 import com.alibaba.fastjson.JSON;
+import com.crumbs.repositories.CrumbsContractRepo;
 import org.ethereum.core.CallTransaction;
 import org.ethereum.core.Transaction;
 import org.ethereum.crypto.ECKey;
@@ -21,17 +22,23 @@ public class EthereumBean{
 	@Autowired
 	private AccountBean accountBean;
 
+	@Autowired
+	private CrumbsContractRepo crumbsContractRepo;
+
 	Ethereum ethereum;
 	public final Logger logger = LoggerFactory.getLogger(EthereumBean.class);
 
 	public void start() {
 		logger.info("EtehreumBean started");
 		this.ethereum = EthereumFactory.createEthereum();
-		this.ethereum.addListener(new CrumbsEthereumListener(ethereum));
+		this.ethereum.addListener(new CrumbsEthereumListener(ethereum, this));
 		this.ethereum.getBlockMiner().addListener(new CrumbsMinerListener());
 		this.ethereum.getBlockMiner().startMining();
 	}
 
+	public CrumbsContractRepo getCrumbsContractRepo() {
+		return crumbsContractRepo;
+	}
 
 	public String getBestBlock(){
 		return "" + ethereum.getBlockchain().getBestBlock().getNumber();

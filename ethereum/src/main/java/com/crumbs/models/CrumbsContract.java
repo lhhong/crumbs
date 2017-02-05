@@ -18,6 +18,7 @@ public class CrumbsContract {
 	private String contractName;
 	private byte[] txHash;
 	private byte[] contractAddr;
+	private boolean included = false;
 
 	@Lob
 	@Column (length = 8195)
