@@ -2,10 +2,7 @@ package com.crumbs.ethereum;
 
 import com.crumbs.models.CrumbsContract;
 import com.crumbs.repositories.CrumbsContractRepo;
-import org.ethereum.core.Block;
-import org.ethereum.core.PendingState;
-import org.ethereum.core.Transaction;
-import org.ethereum.core.TransactionReceipt;
+import org.ethereum.core.*;
 import org.ethereum.facade.Ethereum;
 import org.ethereum.listener.EthereumListener;
 import org.ethereum.listener.EthereumListenerAdapter;
@@ -30,6 +27,10 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 	public CrumbsEthereumListener(Ethereum ethereum, EthereumBean bean) {
 		this.ethereum = ethereum;
 		this.bean = bean;
+	}
+
+	@Override
+	public void onTransactionExecuted(TransactionExecutionSummary summary) {
 	}
 
 	@Override

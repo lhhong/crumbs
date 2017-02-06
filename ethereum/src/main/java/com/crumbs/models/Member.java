@@ -18,6 +18,6 @@ public class Member implements Serializable {
 
 	private byte[] addr;
 	private String name;
-	private int x;
-	private int y;
+	private long x;
+	private long y;
 }
