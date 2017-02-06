@@ -11,6 +11,7 @@ import org.ethereum.util.ByteUtil;
 import org.ethereum.vm.program.ProgramResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spongycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigInteger;
@@ -40,6 +41,10 @@ public class EthereumBean{
 		return crumbsContractRepo;
 	}
 
+	public ProgramResult callConstantFunction(byte[] receiveAddress, CallTransaction.Function function, Object... funcArgs) {
+		return ethereum.callConstantFunction(Hex.toHexString(receiveAddress), accountBean.getKey(), function, funcArgs);
+	}
+
 	public ProgramResult callConstantFunction(String receiveAddress, ECKey senderPrivateKey,
 	                                          CallTransaction.Function function, Object... funcArgs) {
 		return ethereum.callConstantFunction(receiveAddress, senderPrivateKey, function, funcArgs);
@@ -67,6 +72,10 @@ public class EthereumBean{
 		sendTransaction(createTx(receiverAddress, data));
 	}
 
+	public void sendTransaction(byte[] contractAddr, long payment, byte[] functionCallBytes) {
+		sendTransaction(createTx(contractAddr, payment, functionCallBytes));
+	}
+
 	public void sendTransaction(Transaction tx) {
 		SendingTxListener listener = new SendingTxListener() {
 			@Override
@@ -92,6 +101,10 @@ public class EthereumBean{
 
 	public Transaction createTx(byte[] receiverAddr, byte[] data) {
 		return createTx(accountBean.getKey(), receiverAddr, 0, data);
+	}
+
+	public Transaction createTx(byte[] receiverAddr, long value, byte[] data) {
+		return createTx(accountBean.getKey(), receiverAddr, value, data);
 	}
 
 	public Transaction createTx(String senderPrivKey, String receiverAddr, long etherToTransact, byte[] data) {
@@ -165,4 +178,5 @@ public class EthereumBean{
 	public String getBestBlock(){
 		return "" + ethereum.getBlockchain().getBestBlock().getNumber();
 	}
+
 }

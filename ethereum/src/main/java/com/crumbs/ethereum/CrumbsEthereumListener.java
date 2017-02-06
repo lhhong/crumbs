@@ -43,7 +43,7 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 		}
 		if (state.compareTo(PendingTransactionState.INCLUDED) == 0) {
 			Transaction tx = txReceipt.getTransaction();
-			if (txReceipt.getTransaction().isContractCreation()) {
+			if (tx.isContractCreation()) {
 				if (crumbsContractRepo == null) {
 					crumbsContractRepo = bean.getCrumbsContractRepo();
 				}

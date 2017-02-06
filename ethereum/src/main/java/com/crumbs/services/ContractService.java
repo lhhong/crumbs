@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigInteger;
 
 /**
  * Created by low on 4/2/17 2:38 PM.
@@ -84,6 +85,29 @@ public class ContractService {
 			}
 		};
 		ethereumBean.sendTransaction(Hex.decode(metadata.bin), listener);
+	}
+
+	public void sendToTxContract(String functionName, long payment, Object... args) {
+		CrumbsContract contractDef = crumbsContractRepo.findOne("crumbs_tx");
+		if (contractDef == null) {
+			logger.error("crumbs_tx contract not loaded");
+			return;
+		}
+		CallTransaction.Contract contract = new CallTransaction.Contract(contractDef.getAbi());
+		byte[] functionCallBytes = contract.getByName(functionName).encode(args);
+		ethereumBean.sendTransaction(contractDef.getContractAddr(), payment, functionCallBytes);
+		logger.info("transaction to crumbs_tx sent");
+	}
+
+	public Object[] constFunction(String functionName, Object... args) {
+		CrumbsContract contractDef = crumbsContractRepo.findOne("crumbs_tx");
+		if (contractDef == null) {
+			logger.error("crumbs_tx contract not loaded");
+			return null;
+		}
+		CallTransaction.Contract contract = new CallTransaction.Contract(contractDef.getAbi());
+		ProgramResult r = ethereumBean.callConstantFunction(contractDef.getContractAddr(), contract.getByName(functionName), args);
+		return contract.getByName(functionName).decodeResult(r.getHReturn());
 	}
 
 	public void modifyMortalGreeting() {
