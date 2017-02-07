@@ -20,4 +20,5 @@ public class Member implements Serializable {
 	private String name;
 	private long x;
 	private long y;
+	private boolean own;
 }

@@ -30,6 +30,7 @@ contract transaction {
 		Member accepter;
 		uint256 transportPrice;
 		bool pending;
+		bool done;
 	}
 	struct TxList {
 		mapping(string => Tx) txs;
@@ -82,7 +83,7 @@ contract transaction {
 		bytes memory _bb = bytes(_b);
 		string memory ab = new string(_ba.length + _bb.length + 1);
 		bytes memory ba = bytes(ab);
-		byte memory sc = ';';
+		byte sc = ';';
 		uint k = 0;
 		for (uint i = 0; i < _ba.length; i++) ba[k++] = _ba[i];
 		ba[k++] = sc;
@@ -90,22 +91,33 @@ contract transaction {
 		return string(ba);
 	}
 
+	function getAllKey() constant returns (string all) {
+		all = "";
+		uint key = 0;
+		while (key < list.nextKey) {
+			if (!list.keys[key].deleted) {
+				all = strConcat(all, list.keys[key].uuid);
+			}
+		}
+	}
+
 	function getAllAvailKey() constant returns (string all) {
 		all = "";
 		uint key = 0;
 		while (key < list.nextKey) {
 			if (!list.keys[key].deleted) {
-				if (!list.txs[list.keys[key].uuid].pending) {
+				if (!list.txs[list.keys[key].uuid].pending && !list.txs[list.keys[key].uuid].done) {
 					all = strConcat(all, list.keys[key].uuid);
 				}
 			}
 		}
 	}
 
-	function getTxById(string _uuid) constant returns (string _name, int64 _x, int64 _y, uint256 _price, string _item, uint32 _quantity, uint64 _expiry, bool _toSell) {
+	function getTxById(string _uuid) constant returns (address _addr, string _name, int64 _x, int64 _y, uint256 _price, string _item, uint32 _quantity, uint64 _expiry, bool _toSell, bool _pending, bool _done) {
 		if (list.txs[_uuid].pending || list.txs[_uuid].quantity == 0) {
 			throw;
 		}
+		_addr = list.txs[_uuid].from.addr;
 		_name = list.txs[_uuid].from.name;
 		_x = list.txs[_uuid].from.x;
 		_y = list.txs[_uuid].from.y;
@@ -114,9 +126,11 @@ contract transaction {
 		_quantity = list.txs[_uuid].quantity;
 		_expiry = list.txs[_uuid].expiry;
 		_toSell = list.txs[_uuid].toSell;
+		_pending = list.txs[_uuid].pending;
+		_done = list.txs[_uuid].done;
 	}
 
-	function checkStatus(string _uuid) constant returns (bool _pending, string _name, int64 _x, int64 _y, uint256 _transportPrice) {
+	function checkPendingStatus(string _uuid) constant returns (bool _pending, string _name, int64 _x, int64 _y, uint256 _transportPrice) {
 		if (list.txs[_uuid].quantity == 0) {
 			throw;
 		}
@@ -125,6 +139,13 @@ contract transaction {
 		_x = list.txs[_uuid].accepter.x;
 		_y = list.txs[_uuid].accepter.y;
 		_transportPrice = list.txs[_uuid].transportPrice;
+	}
+
+	function checkDoneStatus(string _uuid) constant returns (bool _done) {
+		if (list.txs[_uuid].quantity == 0) {
+			throw;
+		}
+		_done = list.txs[_uuid].done;
 	}
 
 	function accept(string _uuid, uint256 _transportPrice) payable {
@@ -172,12 +193,15 @@ contract transaction {
 		if (!list.txs[_uuid].accepter.addr.send(totalPrice)) {
 		    throw;
 		}
+		list.txs[_uuid].done = true;
+		/*
 		uint key = 0;
 		while (key < list.nextKey || !stringsEqual(list.keys[key].uuid, _uuid)) {
 		    key++;
 		}
 		list.keys[key].deleted = true;
 		delete list.txs[_uuid];
+		*/
 	}
 
 	function deleteTx(string _uuid) {

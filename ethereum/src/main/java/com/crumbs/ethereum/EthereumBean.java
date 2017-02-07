@@ -2,6 +2,8 @@ package com.crumbs.ethereum;
 
 import com.alibaba.fastjson.JSON;
 import com.crumbs.repositories.CrumbsContractRepo;
+import com.crumbs.services.StateUpdater;
+import com.crumbs.util.CurrencyUtil;
 import org.ethereum.core.CallTransaction;
 import org.ethereum.core.Transaction;
 import org.ethereum.crypto.ECKey;
@@ -26,6 +28,9 @@ public class EthereumBean{
 	@Autowired
 	private CrumbsContractRepo crumbsContractRepo;
 
+	@Autowired
+	private StateUpdater stateUpdater;
+
 	Ethereum ethereum;
 	public final Logger logger = LoggerFactory.getLogger(EthereumBean.class);
 
@@ -39,6 +44,10 @@ public class EthereumBean{
 
 	public CrumbsContractRepo getCrumbsContractRepo() {
 		return crumbsContractRepo;
+	}
+
+	public StateUpdater getStateUpdater() {
+		return stateUpdater;
 	}
 
 	public ProgramResult callConstantFunction(byte[] receiveAddress, CallTransaction.Function function, Object... funcArgs) {
@@ -135,7 +144,7 @@ public class EthereumBean{
 				ByteUtil.longToBytesNoLeadZeroes(ethereum.getGasPrice()),
 				ByteUtil.longToBytesNoLeadZeroes(4000000), //gas limit on computation, hard code to high value for prototype purpose
 				receiverAddr,
-				ByteUtil.bigIntegerToBytes(new BigInteger(Long.toString(etherToTransact) + "000000000000000000")),
+				ByteUtil.bigIntegerToBytes(CurrencyUtil.etherToWei(etherToTransact)),
 				data,
 				ethereum.getChainIdForNextBlock()
 		);

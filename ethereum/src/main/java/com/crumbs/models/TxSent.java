@@ -30,4 +30,6 @@ public class TxSent implements Serializable {
 	Member accepter;
 	BigInteger transportPrice;
 	boolean pending;
+	boolean included;
+	boolean done;
 }

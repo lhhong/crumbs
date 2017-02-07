@@ -29,5 +29,7 @@ public class TxAccepted {
 	Member from;
 	BigInteger transportPrice;
 	boolean pending;
+	boolean included;
+	boolean done;
 
 }

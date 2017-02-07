@@ -39,12 +39,14 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 		logger.info("State: " + state.name());
 		logger.info("Tx receipt: " + txReceipt.toString());
 		logger.info("TX: " + txReceipt.getTransaction().toString());
+		bean.getStateUpdater().update();
 		if (state.compareTo(PendingTransactionState.PENDING) == 0) {
 			//TODO check if database has the transaction and remove it
 		}
 		if (state.compareTo(PendingTransactionState.INCLUDED) == 0) {
 			Transaction tx = txReceipt.getTransaction();
 			if (tx.isContractCreation()) {
+				/*
 				if (crumbsContractRepo == null) {
 					crumbsContractRepo = bean.getCrumbsContractRepo();
 				}
@@ -54,6 +56,7 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 				crumbsContract.setIncluded(true);
 				logger.info("CONTRACT ADDRESS DISCOVERED: " +  ByteUtil.toHexString(tx.getContractAddress()));
 				crumbsContractRepo.save(crumbsContract);
+				*/
 			}
 			//TODO process and save transaction to db
 		}
