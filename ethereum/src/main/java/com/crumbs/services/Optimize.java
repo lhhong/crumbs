@@ -21,6 +21,7 @@ public class Optimize {
 		return 4;
 	}
 
+	//TODO to pass in calculated transport cost into it as well
 	public List<TransactionVM> rankOffers(List<TxAccepted> offers) {
 		List<TransactionVM> lists = new ArrayList<>();
 		for (TxAccepted tx : offers) {
