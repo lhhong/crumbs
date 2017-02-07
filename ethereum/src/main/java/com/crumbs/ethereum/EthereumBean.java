@@ -3,7 +3,7 @@ package com.crumbs.ethereum;
 import com.alibaba.fastjson.JSON;
 import com.crumbs.repositories.CrumbsContractRepo;
 import com.crumbs.services.StateUpdater;
-import com.crumbs.util.CurrencyUtil;
+import com.crumbs.util.CrumbsUtil;
 import org.ethereum.core.CallTransaction;
 import org.ethereum.core.Transaction;
 import org.ethereum.crypto.ECKey;
@@ -144,7 +144,7 @@ public class EthereumBean{
 				ByteUtil.longToBytesNoLeadZeroes(ethereum.getGasPrice()),
 				ByteUtil.longToBytesNoLeadZeroes(4000000), //gas limit on computation, hard code to high value for prototype purpose
 				receiverAddr,
-				ByteUtil.bigIntegerToBytes(CurrencyUtil.etherToWei(etherToTransact)),
+				ByteUtil.bigIntegerToBytes(CrumbsUtil.etherToWei(etherToTransact)),
 				data,
 				ethereum.getChainIdForNextBlock()
 		);

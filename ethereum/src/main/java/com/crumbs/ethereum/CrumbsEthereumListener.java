@@ -39,7 +39,6 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 		logger.info("State: " + state.name());
 		logger.info("Tx receipt: " + txReceipt.toString());
 		logger.info("TX: " + txReceipt.getTransaction().toString());
-		bean.getStateUpdater().update();
 		if (state.compareTo(PendingTransactionState.PENDING) == 0) {
 			//TODO check if database has the transaction and remove it
 		}
@@ -73,8 +72,8 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 
 	@Override
 	public void onBlock(Block block, List<TransactionReceipt> receipts) {
-		System.out.println();
-		System.out.println("Do something on block: " + block.getNumber());
+		logger.info("Received block: " + block.getNumber());
+		bean.getStateUpdater().update();
 
 		List<Transaction> txs = block.getTransactionsList();
 
@@ -85,7 +84,6 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 		if (syncDone)
 			calcNetHashRate(block);
 
-		System.out.println();
 	}
 
 

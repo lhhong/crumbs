@@ -2,11 +2,8 @@ package com.crumbs.models;
 
 import lombok.Getter;
 import lombok.Setter;
-
 import javax.persistence.*;
-import java.math.BigInteger;
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.io.Serializable;
 
 /**
  * Created by low on 7/2/17 12:19 AM.
@@ -15,21 +12,9 @@ import java.util.Date;
 @Entity
 @Getter
 @Setter
-public class TxAccepted {
+public class TxAccepted extends BasicTx implements Serializable{
 
-	@Id
-	String uuid;
-	BigInteger price;
-	String item;
-	int quantity;
-	Date expiry;
-	boolean isSell;
 	@ManyToOne
-	@JoinColumn(name = "member")
+	@JoinColumn(name = "from")
 	Member from;
-	BigInteger transportPrice;
-	boolean pending;
-	boolean included;
-	boolean done;
-
 }

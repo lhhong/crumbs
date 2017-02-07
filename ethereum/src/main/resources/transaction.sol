@@ -130,11 +130,12 @@ contract transaction {
 		_done = list.txs[_uuid].done;
 	}
 
-	function checkPendingStatus(string _uuid) constant returns (bool _pending, string _name, int64 _x, int64 _y, uint256 _transportPrice) {
+	function checkPendingStatus(string _uuid) constant returns (bool _pending, address _addr, string _name, int64 _x, int64 _y, uint256 _transportPrice) {
 		if (list.txs[_uuid].quantity == 0) {
 			throw;
 		}
 		_pending = list.txs[_uuid].pending;
+		_addr = list.txs[_uuid].accepter.addr;
 		_name = list.txs[_uuid].accepter.name;
 		_x = list.txs[_uuid].accepter.x;
 		_y = list.txs[_uuid].accepter.y;

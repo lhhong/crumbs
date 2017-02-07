@@ -1,22 +1,17 @@
 package com.crumbs.services;
 
 import com.crumbs.ethereum.AccountBean;
-import com.crumbs.models.Member;
-import com.crumbs.models.TxAccepted;
-import com.crumbs.models.TxSent;
+import com.crumbs.models.*;
 import com.crumbs.repositories.MemberRepo;
 import com.crumbs.repositories.TxAcceptedRepo;
 import com.crumbs.repositories.TxSentRepo;
-import com.crumbs.util.CurrencyUtil;
-import org.apache.commons.collections4.CollectionUtils;
+import com.crumbs.util.CrumbsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 /**
@@ -42,7 +37,38 @@ public class TransactionService {
 	@Autowired
 	MemberRepo memberRepo;
 
-	//TODO TxSent checkOfferAccepted, TxAccpeted checkAcceptanceAgreed, checkAgreeIncluded, agree(uuid),
+	public TxStatus getTxStatus() {
+		TxStatus status = new TxStatus();
+		List<TxSent> successfulOffer = txSentRepo.findByIncludedAndPendingAndDone(true, false, false);
+		for (TxSent tx : successfulOffer) {
+			status.getSuccessfulOffers().add(CrumbsUtil.toTxVM(tx));
+		}
+		List<TxSent> pendingOffer = txSentRepo.findByIncludedAndPendingAndDone(false, false, false);
+		for (TxSent tx : pendingOffer) {
+			status.getPendingOffers().add(CrumbsUtil.toTxVM(tx));
+		}
+		List<TxAccepted> successfulAccept = txAcceptedRepo.findByIncludedAndDone(true, false);
+		for (TxAccepted tx : successfulAccept) {
+			status.getSuccessfulAccepts().add(CrumbsUtil.toTxVM(tx));
+		}
+		List<TxAccepted> pendingAccept = txAcceptedRepo.findByIncludedAndDone(false, false);
+		for (TxAccepted tx : pendingAccept) {
+			status.getPendingAccepts().add(CrumbsUtil.toTxVM(tx));
+		}
+		List<TxSent> pendingAgree = txSentRepo.findByIncludedAndPendingAndDone(false, true, true);
+		for (TxSent tx : pendingAgree) {
+			status.getPendingAgrees().add(CrumbsUtil.toTxVM(tx));
+		}
+		List<TxAccepted> acceptedDone = txAcceptedRepo.findByIncludedAndDone(true, true);
+		List<TxSent> sentDone = txSentRepo.findByIncludedAndPendingAndDone(true, true, true);
+		for (TxAccepted tx : acceptedDone) {
+			status.getDoneTx().add(CrumbsUtil.toTxVM(tx));
+		}
+		for (TxSent tx : sentDone) {
+			status.getDoneTx().add(CrumbsUtil.toTxVM(tx));
+		}
+		return status;
+	}
 
 	public void register(String name, long x, long y) {
 		Member me = new Member();
@@ -53,6 +79,80 @@ public class TransactionService {
 		me.setY(y);
 		memberRepo.save(me);
 		contractService.sendToTxContract("register", 0, name, x, y);
+	}
+
+	public void checkAcceptanceAgreed() {
+		List<TxAccepted> acceptance = txAcceptedRepo.findByIncludedAndDone(true, false);
+		for (TxAccepted tx : acceptance) {
+			Object[] result = contractService.constFunction("checkDoneStatus", tx.getUuid());
+			if (result == null) {
+				logger.error("null returned when checking offers");
+				continue;
+			}
+			if ((boolean) result[0]) {
+				logger.info("transaction {} agreed", tx.getUuid());
+				tx.setDone(true);
+				txAcceptedRepo.save(tx);
+			}
+		}
+		List<TxAccepted> done = txAcceptedRepo.findByIncludedAndDone(true, true);
+		for (TxAccepted tx : done) {
+			Object[] result = contractService.constFunction("checkDoneStatus", tx.getUuid());
+			if (result == null) {
+				logger.error("null returned when checking offers");
+				logger.error("transaction {} excluded when checking agreed", tx.getUuid());
+				tx.setDone(false);
+				continue;
+			}
+			if (!(boolean) result[0]) {
+				logger.info("transaction {} excluded when checking agreed", tx.getUuid());
+				tx.setDone(true);
+				txAcceptedRepo.save(tx);
+			}
+		}
+	}
+
+	public void checkOfferAccepted() {
+		List<TxSent> offers = txSentRepo.findByIncludedAndPending(true, false);
+		for (TxSent tx : offers) {
+			Object[] result = contractService.constFunction("checkPendingStatus", tx.getUuid());
+			if (result == null) {
+				logger.error("null returned when checking offers");
+				continue;
+			}
+			if ((boolean) result[0]) {
+				Member accepter = memberRepo.findOne((byte[]) result[1]);
+				if (accepter == null) {
+					accepter = new Member();
+					accepter.setAddr((byte[]) result[1]);
+					accepter.setName((String) result[2]);
+					accepter.setX((long) result[3]);
+					accepter.setY((long) result[4]);
+				}
+				tx.setAccepter(accepter);
+				tx.setTransportPrice((BigInteger) result[5]);
+				logger.info("transaction {} accepted", tx.getUuid());
+				tx.setPending(true);
+				txSentRepo.save(tx);
+			}
+		}
+		//check for offers that are rejected
+		List<TxSent> accepted = txSentRepo.findByIncludedAndPendingAndDone(true, true, false);
+		for (TxSent tx : accepted) {
+			Object[] result = contractService.constFunction("checkPendingStatus", tx.getUuid());
+			if (result == null) {
+				logger.error("null returned when checking offers");
+				logger.error("transaction {} excluded when checking", tx.getUuid());
+				tx.setPending(false);
+				txSentRepo.save(tx);
+				continue;
+			}
+			if (!(boolean) result[0]) {
+				logger.info("transaction {} excluded when checking", tx.getUuid());
+				tx.setPending(false);
+				txSentRepo.save(tx);
+			}
+		}
 	}
 
 	public void newOffer(BigInteger price, String item, int quantity, Date expiry, boolean toSell) {
@@ -82,7 +182,7 @@ public class TransactionService {
 			}
 		}
 		List<String> uuidList = Arrays.asList(uuids);
-		Iterable<TxSent> included = txSentRepo.findByIncludedAndPending(true, false);
+		Iterable<TxSent> included = txSentRepo.findByIncluded(true);
 		for (TxSent tx : included) {
 			if (!uuidList.contains(tx.getUuid())) {
 				logger.warn("Offer transaction with uuid: {} excluded", tx.getUuid());
@@ -93,24 +193,69 @@ public class TransactionService {
 	}
 
 	public void checkAcceptanceIncluded() {
-		List<TxAccepted> unincluded = txAcceptedRepo.findByIncluded(false);
+		List<TxAccepted> unincluded = txAcceptedRepo.findByIncludedAndDone(false, false);
 		String[] uuids = getAllTxKeys();
 		for (TxAccepted tx : unincluded) {
 			for (String uuid : uuids) {
 				if (tx.getUuid().equalsIgnoreCase(uuid)) {
-					logger.info("Accepting transaction {} included!", uuid);
-					tx.setIncluded(true);
-					txAcceptedRepo.save(tx);
+					Object[] result = contractService.constFunction("checkPendingStatus", uuid);
+					if ((boolean) result[0]) {
+						logger.info("Accepting transaction {} included!", uuid);
+						tx.setIncluded(true);
+						txAcceptedRepo.save(tx);
+					}
 				}
 			}
 		}
 		List<String> uuidList = Arrays.asList(uuids);
 		Iterable<TxAccepted> included = txAcceptedRepo.findByIncludedAndDone(true, false);
 		for (TxAccepted tx : included) {
-			if (!uuidList.contains(tx.getUuid())) {
-				logger.warn("Accepting transaction with uuid: {} excluded", tx.getUuid());
+			if (uuidList.contains(tx.getUuid())) {
+				Object[] result = contractService.constFunction("checkPendingStatus", tx.getUuid());
+				if (!(boolean) result[0]) {
+					logger.warn("Accepting transaction with uuid: {} excluded", tx.getUuid());
+					tx.setIncluded(false);
+					txAcceptedRepo.save(tx);
+				}
+			}
+			else {
+				logger.error("Accepting transaction with uuid: {} excluded COMPLETELY", tx.getUuid());
 				tx.setIncluded(false);
 				txAcceptedRepo.save(tx);
+			}
+		}
+	}
+
+	public void checkAgreeIncluded() {
+		List<TxSent> unincluded = txSentRepo.findByIncludedAndPendingAndDone(false, true, true);
+		String[] uuids = getAllTxKeys();
+		for (TxSent tx : unincluded) {
+			for (String uuid : uuids) {
+				if (tx.getUuid().equalsIgnoreCase(uuid)) {
+					Object[] result = contractService.constFunction("checkDone", uuid);
+					if ((boolean) result[0]) {
+						logger.info("Agreeing transaction {} included!", uuid);
+						tx.setIncluded(true);
+						txSentRepo.save(tx);
+					}
+				}
+			}
+		}
+		List<String> uuidList = Arrays.asList(uuids);
+		Iterable<TxSent> included = txSentRepo.findByIncludedAndPendingAndDone(true, true, true);
+		for (TxSent tx : included) {
+			if (uuidList.contains(tx.getUuid())) {
+				Object[] result = contractService.constFunction("checkDone", tx.getUuid());
+				if (!(boolean) result[0]) {
+					logger.warn("Agreeing transaction with uuid: {} excluded", tx.getUuid());
+					tx.setIncluded(false);
+					txSentRepo.save(tx);
+				}
+			}
+			else {
+				logger.error("Agreeing transaction with uuid: {} excluded COMPLETELY", tx.getUuid());
+				tx.setIncluded(false);
+				txSentRepo.save(tx);
 			}
 		}
 	}
@@ -152,17 +297,38 @@ public class TransactionService {
 			logger.warn("offer {} no longer valid", uuid);
 			return;
 		}
+		tx.setPending(true);
 		long payment = 0;
 		if (tx.isSell()) {
-			payment = CurrencyUtil.weiToEther(tx.getPrice()) + transportPrice;
+			payment = CrumbsUtil.weiToEther(tx.getPrice()) + transportPrice;
 		}
 		accept(tx, transportPrice, payment);
 	}
 
 	public void accept(TxAccepted tx, long transportPrice, long payment) {
-		contractService.sendToTxContract("accept", payment, tx.getUuid(), CurrencyUtil.etherToWei(transportPrice));
+		contractService.sendToTxContract("accept", payment, tx.getUuid(), CrumbsUtil.etherToWei(transportPrice));
 		txAcceptedRepo.save(tx);
 		logger.info("Created accepting transaction {}", tx.getUuid());
+	}
+
+	public void agree(String uuid) {
+		TxSent tx = txSentRepo.findOne(uuid);
+		if (tx == null) {
+			logger.error("transaction {} to be agreed do not exist", uuid);
+			return;
+		}
+		if (tx.isDone() || !tx.isPending() || !tx.isIncluded()) {
+			logger.warn("transaction {} to be agreed not in correct state", uuid);
+			return;
+		}
+		long payment = 0;
+		if (!tx.isSell()) {
+			payment = CrumbsUtil.weiToEther(tx.getTransportPrice()) + CrumbsUtil.weiToEther(tx.getPrice());
+		}
+		tx.setDone(true);
+		tx.setIncluded(false);
+		txSentRepo.save(tx);
+		agree(uuid, payment);
 	}
 
 	public void agree(String uuid, long payment) {

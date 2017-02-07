@@ -1,5 +1,6 @@
 package com.crumbs.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -8,7 +9,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class StateUpdater {
 
-	public void update() {
+	@Autowired
+	TransactionService transactionService;
 
+	public void update() {
+		transactionService.checkOfferIncluded();
+		transactionService.checkAcceptanceIncluded();
+		transactionService.checkAgreeIncluded();
+		transactionService.checkOfferAccepted();
+		transactionService.checkAcceptanceAgreed();
 	}
 }

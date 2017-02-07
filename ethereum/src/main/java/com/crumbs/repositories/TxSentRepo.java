@@ -11,6 +11,7 @@ import java.util.List;
  */
 @Repository
 public interface TxSentRepo extends CrudRepository<TxSent, String>{
+	List<TxSent> findByIncludedAndPendingAndDone(boolean included, boolean pending, boolean done);
 	List<TxSent> findByIncludedAndPending(boolean included, boolean pending);
 	List<TxSent> findByIncluded(boolean included);
 }
