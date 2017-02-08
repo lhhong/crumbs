@@ -11,5 +11,5 @@ import java.util.List;
  */
 @Repository
 public interface MemberRepo extends CrudRepository<Member, byte[]>{
-	List<Member> findeByOwn(boolean own);
+	List<Member> findByOwn(boolean own);
 }

@@ -45,17 +45,16 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 		if (state.compareTo(PendingTransactionState.INCLUDED) == 0) {
 			Transaction tx = txReceipt.getTransaction();
 			if (tx.isContractCreation()) {
-				/*
+
 				if (crumbsContractRepo == null) {
 					crumbsContractRepo = bean.getCrumbsContractRepo();
 				}
-				CrumbsContract crumbsContract = crumbsContractRepo.findOne("mortal_contract");
+				CrumbsContract crumbsContract = crumbsContractRepo.findOne("crumbs_tx");
 				crumbsContract.setTxHash(tx.getHash());
 				crumbsContract.setContractAddr(tx.getContractAddress());
 				crumbsContract.setIncluded(true);
 				logger.info("CONTRACT ADDRESS DISCOVERED: " +  ByteUtil.toHexString(tx.getContractAddress()));
 				crumbsContractRepo.save(crumbsContract);
-				*/
 			}
 			//TODO process and save transaction to db
 		}
@@ -73,7 +72,12 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 	@Override
 	public void onBlock(Block block, List<TransactionReceipt> receipts) {
 		logger.info("Received block: " + block.getNumber());
-		bean.getStateUpdater().update();
+		CrumbsContract contract = crumbsContractRepo.findOne("crumbs_tx");
+		if (contract != null) {
+			if (contract.isIncluded()) {
+				bean.getStateUpdater().update();
+			}
+		}
 
 		List<Transaction> txs = block.getTransactionsList();
 

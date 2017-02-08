@@ -15,6 +15,6 @@ import java.io.Serializable;
 public class TxAccepted extends BasicTx implements Serializable{
 
 	@ManyToOne
-	@JoinColumn(name = "from")
-	Member from;
+	@JoinColumn(name = "sender")
+	Member sender;
 }

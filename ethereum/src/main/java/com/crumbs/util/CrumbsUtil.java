@@ -29,7 +29,7 @@ public class CrumbsUtil {
 		vm.setPrice(CrumbsUtil.weiToEther(tx.getPrice()));
 		vm.setTransportPrice(CrumbsUtil.weiToEther(tx.getTransportPrice()));
 		if (tx instanceof TxAccepted) {
-			vm.setFrom(((TxAccepted) tx).getFrom());
+			vm.setSender(((TxAccepted) tx).getSender());
 		}
 		else if (tx instanceof TxSent) {
 			vm.setAccepter(((TxSent) tx).getAccepter());

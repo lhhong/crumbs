@@ -78,6 +78,7 @@ public class TransactionService {
 		me.setX(x);
 		me.setY(y);
 		memberRepo.save(me);
+		//contractService.sendToTxContract("deleteTx", 0, name);
 		contractService.sendToTxContract("register", 0, name, x, y);
 	}
 
@@ -282,7 +283,7 @@ public class TransactionService {
 				from.setY((long) result[3]);
 			}
 			tx.setUuid(uuid);
-			tx.setFrom(from);
+			tx.setSender(from);
 			tx.setPrice((BigInteger) result[4]);
 			tx.setItem((String) result[5]);
 			tx.setQuantity((int) result[6]);
@@ -357,7 +358,7 @@ public class TransactionService {
 					from.setY((long) result[3]);
 				}
 				tx.setUuid(key);
-				tx.setFrom(from);
+				tx.setSender(from);
 				tx.setPrice((BigInteger) result[4]);
 				tx.setItem((String) result[5]);
 				tx.setQuantity((int) result[6]);

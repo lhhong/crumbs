@@ -21,7 +21,7 @@ contract transaction {
 	}
 	struct Tx {
 		string uuid;
-		Member from;
+		Member sender;
 		uint256 price;
 		string item;
 		uint32 quantity;
@@ -70,7 +70,7 @@ contract transaction {
 		list.keys[key].uuid = _uuid;
 		list.keys[key].deleted = false;
 		list.txs[list.keys[key].uuid].uuid = _uuid;
-		list.txs[list.keys[key].uuid].from = memList.members[msg.sender];
+		list.txs[list.keys[key].uuid].sender = memList.members[msg.sender];
 		list.txs[list.keys[key].uuid].price = _price;
 		list.txs[list.keys[key].uuid].item = _item;
 		list.txs[list.keys[key].uuid].quantity = _quantity;
@@ -117,10 +117,10 @@ contract transaction {
 		if (list.txs[_uuid].pending || list.txs[_uuid].quantity == 0) {
 			throw;
 		}
-		_addr = list.txs[_uuid].from.addr;
-		_name = list.txs[_uuid].from.name;
-		_x = list.txs[_uuid].from.x;
-		_y = list.txs[_uuid].from.y;
+		_addr = list.txs[_uuid].sender.addr;
+		_name = list.txs[_uuid].sender.name;
+		_x = list.txs[_uuid].sender.x;
+		_y = list.txs[_uuid].sender.y;
 		_price = list.txs[_uuid].price;
 		_item = list.txs[_uuid].item;
 		_quantity = list.txs[_uuid].quantity;
@@ -176,7 +176,7 @@ contract transaction {
 	}
 
 	function agree(string _uuid) payable {
-	    if (msg.sender != list.txs[_uuid].from.addr) {
+	    if (msg.sender != list.txs[_uuid].sender.addr) {
 	       throw;
 	    }
 		if (!list.txs[_uuid].pending || list.txs[_uuid].quantity == 0) {
@@ -187,7 +187,7 @@ contract transaction {
 			if (msg.value < totalPrice) {
 				throw;
 			}
-			if (!list.txs[_uuid].from.addr.send(totalPrice)) {
+			if (!list.txs[_uuid].sender.addr.send(totalPrice)) {
 			    throw;
 			}
 		}
@@ -206,7 +206,7 @@ contract transaction {
 	}
 
 	function deleteTx(string _uuid) {
-	    if (msg.sender != list.txs[_uuid].from.addr) {
+	    if (msg.sender != list.txs[_uuid].sender.addr) {
 	       throw;
 	    }
 		uint key = 0;
