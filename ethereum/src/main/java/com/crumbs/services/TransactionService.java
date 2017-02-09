@@ -129,11 +129,11 @@ public class TransactionService {
 					accepter = new Member();
 					accepter.setAddr((byte[]) result[1]);
 					accepter.setName((String) result[2]);
-					accepter.setX((long) result[3]);
-					accepter.setY((long) result[4]);
+					accepter.setX(((BigInteger) result[3]).longValue());
+					accepter.setY(((BigInteger) result[4]).longValue());
 				}
 				tx.setAccepter(accepter);
-				tx.setTransportPrice((long) result[5]);
+				tx.setTransportPrice(((BigInteger) result[5]).longValue());
 				logger.info("transaction {} accepted", tx.getUuid());
 				tx.setPending(true);
 				txSentRepo.save(tx);
@@ -348,34 +348,35 @@ public class TransactionService {
 		List<TxAccepted> txs = new ArrayList<>();
 		String[] keys = getAllAvailTxKeys();
 		for (String key : keys) {
-			Object[] result = contractService.constFunction("getTxById", key);
-			TxAccepted tx = new TxAccepted();
-			try {
-				Member from = memberRepo.findOne((byte[]) result[0]);
-				if (from == null) {
-					from = new Member();
-					from.setAddr((byte[]) result[0]);
-					from.setName((String) result[1]);
-					from.setX((long) result[2]);
-					from.setY((long) result[3]);
+			if (!txSentRepo.exists(key)) {
+				Object[] result = contractService.constFunction("getTxById", key);
+				TxAccepted tx = new TxAccepted();
+				try {
+					Member from = memberRepo.findOne((byte[]) result[0]);
+					if (from == null) {
+						from = new Member();
+						from.setAddr((byte[]) result[0]);
+						from.setName((String) result[1]);
+						from.setX(((BigInteger) result[2]).longValue());
+						from.setY(((BigInteger) result[3]).longValue());
+					}
+					tx.setUuid(key);
+					tx.setSender(from);
+					tx.setPrice(((BigInteger) result[4]).longValue());
+					tx.setItem((String) result[5]);
+					tx.setQuantity(((BigInteger) result[6]).intValue());
+					tx.setExpiry(new Date(((BigInteger) result[7]).longValue()));
+					tx.setSell((boolean) result[8]);
+					tx.setPending((boolean) result[9]);
+					tx.setDone((boolean) result[10]);
+					if (tx.isPending() || tx.isDone()) {
+						logger.warn("transaction {} changed state", tx.getUuid());
+					} else {
+						txs.add(tx);
+					}
+				} catch (ArrayIndexOutOfBoundsException e) {
+					e.printStackTrace();
 				}
-				tx.setUuid(key);
-				tx.setSender(from);
-				tx.setPrice((long) result[4]);
-				tx.setItem((String) result[5]);
-				tx.setQuantity((int) result[6]);
-				tx.setExpiry(new Date((long) result[7]));
-				tx.setSell((boolean) result[8]);
-				tx.setPending((boolean) result[9]);
-				tx.setDone((boolean) result[10]);
-				if (tx.isPending() || tx.isDone()) {
-					logger.warn("transaction {} changed state", tx.getUuid());
-				}
-				else {
-					txs.add(tx);
-				}
-			} catch (ArrayIndexOutOfBoundsException e) {
-				e.printStackTrace();
 			}
 		}
 		return txs;

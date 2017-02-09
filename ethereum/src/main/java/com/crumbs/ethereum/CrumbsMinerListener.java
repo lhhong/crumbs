@@ -29,7 +29,7 @@ public class CrumbsMinerListener implements MinerListener {
 
 	@Override
 	public void blockMined(Block block) {
-		//logger.info("Block mined! : \n" + block);
+		logger.info("Block mined! : " + block.getShortDescr());
 	}
 
 	@Override
