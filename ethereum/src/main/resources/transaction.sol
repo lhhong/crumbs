@@ -216,9 +216,13 @@ contract transaction {
 			throw;
 		}
 		uint key = 0;
-		while (key < list.nextKey || !stringsEqual(list.keys[key].uuid, _uuid)) {
+		while (!stringsEqual(list.keys[key].uuid, _uuid)) {
 			key++;
+			if (key == list.nextKey) {
+			    throw;
+			}
 		}
+
 		list.keys[key].deleted = true;
 		delete list.txs[_uuid];
 	}
