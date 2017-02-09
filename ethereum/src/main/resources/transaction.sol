@@ -11,53 +11,57 @@ contract transaction {
 	struct Member {
 		address addr;
 		string name;
-		int64 x; //x, y coordinate of member
-		int64 y;
+		int64 x_loc; //x, y coordinate of member
+		int64 y_loc;
 	}
 	struct MemberList {
 		mapping(address => Member) members;
-		MemKey[] keys;
-		uint nextKey;
+		MemKey[50] keys;
+		uint32 nextKey;
 	}
 	struct Tx {
 		string uuid;
-		Member sender;
-		uint256 price;
+		Member from;
+		uint64 price;
 		string item;
 		uint32 quantity;
 		uint64 expiry;
 		bool toSell;
 		Member accepter;
-		uint256 transportPrice;
+		uint64 transportPrice;
 		bool pending;
 		bool done;
 	}
 	struct TxList {
 		mapping(string => Tx) txs;
-		TxKey[] keys;
-		uint nextKey;
+		TxKey[200] keys;
+		uint32 nextKey;
 	}
-	TxList list;
-	MemberList memList;
 
-	function register(string _name, int64 _x, int64 _y) {
+	MemberList memList;
+	TxList list;
+
+	function register(string _name, int64 _x, int64 _y) public {
 		uint key = 0;
-		while (key < memList.nextKey && !memList.keys[key].deleted && !(memList.keys[key].addr == msg.sender)) {
+		while (key < memList.nextKey && !memList.keys[key].deleted) {
+		    if (memList.keys[key].addr == msg.sender) {
+		        throw;
+		    }
 			key++;
 		}
 		if (key == memList.nextKey) {
-			list.nextKey++;
+			memList.nextKey++;
 		}
 		memList.keys[key].addr = msg.sender;
 		memList.keys[key].deleted = false;
 		memList.members[memList.keys[key].addr].addr = msg.sender;
 		memList.members[memList.keys[key].addr].name = _name;
-		memList.members[memList.keys[key].addr].x = _x;
-		memList.members[memList.keys[key].addr].y = _y;
+		memList.members[memList.keys[key].addr].x_loc = _x;
+		memList.members[memList.keys[key].addr].y_loc = _y;
 	}
 
-	function newOffer(string _uuid, uint256 _price, string _item, uint32 _quantity, uint64 _expiry, bool _toSell) {
-		if (memList.members[msg.sender].x == 0) {
+	function newOffer(string _uuid, uint64 _price, string _item, uint32 _quantity, uint64 _expiry, bool _toSell) public {
+		if (memList.members[msg.sender].x_loc == 0) {
 			throw;
 		}
 		uint key = 0;
@@ -70,7 +74,7 @@ contract transaction {
 		list.keys[key].uuid = _uuid;
 		list.keys[key].deleted = false;
 		list.txs[list.keys[key].uuid].uuid = _uuid;
-		list.txs[list.keys[key].uuid].sender = memList.members[msg.sender];
+		list.txs[list.keys[key].uuid].from = memList.members[msg.sender];
 		list.txs[list.keys[key].uuid].price = _price;
 		list.txs[list.keys[key].uuid].item = _item;
 		list.txs[list.keys[key].uuid].quantity = _quantity;
@@ -98,6 +102,7 @@ contract transaction {
 			if (!list.keys[key].deleted) {
 				all = strConcat(all, list.keys[key].uuid);
 			}
+			key++;
 		}
 	}
 
@@ -110,17 +115,18 @@ contract transaction {
 					all = strConcat(all, list.keys[key].uuid);
 				}
 			}
+			key++;
 		}
 	}
 
-	function getTxById(string _uuid) constant returns (address _addr, string _name, int64 _x, int64 _y, uint256 _price, string _item, uint32 _quantity, uint64 _expiry, bool _toSell, bool _pending, bool _done) {
+	function getTxById(string _uuid) constant returns (address _addr, string _name, int64 _x, int64 _y, uint64 _price, string _item, uint32 _quantity, uint64 _expiry, bool _toSell, bool _pending, bool _done) {
 		if (list.txs[_uuid].pending || list.txs[_uuid].quantity == 0) {
 			throw;
 		}
-		_addr = list.txs[_uuid].sender.addr;
-		_name = list.txs[_uuid].sender.name;
-		_x = list.txs[_uuid].sender.x;
-		_y = list.txs[_uuid].sender.y;
+		_addr = list.txs[_uuid].from.addr;
+		_name = list.txs[_uuid].from.name;
+		_x = list.txs[_uuid].from.x_loc;
+		_y = list.txs[_uuid].from.y_loc;
 		_price = list.txs[_uuid].price;
 		_item = list.txs[_uuid].item;
 		_quantity = list.txs[_uuid].quantity;
@@ -130,15 +136,15 @@ contract transaction {
 		_done = list.txs[_uuid].done;
 	}
 
-	function checkPendingStatus(string _uuid) constant returns (bool _pending, address _addr, string _name, int64 _x, int64 _y, uint256 _transportPrice) {
+	function checkPendingStatus(string _uuid) constant returns (bool _pending, address _addr, string _name, int64 _x, int64 _y, uint64 _transportPrice) {
 		if (list.txs[_uuid].quantity == 0) {
 			throw;
 		}
 		_pending = list.txs[_uuid].pending;
 		_addr = list.txs[_uuid].accepter.addr;
 		_name = list.txs[_uuid].accepter.name;
-		_x = list.txs[_uuid].accepter.x;
-		_y = list.txs[_uuid].accepter.y;
+		_x = list.txs[_uuid].accepter.x_loc;
+		_y = list.txs[_uuid].accepter.y_loc;
 		_transportPrice = list.txs[_uuid].transportPrice;
 	}
 
@@ -149,12 +155,12 @@ contract transaction {
 		_done = list.txs[_uuid].done;
 	}
 
-	function accept(string _uuid, uint256 _transportPrice) payable {
+	function accept(string _uuid, uint64 _transportPrice) payable public {
 		if (list.txs[_uuid].pending || list.txs[_uuid].quantity == 0) {
 			throw;
 		}
 		if (list.txs[_uuid].toSell) {
-			if (msg.value < (list.txs[_uuid].price + _transportPrice)) {
+			if (msg.value < (list.txs[_uuid].price + _transportPrice)*1000000000000000000) {
 				throw;
 			}
 		}
@@ -164,7 +170,7 @@ contract transaction {
 		list.txs[_uuid].transportPrice = _transportPrice;
 	}
 
-    function stringsEqual(string storage _a, string memory _b) internal returns (bool) {
+	function stringsEqual(string storage _a, string memory _b) internal returns (bool) {
 		bytes storage a = bytes(_a);
 		bytes memory b = bytes(_b);
 		if (a.length != b.length)
@@ -175,45 +181,45 @@ contract transaction {
 		return true;
 	}
 
-	function agree(string _uuid) payable {
-	    if (msg.sender != list.txs[_uuid].sender.addr) {
-	       throw;
-	    }
+	function agree(string _uuid) payable public {
+		if (msg.sender != list.txs[_uuid].from.addr) {
+			throw;
+		}
 		if (!list.txs[_uuid].pending || list.txs[_uuid].quantity == 0) {
 			throw;
 		}
-		uint256 totalPrice = list.txs[_uuid].price + list.txs[_uuid].transportPrice;
+		uint totalPrice = (list.txs[_uuid].price + list.txs[_uuid].transportPrice)*1000000000000000000;
 		if (!list.txs[_uuid].toSell) {
 			if (msg.value < totalPrice) {
 				throw;
 			}
-			if (!list.txs[_uuid].sender.addr.send(totalPrice)) {
-			    throw;
+			if (!list.txs[_uuid].from.addr.send(totalPrice)) {
+				throw;
 			}
 		}
 		if (!list.txs[_uuid].accepter.addr.send(totalPrice)) {
-		    throw;
+			throw;
 		}
 		list.txs[_uuid].done = true;
 		/*
+		   uint key = 0;
+		   while (key < list.nextKey || !stringsEqual(list.keys[key].uuid, _uuid)) {
+		   key++;
+		   }
+		   list.keys[key].deleted = true;
+		   delete list.txs[_uuid];
+		 */
+	}
+
+	function deleteTx(string _uuid) public {
+		if (msg.sender != list.txs[_uuid].from.addr) {
+			throw;
+		}
 		uint key = 0;
 		while (key < list.nextKey || !stringsEqual(list.keys[key].uuid, _uuid)) {
-		    key++;
+			key++;
 		}
 		list.keys[key].deleted = true;
 		delete list.txs[_uuid];
-		*/
 	}
-
-	function deleteTx(string _uuid) {
-	    if (msg.sender != list.txs[_uuid].sender.addr) {
-	       throw;
-	    }
-		uint key = 0;
-		while (key < list.nextKey || !stringsEqual(list.keys[key].uuid, _uuid)) {
-		    key++;
-		}
-		list.keys[key].deleted = true;
-	    delete list.txs[_uuid];
-	}
-}	
+}

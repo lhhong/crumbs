@@ -156,7 +156,13 @@ public class ContractService {
 		}
 		CallTransaction.Contract contract = new CallTransaction.Contract(contractDef.getAbi());
 		ProgramResult r = ethereumBean.callConstantFunction(contractDef.getContractAddr(), contract.getByName(functionName), args);
-		return contract.getByName(functionName).decodeResult(r.getHReturn());
+		if (r.getException() != null) {
+			r.getException().printStackTrace();
+			return null;
+		}
+		else {
+			return contract.getByName(functionName).decodeResult(r.getHReturn());
+		}
 	}
 
 	public void modifyMortalGreeting() {

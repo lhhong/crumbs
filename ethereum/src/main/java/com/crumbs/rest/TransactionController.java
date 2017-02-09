@@ -45,7 +45,7 @@ public class TransactionController {
 	@RequestMapping(value = "/offer", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public void postOffer(@RequestBody TransactionVM offer) {
-		transactionService.newOffer(CrumbsUtil.etherToWei(offer.getPrice()), offer.getItem(), offer.getQuantity(), offer.getExpiry(), offer.isSell());
+		transactionService.newOffer(offer.getPrice(), offer.getItem(), offer.getQuantity(), offer.getExpiry(), offer.isSell());
 	}
 
 	@RequestMapping(value = "/offer", method = GET, produces = APPLICATION_JSON_VALUE)

@@ -137,6 +137,19 @@ public class EthereumBean{
 		return createTx(senderKey, receiverAddr, etherToTransact, data);
 	}
 
+	public Transaction createContractTx(byte[] contractAddr, long etherToTransact, CallTransaction.Function function, Object... args) {
+		ECKey key = accountBean.getKey();
+		return CallTransaction.createCallTransaction(
+				ethereum.getRepository().getNonce(key.getAddress()).longValue(),
+				ethereum.getGasPrice(),
+				4000000,
+				ByteUtil.toHexString(contractAddr),
+				CrumbsUtil.etherToWei(etherToTransact).longValue(),
+				function,
+				args
+		);
+	}
+
 	public Transaction createTx(ECKey senderKey, byte[] receiverAddr, long etherToTransact, byte[] data) {
 		BigInteger nonce = ethereum.getRepository().getNonce(senderKey.getAddress());
 		Transaction tx = new Transaction(

@@ -26,8 +26,8 @@ public class CrumbsUtil {
 		vm.setExpiry(tx.getExpiry());
 		vm.setQuantity(tx.getQuantity());
 		vm.setSell(tx.isSell());
-		vm.setPrice(CrumbsUtil.weiToEther(tx.getPrice()));
-		vm.setTransportPrice(CrumbsUtil.weiToEther(tx.getTransportPrice()));
+		vm.setPrice(tx.getPrice());
+		vm.setTransportPrice(tx.getTransportPrice());
 		if (tx instanceof TxAccepted) {
 			vm.setSender(((TxAccepted) tx).getSender());
 		}

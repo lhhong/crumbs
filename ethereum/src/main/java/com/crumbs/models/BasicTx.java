@@ -19,12 +19,12 @@ public class BasicTx implements Serializable{
 
 	@Id
 	String uuid;
-	BigInteger price;
+	long price;
 	String item;
 	int quantity;
 	Date expiry;
 	boolean isSell;
-	BigInteger transportPrice;
+	long transportPrice;
 	boolean pending;
 	boolean included;
 	boolean done;

@@ -6,6 +6,8 @@ import com.crumbs.repositories.MemberRepo;
 import com.crumbs.repositories.TxAcceptedRepo;
 import com.crumbs.repositories.TxSentRepo;
 import com.crumbs.util.CrumbsUtil;
+import javassist.bytecode.ByteArray;
+import org.ethereum.util.ByteUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,7 +81,7 @@ public class TransactionService {
 		me.setY(y);
 		memberRepo.save(me);
 		//contractService.sendToTxContract("deleteTx", 0, name);
-		contractService.sendToTxContract("register", 0, name, x, y);
+		contractService.sendToTxContract("register", 0, name, BigInteger.valueOf(x), BigInteger.valueOf(y));
 	}
 
 	public void checkAcceptanceAgreed() {
@@ -131,7 +133,7 @@ public class TransactionService {
 					accepter.setY((long) result[4]);
 				}
 				tx.setAccepter(accepter);
-				tx.setTransportPrice((BigInteger) result[5]);
+				tx.setTransportPrice((long) result[5]);
 				logger.info("transaction {} accepted", tx.getUuid());
 				tx.setPending(true);
 				txSentRepo.save(tx);
@@ -156,7 +158,7 @@ public class TransactionService {
 		}
 	}
 
-	public void newOffer(BigInteger price, String item, int quantity, Date expiry, boolean toSell) {
+	public void newOffer(long price, String item, int quantity, Date expiry, boolean toSell) {
 		TxSent tx = new TxSent();
 		String uuid = generateUUID();
 		tx.setUuid(uuid);
@@ -279,15 +281,15 @@ public class TransactionService {
 				from = new Member();
 				from.setAddr((byte[]) result[0]);
 				from.setName((String) result[1]);
-				from.setX((long) result[2]);
-				from.setY((long) result[3]);
+				from.setX(((BigInteger) result[2]).longValue());
+				from.setY(((BigInteger) result[3]).longValue());
 			}
 			tx.setUuid(uuid);
 			tx.setSender(from);
-			tx.setPrice((BigInteger) result[4]);
+			tx.setPrice(((BigInteger) result[4]).longValue());
 			tx.setItem((String) result[5]);
-			tx.setQuantity((int) result[6]);
-			tx.setExpiry(new Date((long) result[7]));
+			tx.setQuantity(((BigInteger) result[6]).intValue());
+			tx.setExpiry(new Date(((BigInteger) result[7]).longValue()));
 			tx.setSell((boolean) result[8]);
 			tx.setPending((boolean) result[9]);
 			tx.setDone((boolean) result[10]);
@@ -301,13 +303,13 @@ public class TransactionService {
 		tx.setPending(true);
 		long payment = 0;
 		if (tx.isSell()) {
-			payment = CrumbsUtil.weiToEther(tx.getPrice()) + transportPrice;
+			payment = tx.getPrice() + transportPrice;
 		}
 		accept(tx, transportPrice, payment);
 	}
 
 	public void accept(TxAccepted tx, long transportPrice, long payment) {
-		contractService.sendToTxContract("accept", payment, tx.getUuid(), CrumbsUtil.etherToWei(transportPrice));
+		contractService.sendToTxContract("accept", payment, tx.getUuid(), transportPrice);
 		txAcceptedRepo.save(tx);
 		logger.info("Created accepting transaction {}", tx.getUuid());
 	}
@@ -324,7 +326,7 @@ public class TransactionService {
 		}
 		long payment = 0;
 		if (!tx.isSell()) {
-			payment = CrumbsUtil.weiToEther(tx.getTransportPrice()) + CrumbsUtil.weiToEther(tx.getPrice());
+			payment = tx.getTransportPrice() + tx.getPrice();
 		}
 		tx.setDone(true);
 		tx.setIncluded(false);
@@ -359,7 +361,7 @@ public class TransactionService {
 				}
 				tx.setUuid(key);
 				tx.setSender(from);
-				tx.setPrice((BigInteger) result[4]);
+				tx.setPrice((long) result[4]);
 				tx.setItem((String) result[5]);
 				tx.setQuantity((int) result[6]);
 				tx.setExpiry(new Date((long) result[7]));
