@@ -68,6 +68,7 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 				}
 				scanner.close();
 
+				crumbsContract.setContractName("crumbs_tx");
 				crumbsContract.setAbi(abi.toString());
 				crumbsContract.setTxHash(tx.getHash());
 				crumbsContract.setContractAddr(tx.getContractAddress());
