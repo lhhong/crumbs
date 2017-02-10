@@ -61,6 +61,8 @@ public class TransactionService {
 		for (TxSent tx : pendingAgree) {
 			status.getPendingAgrees().add(CrumbsUtil.toTxVM(tx));
 		}
+		List<TxSent> offersAccepted = txSentRepo.findByIncludedAndPendingAndDone(true, true, false);
+		offersAccepted.forEach((tx) -> status.getOffersAccepted().add(CrumbsUtil.toTxVM(tx)));
 		List<TxAccepted> acceptedDone = txAcceptedRepo.findByIncludedAndDone(true, true);
 		List<TxSent> sentDone = txSentRepo.findByIncludedAndPendingAndDone(true, true, true);
 		for (TxAccepted tx : acceptedDone) {

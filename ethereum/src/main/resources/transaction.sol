@@ -193,22 +193,15 @@ contract transaction {
 			if (msg.value < totalPrice) {
 				throw;
 			}
-			if (!list.txs[_uuid].from.addr.send(totalPrice)) {
+			if (!list.txs[_uuid].accepter.addr.send(totalPrice)) {
 				throw;
 			}
 		}
-		if (!list.txs[_uuid].accepter.addr.send(totalPrice)) {
+		else if (!list.txs[_uuid].from.addr.send(totalPrice)) {
 			throw;
 		}
 		list.txs[_uuid].done = true;
-		/*
-		   uint key = 0;
-		   while (key < list.nextKey || !stringsEqual(list.keys[key].uuid, _uuid)) {
-		   key++;
-		   }
-		   list.keys[key].deleted = true;
-		   delete list.txs[_uuid];
-		 */
+
 	}
 
 	function deleteTx(string _uuid) public {

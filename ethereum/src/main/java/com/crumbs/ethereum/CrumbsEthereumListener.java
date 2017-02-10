@@ -62,11 +62,11 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 
 	@Override
 	public void onPendingStateChanged(PendingState pendingState) {
-		List<Transaction> txs = pendingState.getPendingTransactions();
 		logger.info("@@@@@@@@@@ onPendingStateChanged invoked @@@@@@@@@");
+		/*List<Transaction> txs = pendingState.getPendingTransactions();
 		for (Transaction tx: txs) {
 			logger.info("Pending transactions: " + tx.toString());
-		}
+		}*/
 	}
 
 	@Override
@@ -80,7 +80,7 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 				}
 			}
 		} catch (NullPointerException e) {
-			logger.warn("null pointer");
+			logger.warn("null pointer {}", e.getMessage());
 		}
 
 		List<Transaction> txs = block.getTransactionsList();

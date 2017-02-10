@@ -17,5 +17,6 @@ public class TxStatus {
 	private List<TransactionVM> pendingOffers = new ArrayList<>();
 	private List<TransactionVM> pendingAccepts = new ArrayList<>();
 	private List<TransactionVM> pendingAgrees = new ArrayList<>();
+	private List<TransactionVM> offersAccepted = new ArrayList<>();
 	private List<TransactionVM> doneTx = new ArrayList<>();
 }
