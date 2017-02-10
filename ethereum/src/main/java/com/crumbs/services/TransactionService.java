@@ -350,6 +350,7 @@ public class TransactionService {
 		List<TxAccepted> txs = new ArrayList<>();
 		String[] keys = getAllAvailTxKeys();
 		for (String key : keys) {
+			logger.info("getting key : {}", key);
 			if (!txSentRepo.exists(key)) {
 				Object[] result = contractService.constFunction("getTxById", key);
 				TxAccepted tx = new TxAccepted();
