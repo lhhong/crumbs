@@ -238,7 +238,7 @@ public class TransactionService {
 		for (TxSent tx : unincluded) {
 			for (String uuid : uuids) {
 				if (tx.getUuid().equalsIgnoreCase(uuid)) {
-					Object[] result = contractService.constFunction("checkDone", uuid);
+					Object[] result = contractService.constFunction("checkDoneStatus", uuid);
 					if ((boolean) result[0]) {
 						logger.info("Agreeing transaction {} included!", uuid);
 						tx.setIncluded(true);
@@ -251,7 +251,7 @@ public class TransactionService {
 		Iterable<TxSent> included = txSentRepo.findByIncludedAndPendingAndDone(true, true, true);
 		for (TxSent tx : included) {
 			if (uuidList.contains(tx.getUuid())) {
-				Object[] result = contractService.constFunction("checkDone", tx.getUuid());
+				Object[] result = contractService.constFunction("checkDoneStatus", tx.getUuid());
 				if (!(boolean) result[0]) {
 					logger.warn("Agreeing transaction with uuid: {} excluded", tx.getUuid());
 					tx.setIncluded(false);
