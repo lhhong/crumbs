@@ -176,7 +176,7 @@ public class TransactionService {
 	}
 
 	public void checkOfferIncluded() {
-		Iterable<TxSent> unincluded = txSentRepo.findByIncluded(false);
+		Iterable<TxSent> unincluded = txSentRepo.findByIncludedAndPending(false, false);
 		String[] uuids = getAllTxKeys();
 		for (TxSent tx : unincluded) {
 			for (String uuid : uuids) {
@@ -188,7 +188,7 @@ public class TransactionService {
 			}
 		}
 		List<String> uuidList = Arrays.asList(uuids);
-		Iterable<TxSent> included = txSentRepo.findByIncluded(true);
+		Iterable<TxSent> included = txSentRepo.findByIncludedAndPending(true, false);
 		for (TxSent tx : included) {
 			if (!uuidList.contains(tx.getUuid())) {
 				logger.warn("Offer transaction with uuid: {} excluded", tx.getUuid());
