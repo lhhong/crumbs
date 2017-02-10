@@ -133,6 +133,7 @@ public class TransactionService {
 					accepter.setName((String) result[2]);
 					accepter.setX(((BigInteger) result[3]).longValue());
 					accepter.setY(((BigInteger) result[4]).longValue());
+					memberRepo.save(accepter);
 				}
 				tx.setAccepter(accepter);
 				tx.setTransportPrice(((BigInteger) result[5]).longValue());
@@ -285,6 +286,7 @@ public class TransactionService {
 				from.setName((String) result[1]);
 				from.setX(((BigInteger) result[2]).longValue());
 				from.setY(((BigInteger) result[3]).longValue());
+				memberRepo.save(from);
 			}
 			tx.setUuid(uuid);
 			tx.setSender(from);
@@ -350,7 +352,7 @@ public class TransactionService {
 		List<TxAccepted> txs = new ArrayList<>();
 		String[] keys = getAllAvailTxKeys();
 		for (String key : keys) {
-			logger.info("getting key : {}", key);
+			if (key.equals("")) continue;
 			if (!txSentRepo.exists(key)) {
 				Object[] result = contractService.constFunction("getTxById", key);
 				TxAccepted tx = new TxAccepted();
