@@ -12,8 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Scanner;
 
 public class CrumbsEthereumListener extends EthereumListenerAdapter {
 
@@ -49,7 +52,23 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 				if (crumbsContractRepo == null) {
 					crumbsContractRepo = bean.getCrumbsContractRepo();
 				}
-				CrumbsContract crumbsContract = crumbsContractRepo.findOne("crumbs_tx");
+				CrumbsContract crumbsContract = new CrumbsContract();
+				ClassLoader loader = getClass().getClassLoader();
+				StringBuilder abi = new StringBuilder("");
+				File file = new File(loader.getResource("crumbs_tx-abi").getFile());
+				Scanner scanner;
+				try {
+					scanner = new Scanner(file);
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+					return;
+				}
+				while (scanner.hasNextLine()) {
+					abi.append(scanner.nextLine());
+				}
+				scanner.close();
+
+				crumbsContract.setAbi(abi.toString());
 				crumbsContract.setTxHash(tx.getHash());
 				crumbsContract.setContractAddr(tx.getContractAddress());
 				crumbsContract.setIncluded(true);
@@ -72,15 +91,14 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 	@Override
 	public void onBlock(Block block, List<TransactionReceipt> receipts) {
 		logger.info("Received block: " + block.getNumber());
-		try {
-			if (crumbsContractRepo.exists("crumbs_tx")) {
-				CrumbsContract contract = crumbsContractRepo.findOne("crumbs_tx");
-				if (contract.isIncluded()) {
-					bean.getStateUpdater().update();
-				}
+		if (crumbsContractRepo == null) {
+			crumbsContractRepo = bean.getCrumbsContractRepo();
+		}
+		if (crumbsContractRepo.exists("crumbs_tx")) {
+			CrumbsContract contract = crumbsContractRepo.findOne("crumbs_tx");
+			if (contract.isIncluded()) {
+				bean.getStateUpdater().update();
 			}
-		} catch (NullPointerException e) {
-			logger.warn("null pointer {}", e.getMessage());
 		}
 
 		List<Transaction> txs = block.getTransactionsList();
