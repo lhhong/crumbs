@@ -41,6 +41,10 @@ contract transaction {
 	MemberList memList;
 	TxList list;
 
+	function topup() payable {
+
+	}
+
 	function register(string _name, int64 _x, int64 _y) public {
 		uint key = 0;
 		while (key < memList.nextKey && !memList.keys[key].deleted) {
@@ -160,7 +164,7 @@ contract transaction {
 			throw;
 		}
 		if (list.txs[_uuid].toSell) {
-			if (msg.value < (list.txs[_uuid].price + _transportPrice)*1000000000000000000) {
+			if (msg.value < ((uint256) (list.txs[_uuid].price + _transportPrice))*1000000000000000000) {
 				throw;
 			}
 		}
@@ -188,7 +192,7 @@ contract transaction {
 		if (!list.txs[_uuid].pending || list.txs[_uuid].quantity == 0) {
 			throw;
 		}
-		uint totalPrice = (list.txs[_uuid].price + list.txs[_uuid].transportPrice)*1000000000000000000;
+		uint totalPrice = ((uint256) (list.txs[_uuid].price + list.txs[_uuid].transportPrice))*1000000000000000000;
 		if (!list.txs[_uuid].toSell) {
 			if (msg.value < totalPrice) {
 				throw;

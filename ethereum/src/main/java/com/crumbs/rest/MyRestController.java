@@ -42,6 +42,12 @@ public class MyRestController {
 		contractService.sendContract();
 	}
 
+	@RequestMapping(value = "/topup-contract", method = GET)
+	@ResponseBody
+	public void topUpContract() throws IOException {
+		contractService.topUpContract();
+	}
+
 	@RequestMapping(value = "/getBalance", method = GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public long getThisAccoutBal() throws IOException {

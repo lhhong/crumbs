@@ -196,4 +196,8 @@ public class ContractService {
 		logger.info("result: " + JSON.toJSONString(ret));
 		logger.info("Current contract data member value: " + ret[0]);
 	}
+
+	public void topUpContract() {
+		sendToTxContract("topup", 100);
+	}
 }

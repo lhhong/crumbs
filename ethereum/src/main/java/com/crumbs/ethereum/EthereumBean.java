@@ -71,10 +71,18 @@ public class EthereumBean{
 		sendTransaction(createTx(data), listener);
 	}
 
+	public void sendTransaction(byte[] data, long payment, SendingTxListener listener) {
+		sendTransaction(createTx(payment, data),listener);
+	}
+
 	public void sendTransaction(Transaction tx, SendingTxListener listener) {
 		Future<Transaction> ft = ethereum.submitTransaction(tx);
 		Thread t = new Thread(new WaitingThread(tx, ft, listener));
 		t.start();
+	}
+
+	public void sendTransaction(byte[] receiverAddress, long value) {
+		sendTransaction(createTx(receiverAddress, value, new byte[0]));
 	}
 
 	public void sendTransaction(byte[] receiverAddress, byte[] data) {
@@ -106,6 +114,10 @@ public class EthereumBean{
 
 	public Transaction createTx(byte[] data) {
 		return createTx(new byte[0], data);
+	}
+
+	public Transaction createTx(long payment, byte[] data) {
+		return createTx(new byte[0], payment, data);
 	}
 
 	public Transaction createTx(byte[] receiverAddr, byte[] data) {
