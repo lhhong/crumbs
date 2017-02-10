@@ -38,8 +38,8 @@ public class TransactionController {
 
 	@RequestMapping(value = "/register", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public void register(@RequestParam("name") String name, @RequestParam("x") long x, @RequestParam("y") long y) {
-		transactionService.register(name, x, y);
+	public void register(@RequestBody Member member) {
+		transactionService.register(member.getName(), member.getX(), member.getY());
 	}
 
 	@RequestMapping(value = "/offer", method = POST, produces = APPLICATION_JSON_VALUE)
@@ -63,7 +63,7 @@ public class TransactionController {
 
 	@RequestMapping(value = "/agree", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public void agree(@RequestParam("uuid") String uuid) throws IOException {
+	public void agree(@RequestBody String uuid) throws IOException {
 		transactionService.agree(uuid);
 	}
 }
