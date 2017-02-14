@@ -7,11 +7,12 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('PredictCtrl', function($scope,$position) {
+  .controller('PredictCtrl', ['$scope', function($scope) {
 
     console.log("loaded");
     $scope.predictions = [{
-      'SKU' : "asdasdas",
-      Product: "afdad"
+      SKU : "asdasdas",
+      Product: "afdad",
+	 date: 123145123
     }]
-  });
+  }]);
