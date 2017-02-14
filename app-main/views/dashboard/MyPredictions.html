@@ -1,0 +1,43 @@
+<div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-bar-chart-o fa-fw"></i><em> MyPredictions</em></h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong>Shortages</strong>
+      </div>
+      <!-- /.panel-heading -->
+      <div class="panel-body">
+          <div class="table-responsive">
+              <table class="table table-striped">
+                  <thead>
+                      <tr>
+                          <th>SKU</th>
+                          <th>Product</th>
+                          <th>Quantity (Shortfall)</th>
+                          <th>Date</th>
+                          <th>View</th>
+                          <th>Market</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr ng-repeat="x in predictions">
+                          <td>{{ x.SKU }}</td>
+                          <td>{{ x.Product }}</td>
+                          <td>{{ x.Qty }}</td>
+                          <td>{{ x.Date | Date }}</td>
+                          <td>{{ x.View }}</td>
+                          <td>{{ x.Market }}</td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+          <!-- /.table-responsive -->
+      </div>
+      <!-- /.panel-body -->
+    </div>
+</div>

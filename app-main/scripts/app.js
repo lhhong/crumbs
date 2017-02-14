@@ -15,7 +15,7 @@ angular
     'angular-loading-bar',
   ])
   .config(['$stateProvider','$urlRouterProvider','$ocLazyLoadProvider',function ($stateProvider,$urlRouterProvider,$ocLazyLoadProvider) {
-    
+
     $ocLazyLoadProvider.config({
       debug:false,
       events:true,
@@ -93,6 +93,27 @@ angular
           }
         }
       })
+      .state('dashboard.MyPredictions',{
+        url:'/MyPredictions',
+        templateUrl:'views/dashboard/MyPredictions.html',
+        controller: 'PredictCtrl',
+        resolve: {
+          loadMyFile:function($ocLazyLoad) {
+            return $ocLazyLoad.load({
+                name:'sbAdminApp',
+                files:['scripts/controllers/MyPredictions.js']
+            })
+          }
+        }
+    })
+      .state('dashboard.MyTransactions',{
+          url:'/MyTransactions',
+          templateUrl:'views/dashboard/MyTransactions.html'
+      })
+      .state('dashboard.Market',{
+          url:'/Market',
+          templateUrl:'views/dashboard/Market.html'
+      })
       .state('dashboard.form',{
         templateUrl:'views/form.html',
         url:'/form'
@@ -154,5 +175,3 @@ angular
        url:'/grid'
    })
   }]);
-
-    
