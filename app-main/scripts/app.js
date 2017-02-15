@@ -129,7 +129,16 @@ angular
 	})
 	.state('dashboard.Market',{
 		url:'/Market',
-		templateUrl:'views/dashboard/Market.html'
+		templateUrl:'views/dashboard/Market.html',
+		controller: 'MarketCtrl',
+		resolve: {
+			loadMyFile:function($ocLazyLoad) {
+				return $ocLazyLoad.load({
+					name:'sbAdminApp',
+					files:['scripts/controllers/Market.js']
+				})
+			}
+		}
 	})
 	.state('dashboard.form',{
 		templateUrl:'views/form.html',

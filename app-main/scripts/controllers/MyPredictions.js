@@ -12,15 +12,17 @@ angular.module('sbAdminApp')
     console.log("loaded");
     $scope.predictions = [{
       'SKU' : '00123123',
-      product: 'Apples',
-      qty: 12,
-      date: 123145123
+      'product': 'Apples',
+      'qty': '12',
+      'dateOfShortage': 123145123,
+      'expiryDate': 123145123
     },
     {
       'SKU' : '00123144',
-      product: 'Oranges',
-      qty: 21,
-      date: 893545365
+      'product': 'Oranges',
+      'qty': '21',
+      'dateOfShortage': 893545365,
+      'expiryDate': 893545365
     }
 
     ]

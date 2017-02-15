@@ -19,7 +19,8 @@
                           <th>SKU</th>
                           <th>Product</th>
                           <th>Quantity (Shortfall)</th>
-                          <th>Date</th>
+                          <th>Date of Shortage</th>
+                          <th>Expiry Date</th>
                           <th>View</th>
                           <th>Market</th>
                       </tr>
@@ -29,7 +30,8 @@
                           <td>{{ x.SKU }}</td>
                           <td>{{ x.product }}</td>
                           <td>{{ x.qty }}</td>
-                          <td>{{ x.date | date }}</td>
+                          <td>{{ x.dateOfShortage | date }}</td>
+                          <td>{{ x.expiryDate | date }}</td>
                           <td><button ng-click="viewChart(x.product)" type="button" class="btn btn-success btn-xs">View Chart</button></td>
                           <td><button type="button" class="btn btn-info btn-xs">View Market</button></td>
                       </tr>

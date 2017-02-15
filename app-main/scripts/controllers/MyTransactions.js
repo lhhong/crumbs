@@ -11,18 +11,15 @@ angular.module('sbAdminApp')
     console.log("loaded");
     $scope.bought = [{
       'storename' : 'NTUC',
-      product: 'Apples',
-      qty: 12,
-      price: 120
+      'product': 'Apples',
+      'qty': 12,
+      'price': 120
     },
     {
       'storename' : 'Giant',
-      product: 'Oranges',
-      qty: 21,
-      price: 120.09
+      'product': 'Oranges',
+      'qty': 21,
+      'price': 120.09
     }
-    ],
-    $scope.sold = [{
-
-    }]
+    ]
   }]);
