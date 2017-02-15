@@ -27,11 +27,11 @@
                   <tbody>
                       <tr ng-repeat="x in predictions">
                           <td>{{ x.SKU }}</td>
-                          <td>{{ x.Product }}</td>
-                          <td>{{ x.Qty }}</td>
+                          <td>{{ x.product }}</td>
+                          <td>{{ x.qty }}</td>
                           <td>{{ x.date | date }}</td>
-                          <td>{{ x.View }}</td>
-                          <td>{{ x.Market }}</td>
+                          <td><button type="button" class="btn btn-success btn-xs">View Chart</button></td>
+                          <td><button type="button" class="btn btn-info btn-xs">View Market</button></td>
                       </tr>
                   </tbody>
               </table>

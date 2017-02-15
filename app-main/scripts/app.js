@@ -22,7 +22,7 @@ angular
 	});
 
 	$urlRouterProvider.otherwise('/dashboard/home');
-	
+
 	/*
 	$routeProvider
 		.when('/MyPredictions', {
@@ -116,7 +116,16 @@ angular
 	})
 	.state('dashboard.MyTransactions',{
 		url:'/MyTransactions',
-		templateUrl:'views/dashboard/MyTransactions.html'
+		templateUrl:'views/dashboard/MyTransactions.html',
+    controller: 'TransactionCtrl',
+		resolve: {
+			loadMyFile:function($ocLazyLoad) {
+				return $ocLazyLoad.load({
+					name:'sbAdminApp',
+					files:['scripts/controllers/MyTransactions.js']
+				})
+			}
+		}
 	})
 	.state('dashboard.Market',{
 		url:'/Market',

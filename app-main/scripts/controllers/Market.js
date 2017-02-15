@@ -7,21 +7,22 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('PredictCtrl', ['$scope', function($scope) {
-
+  .controller('MarketCtrl', ['$scope', function($scope) {
     console.log("loaded");
-    $scope.predictions = [{
-      'SKU' : '00123123',
+    $scope.selling = [{
+      'storename' : 'NTUC',
       product: 'Apples',
       qty: 12,
-      date: 123145123
+      price: 120
     },
     {
-      'SKU' : '00123144',
+      'storename' : 'Giant',
       product: 'Oranges',
       qty: 21,
-      date: 893545365
+      price: 120.09
     }
-
-    ]
+    ],
+    $scope.request = [{
+      
+    }]
   }]);
