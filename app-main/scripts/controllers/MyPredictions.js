@@ -24,4 +24,7 @@ angular.module('sbAdminApp')
     }
 
     ]
+    $scope.viewChart = function(productName) {
+        console.log(productName);
+    }
   }]);
