@@ -2,10 +2,7 @@ package com.crumbs.rest;
 
 import com.crumbs.ethereum.AccountBean;
 import com.crumbs.ethereum.EthereumBean;
-import com.crumbs.models.Test;
-import com.crumbs.repositories.TestRepo;
 import com.crumbs.services.ContractService;
-import com.crumbs.services.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,12 +17,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  */
 @RestController
 public class TestControllers {
-
-	@Autowired
-	private TestRepo testRepo;
-
-	@Autowired
-	private TestService testService;
 
 	@Autowired
 	private EthereumBean ethereumBean;
@@ -52,21 +43,6 @@ public class TestControllers {
 	@ResponseBody
 	public void testSampleContract() throws IOException {
 		contractService.callMortalGreet();
-	}
-
-	@RequestMapping(value = "/test", method = POST, produces = APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public void saveRandom(@RequestParam("id") long id, @RequestParam("msg") String msg) {
-		Test t = new Test();
-		t.setId(id);
-		t.setMyString(msg);
-		testRepo.save(t);
-	}
-
-	@RequestMapping(value = "/test/{id}", method = GET, produces = APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public Test getRandom(@PathVariable("id") long id) {
-		return testService.getById(id);
 	}
 
 	@RequestMapping(value = "/bestBlock", method = GET, produces = APPLICATION_JSON_VALUE)
