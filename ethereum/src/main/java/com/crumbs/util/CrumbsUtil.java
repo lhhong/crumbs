@@ -28,6 +28,7 @@ public class CrumbsUtil {
 		vm.setSell(tx.isSell());
 		vm.setPrice(tx.getPrice());
 		vm.setTransportPrice(tx.getTransportPrice());
+		vm.setTxDate(tx.getTxDate());
 		if (tx instanceof TxAccepted) {
 			vm.setSender(((TxAccepted) tx).getSender());
 		}

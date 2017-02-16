@@ -125,7 +125,7 @@ contract transaction {
 		}
 	}
 
-	function getTxById(string _uuid) constant returns (address _addr, string _name, int64 _x, int64 _y, uint64 _price, string _item, uint32 _quantity, uint64 _expiry, bool _toSell, bool _pending, bool _done) {
+	function getTxById(string _uuid) constant returns (address _addr, string _name, int64 _x, int64 _y, uint64 _price, string _item, uint32 _quantity, uint64 _expiry, bool _toSell, bool _pending, bool _done, uint64 _txDate) {
 		if (list.txs[_uuid].pending || list.txs[_uuid].quantity == 0) {
 			throw;
 		}
@@ -140,6 +140,7 @@ contract transaction {
 		_toSell = list.txs[_uuid].toSell;
 		_pending = list.txs[_uuid].pending;
 		_done = list.txs[_uuid].done;
+		_txDate = list.txs[_uuid].txDate;
 	}
 
 	function checkPendingStatus(string _uuid) constant returns (bool _pending, address _addr, string _name, int64 _x, int64 _y, uint64 _transportPrice) {

@@ -317,6 +317,7 @@ public class TransactionService {
 			tx.setSell((boolean) result[8]);
 			tx.setPending((boolean) result[9]);
 			tx.setDone((boolean) result[10]);
+			tx.setTxDate(new Date(((BigInteger) result[11]).longValue()));
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
 		}
@@ -394,6 +395,7 @@ public class TransactionService {
 					tx.setSell((boolean) result[8]);
 					tx.setPending((boolean) result[9]);
 					tx.setDone((boolean) result[10]);
+					tx.setTxDate(new Date(((BigInteger) result[11]).longValue()));
 					if (tx.isPending() || tx.isDone()) {
 						logger.warn("transaction {} changed state", tx.getUuid());
 					} else {
