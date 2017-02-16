@@ -24,7 +24,7 @@ public class Shipment implements Serializable {
 	private Date expiry;
 	private int	quantity;
 
-	@ManyToOne
-	@JoinColumn (name = "shipped_product")
+	@ManyToOne (fetch = FetchType.LAZY)
+	@JoinColumn (name = "product")
 	Product product;
 }

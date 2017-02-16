@@ -1,3 +1,5 @@
+package com.crumbs.test;
+
 import com.crumbs.services.TransactionService;
 import org.junit.Before;
 import org.junit.Ignore;

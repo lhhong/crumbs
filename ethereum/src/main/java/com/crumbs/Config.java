@@ -31,6 +31,6 @@ public class Config {
 
     @Bean
     RestTemplate restTemplate(RestTemplateBuilder builder) {
-        return builder.rootUri("http://localhost:9000/").build();
+        return builder.rootUri("http://localhost:5000/").build();
     }
 }
