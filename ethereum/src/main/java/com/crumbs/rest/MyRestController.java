@@ -3,10 +3,7 @@ package com.crumbs.rest;
 
 import com.crumbs.ethereum.AccountBean;
 import com.crumbs.ethereum.EthereumBean;
-import com.crumbs.models.Test;
-import com.crumbs.repositories.TestRepo;
 import com.crumbs.services.ContractService;
-import com.crumbs.services.TestService;
 import com.crumbs.util.CrumbsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +17,6 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 public class MyRestController {
-
-	@Autowired
-	private TestRepo testRepo;
-
-	@Autowired
-	private TestService testService;
 
 	@Autowired
 	private EthereumBean ethereumBean;
