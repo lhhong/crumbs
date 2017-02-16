@@ -1,13 +1,12 @@
 package com.crumbs.services;
 
 import com.crumbs.ethereum.AccountBean;
+import com.crumbs.ethereum.CheckIncludedListener;
 import com.crumbs.models.*;
 import com.crumbs.repositories.MemberRepo;
 import com.crumbs.repositories.TxAcceptedRepo;
 import com.crumbs.repositories.TxSentRepo;
 import com.crumbs.util.CrumbsUtil;
-import javassist.bytecode.ByteArray;
-import org.ethereum.util.ByteUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +37,16 @@ public class TransactionService {
 
 	@Autowired
 	MemberRepo memberRepo;
+
+	private List<CheckIncludedListener> checkIncludedListeners = new ArrayList<>();
+
+	public void addListener(CheckIncludedListener listener) {
+		checkIncludedListeners.add(listener);
+	}
+
+	public void dropListener(CheckIncludedListener listener) {
+		checkIncludedListeners.remove(listener);
+	}
 
 	public TxStatus getTxStatus() {
 		TxStatus status = new TxStatus();
@@ -161,7 +170,7 @@ public class TransactionService {
 		}
 	}
 
-	public void newOffer(long price, String item, int quantity, Date expiry, boolean toSell) {
+	public String newOffer(long price, String item, int quantity, Date expiry, boolean toSell) {
 		TxSent tx = new TxSent();
 		String uuid = generateUUID();
 		tx.setUuid(uuid);
@@ -173,6 +182,7 @@ public class TransactionService {
 		txSentRepo.save(tx);
 		contractService.sendToTxContract("newOffer", 0, uuid, price, item, quantity, expiry.getTime(), toSell);
 		logger.info("Created new offer transaction {}", uuid);
+		return uuid;
 	}
 
 	public void checkOfferIncluded() {
@@ -184,6 +194,9 @@ public class TransactionService {
 					logger.info("Offer transaction {} included!", uuid);
 					tx.setIncluded(true);
 					txSentRepo.save(tx);
+					for (CheckIncludedListener l : checkIncludedListeners) {
+						l.onIncluded(tx);
+					}
 				}
 			}
 		}
@@ -209,6 +222,9 @@ public class TransactionService {
 						logger.info("Accepting transaction {} included!", uuid);
 						tx.setIncluded(true);
 						txAcceptedRepo.save(tx);
+						for (CheckIncludedListener l : checkIncludedListeners) {
+							l.onIncluded(tx);
+						}
 					}
 				}
 			}
@@ -243,6 +259,9 @@ public class TransactionService {
 						logger.info("Agreeing transaction {} included!", uuid);
 						tx.setIncluded(true);
 						txSentRepo.save(tx);
+						for (CheckIncludedListener l : checkIncludedListeners) {
+							l.onIncluded(tx);
+						}
 					}
 				}
 			}

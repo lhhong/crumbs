@@ -7,7 +7,7 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('TransactionCtrl', ['$scope', function($scope) {
+  .controller('TransactionCtrl', ['$scope', 'txService' ,function($scope, txService) {
     console.log("loaded");
     $scope.bought = [{
       'storename' : 'NTUC',

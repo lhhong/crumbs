@@ -7,7 +7,7 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('PredictCtrl', ['$scope', function($scope) {
+  .controller('PredictCtrl', ['$scope', 'txService', function($scope, txService) {
 
     console.log("loaded");
     $scope.predictions = [{
@@ -28,5 +28,21 @@ angular.module('sbAdminApp')
     ]
     $scope.viewChart = function(productName) {
         console.log(productName);
+        txService.getEther(function (data) {
+            console.log(data)
+        })
+        var offer = {
+            price: 20,
+            item: "dasdsf",
+            quantity: 100,
+            expiry: 1234523452,
+            isSell: true
+        }
+        txService.sendOffer(offer, function(data) {
+            console.log(data)
+            if (data) {
+                //codes when transaction is included
+            }
+        })
     }
   }]);

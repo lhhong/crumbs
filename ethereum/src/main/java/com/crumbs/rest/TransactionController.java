@@ -1,13 +1,16 @@
 package com.crumbs.rest;
 
-import com.crumbs.models.Member;
-import com.crumbs.models.TransactionVM;
-import com.crumbs.models.TxAccepted;
-import com.crumbs.models.TxStatus;
+import com.crumbs.ethereum.CheckIncludedListener;
+import com.crumbs.models.*;
 import com.crumbs.services.Optimize;
 import com.crumbs.services.TransactionService;
 import com.crumbs.util.CrumbsUtil;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -23,6 +26,8 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  */
 @RestController(value = "/tx")
 public class TransactionController {
+
+	private static final Logger logger = LoggerFactory.getLogger(TransactionController.class);
 
 	@Autowired
 	private TransactionService transactionService;
@@ -44,8 +49,23 @@ public class TransactionController {
 
 	@RequestMapping(value = "/offer", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public void postOffer(@RequestBody TransactionVM offer) {
-		transactionService.newOffer(offer.getPrice(), offer.getItem(), offer.getQuantity(), offer.getExpiry(), offer.isSell());
+	public boolean postOffer(@RequestBody TransactionVM offer) {
+		String uuid = transactionService.newOffer(offer.getPrice(), offer.getItem(), offer.getQuantity(), offer.getExpiry(), offer.isSell());
+		ResponseEntity.BodyBuilder builder = ResponseEntity.ok();
+		Thread t = Thread.currentThread();
+		transactionService.addListener(tx -> {
+			logger.info("onIncluded called");
+			if (tx.getUuid().equalsIgnoreCase(uuid)) {
+				logger.info("sending included receipt to client for offer {}", uuid);
+				t.interrupt();
+			}
+		});
+		try {
+			Thread.sleep(60000);
+		} catch (InterruptedException e) {
+			return true;
+		}
+		return false;
 	}
 
 	@RequestMapping(value = "/offer", method = GET, produces = APPLICATION_JSON_VALUE)

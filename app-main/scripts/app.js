@@ -109,7 +109,8 @@ angular
 			loadMyFile:function($ocLazyLoad) {
 				return $ocLazyLoad.load({
 					name:'sbAdminApp',
-					files:['scripts/controllers/MyPredictions.js']
+					files:['scripts/controllers/MyPredictions.js',
+					'scripts/services/transaction-service.js']
 				})
 			}
 		}
@@ -122,7 +123,8 @@ angular
 			loadMyFile:function($ocLazyLoad) {
 				return $ocLazyLoad.load({
 					name:'sbAdminApp',
-					files:['scripts/controllers/MyTransactions.js']
+					files:['scripts/controllers/MyTransactions.js',
+					'scripts/services/transaction-service.js']
 				})
 			}
 		}
