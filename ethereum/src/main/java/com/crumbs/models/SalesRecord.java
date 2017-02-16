@@ -3,10 +3,7 @@ package com.crumbs.models;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -14,10 +11,10 @@ import java.util.Date;
  * Created by low on 15/2/17 9:16 PM.
  */
 @Entity
-@Table (name = "sales_records")
+@Table (name = "sales_record")
 @Getter
 @Setter
-public class SalesRecords implements Serializable{
+public class SalesRecord implements Serializable{
 
 	@Id
 	@GeneratedValue
@@ -25,4 +22,8 @@ public class SalesRecords implements Serializable{
 
 	private int quantity;
 	private Date date;
+
+	@ManyToOne
+	@JoinColumn (name = "sold_product")
+	Product product;
 }
