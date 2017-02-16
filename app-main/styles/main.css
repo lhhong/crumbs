@@ -75,6 +75,10 @@ body {
   .jumbotron {
     border-bottom: 0;
   }
+
+  th {
+    cursor: pointer;
+  }
   .arrow-up {
     width: 0;
     height: 0;
