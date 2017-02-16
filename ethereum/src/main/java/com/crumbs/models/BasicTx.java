@@ -23,6 +23,7 @@ public class BasicTx implements Serializable{
 	String item;
 	int quantity;
 	Date expiry;
+	Date txDate;
 	boolean sell;
 	long transportPrice;
 	boolean pending;

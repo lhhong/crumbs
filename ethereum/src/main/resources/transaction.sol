@@ -26,6 +26,7 @@ contract transaction {
 		string item;
 		uint32 quantity;
 		uint64 expiry;
+		uint64 txDate;
 		bool toSell;
 		Member accepter;
 		uint64 transportPrice;
@@ -64,7 +65,7 @@ contract transaction {
 		memList.members[memList.keys[key].addr].y_loc = _y;
 	}
 
-	function newOffer(string _uuid, uint64 _price, string _item, uint32 _quantity, uint64 _expiry, bool _toSell) public {
+	function newOffer(string _uuid, uint64 _price, string _item, uint32 _quantity, uint64 _expiry, bool _toSell, uint64 _txDate) public {
 		if (memList.members[msg.sender].x_loc == 0) {
 			throw;
 		}
@@ -84,6 +85,7 @@ contract transaction {
 		list.txs[list.keys[key].uuid].quantity = _quantity;
 		list.txs[list.keys[key].uuid].expiry = _expiry;
 		list.txs[list.keys[key].uuid].toSell = _toSell;
+		list.txs[list.keys[key].uuid].txDate = _txDate;
 	}
 
 	function strConcat(string _a, string _b) internal returns (string){

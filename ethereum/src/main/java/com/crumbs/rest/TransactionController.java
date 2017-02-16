@@ -50,7 +50,7 @@ public class TransactionController {
 	@RequestMapping(value = "/offer", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public boolean postOffer(@RequestBody TransactionVM offer) {
-		String uuid = transactionService.newOffer(offer.getPrice(), offer.getItem(), offer.getQuantity(), offer.getExpiry(), offer.isSell());
+		String uuid = transactionService.newOffer(offer);
 		ResponseEntity.BodyBuilder builder = ResponseEntity.ok();
 		Thread t = Thread.currentThread();
 		transactionService.addListener(tx -> {

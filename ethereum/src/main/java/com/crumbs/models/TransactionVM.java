@@ -19,7 +19,7 @@ public class TransactionVM implements Serializable{
 	int quantity;
 	Date expiry;
 	Date txDate;
-	boolean isSell;
+	boolean sell;
 	Member sender;
 	Member accepter;
 	long transportPrice;

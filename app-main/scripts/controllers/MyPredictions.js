@@ -36,7 +36,8 @@ angular.module('sbAdminApp')
             item: "dasdsf",
             quantity: 100,
             expiry: 1234523452,
-            isSell: true
+            isSell: true,
+            txDate: 274523454543
         }
         txService.sendOffer(offer, function(data) {
             console.log(data)

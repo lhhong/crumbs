@@ -170,17 +170,18 @@ public class TransactionService {
 		}
 	}
 
-	public String newOffer(long price, String item, int quantity, Date expiry, boolean toSell) {
+	public String newOffer(TransactionVM txReceived) {
 		TxSent tx = new TxSent();
 		String uuid = generateUUID();
 		tx.setUuid(uuid);
-		tx.setExpiry(expiry);
-		tx.setSell(toSell);
-		tx.setQuantity(quantity);
-		tx.setItem(item);
-		tx.setPrice(price);
+		tx.setExpiry(txReceived.getExpiry());
+		tx.setSell(txReceived.isSell());
+		tx.setQuantity(txReceived.getQuantity());
+		tx.setItem(txReceived.getItem());
+		tx.setPrice(txReceived.getPrice());
+		tx.setTxDate(txReceived.getTxDate());
 		txSentRepo.save(tx);
-		contractService.sendToTxContract("newOffer", 0, uuid, price, item, quantity, expiry.getTime(), toSell);
+		contractService.sendToTxContract("newOffer", 0, uuid, tx.getPrice(), tx.getItem(), tx.getQuantity(), tx.getExpiry().getTime(), tx.isSell(), tx.getTxDate());
 		logger.info("Created new offer transaction {}", uuid);
 		return uuid;
 	}
