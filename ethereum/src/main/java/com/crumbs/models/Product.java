@@ -22,8 +22,8 @@ public class Product implements Serializable {
 	private String name;
 	private String category;
 	private long price;
-	@OneToMany (mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany (mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<SalesRecord> salesRecords;
-	@OneToMany (mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@OneToMany (mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private Set<Shipment> shipments;
 }

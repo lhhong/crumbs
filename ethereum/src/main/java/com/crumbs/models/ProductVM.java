@@ -11,5 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class ProductVM {
-	private Product product;
+	private String name;
+	private String category;
+	private long price;
 }

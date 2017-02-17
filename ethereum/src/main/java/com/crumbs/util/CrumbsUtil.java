@@ -1,11 +1,11 @@
 package com.crumbs.util;
 
-import com.crumbs.models.BasicTx;
-import com.crumbs.models.TransactionVM;
-import com.crumbs.models.TxAccepted;
-import com.crumbs.models.TxSent;
+import com.crumbs.models.*;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 
 /**
  * Created by low on 7/2/17 9:57 AM.
@@ -36,5 +36,25 @@ public class CrumbsUtil {
 			vm.setAccepter(((TxSent) tx).getAccepter());
 		}
 		return vm;
+	}
+
+	public static ProductVM toProductVM(Product product) {
+		return new ProductVM(product.getName(), product.getCategory(), product.getPrice());
+	}
+
+	public static Date toDate(LocalDate localDate) {
+		return new Date(localDate.atStartOfDay(ZoneId.of("GMT")).toInstant().toEpochMilli());
+	}
+
+	public static LocalDate toLocalDate(Date date) {
+		return LocalDate.from(date.toInstant().atZone(ZoneId.of("GMT")));
+	}
+
+	public static Date today() {
+		return toDate(todayLocalDate());
+	}
+
+	public static LocalDate todayLocalDate() {
+		return LocalDate.ofYearDay(2017,130);
 	}
 }
