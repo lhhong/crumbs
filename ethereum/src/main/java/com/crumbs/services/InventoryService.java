@@ -36,15 +36,21 @@ public class InventoryService {
 
 	public Map<LocalDate,Integer> productToShipmentQuantityArray(Product product) {
 		Map<LocalDate,Integer> result = new HashMap<>();
-		List<Shipment> shipments = shipmentRepo.findByProductAndQuantityNotAndExpiryAfter(product,0, CrumbsUtil.today());
+		List<Shipment> shipments = shipmentRepo.findByProductAndQuantityNotAndExpiryAfter(product,0, CrumbsUtil.todayLocalDate());
 		for (Shipment record : shipments) {
-			if (result.containsKey(CrumbsUtil.toLocalDate(record.getShipDate()))) {
-				result.merge(CrumbsUtil.toLocalDate(record.getShipDate()), record.getQuantity(), (current, addition) -> (current + addition));
+			if (result.containsKey(record.getShipDate())) {
+				result.merge(record.getShipDate(), record.getQuantity(), (current, addition) -> (current + addition));
 			}
 			else {
-				result.put(CrumbsUtil.toLocalDate(record.getShipDate()), record.getQuantity());
+				result.put(record.getShipDate(), record.getQuantity());
 			}
 		}
+		return result;
+	}
+
+	public Map<LocalDate,Integer> buildOneWeekSupply(Product product) {
+		Map<LocalDate,Integer> result = new HashMap<>();
+		//TODO build this shit
 		return result;
 	}
 
