@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -21,8 +22,8 @@ public class Shipment implements Serializable {
 	@GeneratedValue
 	long id;
 
-	private Date shipDate;
-	private Date expiry;
+	private LocalDate shipDate;
+	private LocalDate expiry;
 	private int	quantity;
 
 	@ManyToOne (fetch = FetchType.LAZY)

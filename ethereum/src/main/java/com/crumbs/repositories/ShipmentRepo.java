@@ -5,6 +5,7 @@ import com.crumbs.models.Shipment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -13,6 +14,6 @@ import java.util.List;
  */
 @Repository
 public interface ShipmentRepo extends JpaRepository<Shipment, Long> {
-	List<Shipment> findByProductAndQuantityNotAndExpiryAfter(Product product, int quantity, Date expiry);
-	List<Shipment> findByProductAndQuantityNotAndExpiryAfterAndShipDateBefore(Product product, int quantity, Date expiry, Date shipDate);
+	List<Shipment> findByProductAndQuantityNotAndExpiryAfter(Product product, int quantity, LocalDate expiry);
+	List<Shipment> findByProductAndQuantityNotAndExpiryAfterAndShipDateBefore(Product product, int quantity, LocalDate expiry, LocalDate shipDate);
 }
