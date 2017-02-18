@@ -6,6 +6,7 @@ import com.crumbs.models.ProductVM;
 import com.crumbs.models.SalesRecord;
 import com.crumbs.models.Shipment;
 import com.crumbs.services.InventoryService;
+import com.crumbs.services.PredictionSrvc;
 import com.crumbs.util.DateUtil;
 import org.junit.After;
 import org.junit.Before;
@@ -29,6 +30,9 @@ public class ProductRepoTest {
 
 	@Autowired
 	InventoryService inventoryService;
+
+	@Autowired
+	PredictionSrvc predictionSrvc;
 
 	@Before
 	public void setUpApple() {
@@ -72,6 +76,12 @@ public class ProductRepoTest {
 		s6.setExpiry(DateUtil.daysFromToday(7));
 		s6.setShipDate(DateUtil.daysFromToday(0));
 		l.add(s6);
+		Shipment s7 = new Shipment();
+		s7.setProduct(p);
+		s7.setQuantity(46);
+		s7.setExpiry(DateUtil.daysFromToday(6));
+		s7.setShipDate(DateUtil.daysFromToday(2));
+		l.add(s7);
 		p.setShipments(l);
 		SalesRecord r1 = new SalesRecord();
 		r1.setQuantity(123456);
@@ -104,10 +114,27 @@ public class ProductRepoTest {
 	}
 
 	@Test
+	public void predictionTest() {
+		String p ="apple";
+		List<Integer> list = new ArrayList<>();
+		list.add(3);
+		list.add(4);
+		list.add(5);
+		list.add(6);
+		list.add(7);
+		list.add(8);
+		list.add(9);
+		list.add(10);
+		logger.info(JSON.toJSONString(inventoryService.futureStockInArray(p)));
+		logger.info(JSON.toJSONString(predictionSrvc.aggregatedStock(list, p)));
+	}
+
+
+	@Test
 	public void inventoryMapTest() {
-		Product p = new Product();
-		p.setName("apple");
+		String p = "apple";
 		logger.info(JSON.toJSONString(inventoryService.futureStock(p)));
+		logger.info(JSON.toJSONString(inventoryService.futureStockInArray(p)));
 	}
 
 	@After

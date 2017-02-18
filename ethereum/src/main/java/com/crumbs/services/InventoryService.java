@@ -49,12 +49,26 @@ public class InventoryService {
 		return result;
 	}
 
-	public Map<LocalDate, StockUpdate> futureStock(Product product) {
+	public List<StockUpdate> futureStockInArray(String product) {
+		Map<LocalDate, StockUpdate> map = futureStock(product);
+		List<StockUpdate> list = new ArrayList<>();
+		List<LocalDate> dates = new ArrayList<>();
+		dates.addAll(map.keySet());
+		Collections.sort(dates);
+		for (LocalDate date : dates) {
+			list.add(map.get(date));
+		}
+		return list;
+	}
+
+	public Map<LocalDate, StockUpdate> futureStock(String product) {
 		Map<LocalDate,StockUpdate> result = new HashMap<>();
 		for (int i = 1; i <= 7; i++) {
 			result.put(DateUtil.todayLocalDate().plusDays(i), new StockUpdate());
 		}
-		List<Shipment> shipments = shipmentRepo.findByProductAndQuantityNotAndExpiryAfter(product, 0, DateUtil.today());
+		Product p = new Product();
+		p.setName(product);
+		List<Shipment> shipments = shipmentRepo.findByProductAndQuantityNotAndExpiryAfter(p, 0, DateUtil.today());
 		List<ShipmentVM> shipmentVMS = new ArrayList<>();
 		shipments.forEach((shipment) -> shipmentVMS.add(new ShipmentVM(shipment)));
 		for (ShipmentVM shipment : shipmentVMS) {
@@ -69,7 +83,6 @@ public class InventoryService {
 				}
 				else {
 					for (StockUpdate stockUpdate : result.values()) {
-						logger.info("{}", shipment.getQuantity());
 						stockUpdate.addQuantity(shipment.getQuantity());
 					}
 				}
@@ -83,7 +96,6 @@ public class InventoryService {
 						result.get(date).dispose(shipment.getQuantity());
 						break;
 					}
-					logger.info("ADDING: at date: {} dealing with quantity {}", date, shipment.getQuantity());
 					result.get(date).addQuantity(shipment.getQuantity());
 					date = date.plusDays(1);
 				}
@@ -111,9 +123,5 @@ public class InventoryService {
 
 	public void deleteProduct(String product) {
 		productRepo.delete(product);
-	}
-
-	public void test() {
-		restTemplate.postForEntity("url", new Object(), TransactionVM.class);
 	}
 }
