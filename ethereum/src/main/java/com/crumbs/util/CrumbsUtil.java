@@ -42,19 +42,4 @@ public class CrumbsUtil {
 		return new ProductVM(product.getName(), product.getCategory(), product.getPrice());
 	}
 
-	public static Date toDate(LocalDate localDate) {
-		return new Date(localDate.atStartOfDay(ZoneId.of("GMT")).toInstant().toEpochMilli());
-	}
-
-	public static LocalDate toLocalDate(Date date) {
-		return LocalDate.from(date.toInstant().atZone(ZoneId.of("GMT")));
-	}
-
-	public static Date today() {
-		return toDate(todayLocalDate());
-	}
-
-	public static LocalDate todayLocalDate() {
-		return LocalDate.ofYearDay(2017,130);
-	}
 }

@@ -6,7 +6,9 @@ import com.crumbs.models.ProductVM;
 import com.crumbs.models.SalesRecord;
 import com.crumbs.models.Shipment;
 import com.crumbs.services.InventoryService;
-import com.crumbs.util.CrumbsUtil;
+import com.crumbs.util.DateUtil;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -22,48 +24,54 @@ import java.util.*;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-//@WebIntegrationTest
 public class ProductRepoTest {
 	private static final Logger logger = LoggerFactory.getLogger(ProductRepoTest.class);
 
 	@Autowired
 	InventoryService inventoryService;
 
-	@Test
-	public void productStorageTest() {
+	@Before
+	public void setUpApple() {
 		Product p = new Product();
 		p.setName("apple");
 		p.setPrice(123);
 		Shipment s = new Shipment();
 		s.setProduct(p);
 		s.setQuantity(1);
-		s.setExpiry(CrumbsUtil.toDate(CrumbsUtil.todayLocalDate().minusDays(2)));
-		s.setShipDate(CrumbsUtil.today());
+		s.setExpiry(DateUtil.daysFromToday(-2));
+		s.setShipDate(DateUtil.daysFromToday(-8));
 		Set<Shipment> l = new HashSet<>();
 		l.add(s);
 		Shipment s2 = new Shipment();
 		s2.setProduct(p);
 		s2.setQuantity(2);
-		s2.setExpiry(CrumbsUtil.toDate(CrumbsUtil.todayLocalDate().plusDays(2)));
-		s2.setShipDate(CrumbsUtil.today());
+		s2.setExpiry(DateUtil.daysFromToday(8));
+		s2.setShipDate(DateUtil.daysFromToday(2));
 		l.add(s2);
 		Shipment s3 = new Shipment();
 		s3.setProduct(p);
-		s3.setQuantity(0);
-		s3.setExpiry(CrumbsUtil.toDate(CrumbsUtil.todayLocalDate().plusDays(2)));
-		s3.setShipDate(CrumbsUtil.today());
+		s3.setQuantity(3);
+		s3.setExpiry(DateUtil.daysFromToday(7));
+		s3.setShipDate(DateUtil.daysFromToday(1));
 		l.add(s3);
 		Shipment s4 = new Shipment();
 		s4.setProduct(p);
 		s4.setQuantity(4);
-		s4.setExpiry(CrumbsUtil.toDate(CrumbsUtil.todayLocalDate().plusDays(1)));
-		s4.setShipDate(CrumbsUtil.today());
+		s4.setExpiry(DateUtil.daysFromToday(9));
+		s4.setShipDate(DateUtil.today());
 		l.add(s4);
 		Shipment s5 = new Shipment();
 		s5.setProduct(p);
 		s5.setQuantity(5);
-		s5.setExpiry(CrumbsUtil.today());
+		s5.setExpiry(DateUtil.daysFromToday(6));
+		s5.setShipDate(DateUtil.daysFromToday(-2));
 		l.add(s5);
+		Shipment s6 = new Shipment();
+		s6.setProduct(p);
+		s6.setQuantity(6);
+		s6.setExpiry(DateUtil.daysFromToday(7));
+		s6.setShipDate(DateUtil.daysFromToday(0));
+		l.add(s6);
 		p.setShipments(l);
 		SalesRecord r1 = new SalesRecord();
 		r1.setQuantity(123456);
@@ -93,6 +101,17 @@ public class ProductRepoTest {
 		logger.info(JSON.toJSONString(outcome));
 		logger.info(JSON.toJSONString(inventoryService.productToDateQuantityArray(p)));
 		logger.info(JSON.toJSONString(inventoryService.productToShipmentQuantityArray(p)));
+	}
+
+	@Test
+	public void inventoryMapTest() {
+		Product p = new Product();
+		p.setName("apple");
+		logger.info(JSON.toJSONString(inventoryService.futureStock(p)));
+	}
+
+	@After
+	public void removeApple() {
 		inventoryService.deleteProduct("apple");
 	}
 
