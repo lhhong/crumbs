@@ -5,7 +5,6 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDate;
 import java.util.Date;
 
 /**
@@ -22,7 +21,7 @@ public class SalesRecord implements Serializable{
 	private long id;
 
 	private int quantity;
-	private LocalDate date;
+	private Date date;
 
 	@ManyToOne (fetch = FetchType.LAZY)
 	@JoinColumn (name = "product")
