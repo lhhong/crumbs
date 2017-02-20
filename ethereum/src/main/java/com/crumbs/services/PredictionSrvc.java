@@ -1,5 +1,7 @@
 package com.crumbs.services;
 
+import com.crumbs.entities.Product;
+import com.crumbs.entities.SalesRecord;
 import com.crumbs.models.*;
 import com.crumbs.repositories.SalesRecordRepo;
 import com.crumbs.util.DateUtil;

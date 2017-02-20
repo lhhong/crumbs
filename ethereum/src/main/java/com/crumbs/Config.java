@@ -1,7 +1,7 @@
 package com.crumbs;
 
-import com.crumbs.ethereum.AccountBean;
-import com.crumbs.ethereum.EthereumBean;
+import com.crumbs.components.AccountBean;
+import com.crumbs.components.EthereumBean;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

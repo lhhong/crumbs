@@ -1,4 +1,4 @@
-package com.crumbs.models;
+package com.crumbs.entities;
 
 import lombok.Getter;
 import lombok.Setter;

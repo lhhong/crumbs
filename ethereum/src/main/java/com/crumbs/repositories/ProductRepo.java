@@ -1,6 +1,6 @@
 package com.crumbs.repositories;
 
-import com.crumbs.models.Product;
+import com.crumbs.entities.Product;
 import org.springframework.data.repository.CrudRepository;
 
 /**

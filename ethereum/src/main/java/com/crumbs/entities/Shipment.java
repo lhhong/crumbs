@@ -1,4 +1,4 @@
-package com.crumbs.models;
+package com.crumbs.entities;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,6 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by low on 15/2/17 9:11 PM.

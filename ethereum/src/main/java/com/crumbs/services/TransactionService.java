@@ -1,7 +1,10 @@
 package com.crumbs.services;
 
-import com.crumbs.ethereum.AccountBean;
-import com.crumbs.ethereum.CheckIncludedListener;
+import com.crumbs.components.AccountBean;
+import com.crumbs.components.CheckIncludedListener;
+import com.crumbs.entities.Member;
+import com.crumbs.entities.TxAccepted;
+import com.crumbs.entities.TxSent;
 import com.crumbs.models.*;
 import com.crumbs.repositories.MemberRepo;
 import com.crumbs.repositories.TxAcceptedRepo;

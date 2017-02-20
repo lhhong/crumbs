@@ -1,11 +1,12 @@
 package com.crumbs.util;
 
+import com.crumbs.entities.BasicTx;
+import com.crumbs.entities.Product;
+import com.crumbs.entities.TxAccepted;
+import com.crumbs.entities.TxSent;
 import com.crumbs.models.*;
 
 import java.math.BigInteger;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 
 /**
  * Created by low on 7/2/17 9:57 AM.

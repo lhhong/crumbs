@@ -1,14 +1,13 @@
 package com.crumbs.services;
 
 import com.alibaba.fastjson.JSON;
-import com.crumbs.ethereum.AccountBean;
-import com.crumbs.ethereum.EthereumBean;
-import com.crumbs.ethereum.SendingTxListener;
-import com.crumbs.models.CrumbsContract;
+import com.crumbs.components.AccountBean;
+import com.crumbs.components.EthereumBean;
+import com.crumbs.components.SendingTxListener;
+import com.crumbs.entities.CrumbsContract;
 import com.crumbs.repositories.CrumbsContractRepo;
 import org.ethereum.core.CallTransaction;
 import org.ethereum.core.Transaction;
-import org.ethereum.core.TransactionReceipt;
 import org.ethereum.solidity.compiler.CompilationResult;
 import org.ethereum.solidity.compiler.SolidityCompiler;
 import org.ethereum.util.ByteUtil;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.util.Scanner;
 
 /**

@@ -1,4 +1,4 @@
-package com.crumbs.ethereum;
+package com.crumbs.components;
 
 import com.alibaba.fastjson.JSON;
 import com.crumbs.repositories.CrumbsContractRepo;
@@ -17,8 +17,6 @@ import org.spongycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Future;
 
 

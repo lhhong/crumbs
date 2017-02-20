@@ -1,6 +1,6 @@
-package com.crumbs.ethereum;
+package com.crumbs.components;
 
-import com.crumbs.models.Account;
+import com.crumbs.entities.Account;
 import com.crumbs.repositories.AccountRepo;
 import org.ethereum.core.Transaction;
 import org.ethereum.crypto.ECKey;

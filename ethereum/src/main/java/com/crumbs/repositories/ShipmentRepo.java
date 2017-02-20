@@ -1,7 +1,7 @@
 package com.crumbs.repositories;
 
-import com.crumbs.models.Product;
-import com.crumbs.models.Shipment;
+import com.crumbs.entities.Product;
+import com.crumbs.entities.Shipment;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

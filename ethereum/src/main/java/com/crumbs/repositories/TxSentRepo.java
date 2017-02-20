@@ -1,6 +1,6 @@
 package com.crumbs.repositories;
 
-import com.crumbs.models.TxSent;
+import com.crumbs.entities.TxSent;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

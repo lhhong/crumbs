@@ -1,20 +1,16 @@
-package com.crumbs.ethereum;
+package com.crumbs.components;
 
-import com.crumbs.models.CrumbsContract;
+import com.crumbs.entities.CrumbsContract;
 import com.crumbs.repositories.CrumbsContractRepo;
 import org.ethereum.core.*;
 import org.ethereum.facade.Ethereum;
-import org.ethereum.listener.EthereumListener;
 import org.ethereum.listener.EthereumListenerAdapter;
-import org.ethereum.util.BIUtil;
 import org.ethereum.util.ByteUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Scanner;
 

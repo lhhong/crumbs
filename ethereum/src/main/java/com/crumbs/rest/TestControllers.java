@@ -1,7 +1,7 @@
 package com.crumbs.rest;
 
-import com.crumbs.ethereum.AccountBean;
-import com.crumbs.ethereum.EthereumBean;
+import com.crumbs.components.AccountBean;
+import com.crumbs.components.EthereumBean;
 import com.crumbs.services.ContractService;
 import com.crumbs.services.WebSocketSrvc;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,5 +1,6 @@
 package com.crumbs.models;
 
+import com.crumbs.entities.Member;
 import lombok.Getter;
 import lombok.Setter;
 

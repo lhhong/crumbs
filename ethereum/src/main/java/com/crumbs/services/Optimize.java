@@ -1,9 +1,7 @@
 package com.crumbs.services;
 
-import com.crumbs.models.BasicTx;
-import com.crumbs.models.Member;
 import com.crumbs.models.TransactionVM;
-import com.crumbs.models.TxAccepted;
+import com.crumbs.entities.TxAccepted;
 import com.crumbs.util.CrumbsUtil;
 import org.springframework.stereotype.Service;
 

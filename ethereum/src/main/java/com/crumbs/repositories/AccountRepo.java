@@ -1,6 +1,6 @@
 package com.crumbs.repositories;
 
-import com.crumbs.models.Account;
+import com.crumbs.entities.Account;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

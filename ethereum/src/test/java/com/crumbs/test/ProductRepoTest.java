@@ -1,10 +1,10 @@
 package com.crumbs.test;
 
 import com.alibaba.fastjson.JSON;
-import com.crumbs.models.Product;
+import com.crumbs.entities.Product;
 import com.crumbs.models.ProductVM;
-import com.crumbs.models.SalesRecord;
-import com.crumbs.models.Shipment;
+import com.crumbs.entities.SalesRecord;
+import com.crumbs.entities.Shipment;
 import com.crumbs.services.InventoryService;
 import com.crumbs.services.PredictionSrvc;
 import com.crumbs.util.DateUtil;

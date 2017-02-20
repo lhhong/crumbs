@@ -1,5 +1,8 @@
 package com.crumbs.services;
 
+import com.crumbs.entities.Product;
+import com.crumbs.entities.SalesRecord;
+import com.crumbs.entities.Shipment;
 import com.crumbs.models.*;
 import com.crumbs.repositories.ProductRepo;
 import com.crumbs.repositories.SalesRecordRepo;

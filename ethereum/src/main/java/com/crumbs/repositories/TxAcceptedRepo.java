@@ -1,6 +1,6 @@
 package com.crumbs.repositories;
 
-import com.crumbs.models.TxAccepted;
+import com.crumbs.entities.TxAccepted;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

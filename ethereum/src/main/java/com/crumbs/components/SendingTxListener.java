@@ -1,4 +1,4 @@
-package com.crumbs.ethereum;
+package com.crumbs.components;
 
 import org.ethereum.core.Transaction;
 

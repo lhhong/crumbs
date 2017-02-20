@@ -1,5 +1,6 @@
 package com.crumbs.models;
 
+import com.crumbs.entities.Shipment;
 import com.crumbs.util.DateUtil;
 import lombok.Getter;
 import lombok.Setter;
