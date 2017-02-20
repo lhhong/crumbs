@@ -14,9 +14,18 @@ import java.util.List;
 public class Prediction {
 
 	private ProductVM product;
-	private List<RemainingStock> stock = new ArrayList<>();
+
+	//from day 0 to day 7
+	private List<RemainingStock> stocks = new ArrayList<>();
+
+	//from day 1 to day 7
+	private List<ExcessShipment> shipments = new ArrayList<>();
 
 	public void addToStockList(RemainingStock remainingStock) {
-		stock.add(remainingStock);
+		stocks.add(remainingStock);
+	}
+
+	public void addToShipmentList(ExcessShipment excessShipment) {
+		shipments.add(excessShipment);
 	}
 }

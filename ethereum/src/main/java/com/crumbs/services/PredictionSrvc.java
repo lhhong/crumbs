@@ -31,6 +31,13 @@ public class PredictionSrvc {
 	@Autowired
 	SalesRecordRepo salesRecordRepo;
 
+	public PredictionVM getAndRankPredictions() {
+		PredictionVM predictionVM = new PredictionVM();
+		List<Prediction> predictions = getAllPredictions();
+		//TODO rank predictions and create new ExceShipVM or RemStockVM to be added to predictions
+		return predictionVM;
+	}
+
 	public List<Prediction> getAllPredictions() {
 		restTemplate.postForEntity("url", Integer[].class, Integer[].class);
 		List<Prediction> predictions = new ArrayList<>();
@@ -48,26 +55,43 @@ public class PredictionSrvc {
 	}
 
 	public Prediction buildPrediction(List<Integer> demand, String product) {
-		List<Integer> aggregatedStock = aggregatedStock(demand, product);
+		if (demand.size() != 8) {
+			logger.error("demand array not of size 8");
+			return null;
+		}
 		ProductVM productVM = inventoryService.getProduct(product);
+		List<StockUpdate> currentStock = inventoryService.futureStockInArray(product);
+
 		Prediction prediction = new Prediction();
 		prediction.setProduct(productVM);
+
+		List<Integer> disposals = new ArrayList<>();
+		currentStock.forEach(stock -> disposals.add(stock.getDisposed()));
+
+		//NB: currentStocks and disposal start from day 1 (index 0) containing 7 values while demand starts from day 0 containing 8 values
+		int carryOver = currentStock.get(0).getCurrentQuantity() - currentStock.get(0).getStock() + currentStock.get(0).getDisposed();
 		for (int i = 0; i < 7; i++) {
-			RemainingStock stock = new RemainingStock();
-			stock.setQuantity(aggregatedStock.get(i));
-			double urgency = calculateUrgency(demand.get(i), aggregatedStock.get(i));
-			stock.setUrgency(urgency);
-			stock.setUrgencyLevel(getUrgencyLevel(urgency));
-			stock.setPercentExtra((int) (100*calcPercentExtra(demand.get(i), aggregatedStock.get(i))));
-			prediction.addToStockList(stock);
+			int toDeduct = demand.get(i);
+			for (int j = i; j < 7; j++) {
+				int initialDispose = disposals.get(j);
+				disposals.set((j), Integer.max(0, initialDispose - toDeduct));
+				toDeduct = toDeduct - initialDispose;
+				if (toDeduct < 0) break;
+			}
+
+			int predictedStock = carryOver - demand.get(i);
+			prediction.addToStockList(new RemainingStock(demand.get(i), predictedStock, i));
+			prediction.addToShipmentList(new ExcessShipment(currentStock.get(i).getDisposed(), disposals.get(i), i));
 		}
+		int predictedStock = carryOver - demand.get(7);
+		prediction.addToStockList(new RemainingStock(demand.get(7), predictedStock, 7));
 		return prediction;
 	}
 
+	/**
+	 * @deprecated
+	 */
 	public List<Integer> aggregatedStock(List<Integer> demand, String product) {
-		if (demand.size() != 8) {
-			logger.error("demand array not of size 8");
-		}
 		List<Integer> predictedStock = new ArrayList<>();
 		List<StockUpdate> currentStock = inventoryService.futureStockInArray(product);
 
@@ -92,48 +116,4 @@ public class PredictionSrvc {
 		return predictedStock;
 	}
 
-	private String getUrgencyLevel(double urgency) {
-		List<Double> threshold = calcThreshold();
-		if (urgency > threshold.get(0)) {
-			return "red";
-		}
-		if (urgency > threshold.get(1)) {
-			return "orange";
-		}
-		if (urgency > threshold.get(2)) {
-			return "yellow";
-		}
-		else {
-			return "green";
-		}
-	}
-
-	private double calcPercentExtra(int demand, int predictedStock) {
-		return  ((double) predictedStock) / ((double) demand);
-	}
-
-	private double calculateUrgency(int demand, int predictedStock) {
-		return urgencyFunction(calcPercentExtra(demand, predictedStock));
-	}
-
-	private final double perfectPercentage = 0.15;
-	private final double multiplicator = 4;
-
-	private double urgencyFunction(double x) {
-		x = (x - perfectPercentage) * multiplicator;
-		return ((x* x) * (1- sigmoid(x, 4))) + ((x*x/6) * sigmoid(x, 6));
-	}
-
-	private double sigmoid(double x, int alpha) {
-		return (1d / (1 + Math.exp(-alpha * x)));
-	}
-
-	private List<Double> calcThreshold() {
-		List<Double> threshold = new ArrayList<>();
-		double severeUrgency = urgencyFunction(0d);
-		threshold.add(severeUrgency);
-		threshold.add(severeUrgency*2/3);
-		threshold.add(severeUrgency/3);
-		return threshold;
-	}
 }
