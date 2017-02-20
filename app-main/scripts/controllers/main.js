@@ -7,5 +7,17 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('MainCtrl', function($scope,$position) {
-  });
+  .controller('MainCtrl', ['$scope', '$position', '$interval', 'txService', function($scope, $position, $interval, txService) {
+    console.log("main controller loaded");
+    $scope.balance = 0;
+
+    var reloadData = function() {
+        txService.getEther(function(balance) {
+            $scope.balance = balance;
+        })
+    }
+
+    $interval(function() {
+        reloadData();
+    }, 5000)
+  }]);

@@ -95,7 +95,8 @@ angular
 						'scripts/directives/timeline/timeline.js',
 						'scripts/directives/notifications/notifications.js',
 						'scripts/directives/chat/chat.js',
-						'scripts/directives/dashboard/stats/stats.js'
+						'scripts/directives/dashboard/stats/stats.js',
+						'scripts/services/transaction-service.js'
 					]
 				})
 			}
@@ -145,14 +146,6 @@ angular
 	.state('dashboard.form',{
 		templateUrl:'views/form.html',
 		url:'/form'
-	})
-	.state('dashboard.blank',{
-		templateUrl:'views/pages/blank.html',
-		url:'/blank'
-	})
-	.state('login',{
-		templateUrl:'views/pages/login.html',
-		url:'/login'
 	})
 	.state('dashboard.chart',{
 		templateUrl:'views/chart.html',

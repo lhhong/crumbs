@@ -7,9 +7,21 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('PredictCtrl', ['$scope', 'txService', function($scope, txService) {
+  .controller('PredictCtrl', ['$interval', '$scope', 'txService', function($interval, $scope, txService) {
 
     console.log("loaded");
+    $scope.balance = 0;
+
+    var reloadData = function() {
+        txService.getEther(function(balance) {
+            $scope.balance = balance;
+        })
+    }
+
+    $interval(function() {
+        reloadData();
+    }, 5000)
+
     $scope.predictions = [{
       'SKU' : '00123123',
       'product': 'Apples',

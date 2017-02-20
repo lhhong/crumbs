@@ -5,6 +5,7 @@ import com.crumbs.models.SalesRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,4 +14,5 @@ import java.util.List;
 @Repository
 public interface SalesRecordRepo extends JpaRepository<SalesRecord, Long> {
 	List<SalesRecord> findByProductOrderByDateAsc(Product product);
+	List<SalesRecord> findByProductOrderByDateBeforeByDateAsc(Product product, Date date);
 }

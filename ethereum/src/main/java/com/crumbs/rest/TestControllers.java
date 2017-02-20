@@ -3,10 +3,12 @@ package com.crumbs.rest;
 import com.crumbs.ethereum.AccountBean;
 import com.crumbs.ethereum.EthereumBean;
 import com.crumbs.services.ContractService;
+import com.crumbs.services.WebSocketSrvc;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Random;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
@@ -26,6 +28,18 @@ public class TestControllers {
 
 	@Autowired
 	private ContractService contractService;
+
+	@Autowired
+	private WebSocketSrvc webSocketSrvc;
+
+	static Random r = new Random();
+
+	@RequestMapping(value = "/random-test", method = GET)
+	@ResponseBody
+	public long testWebSocket() {
+		//webSocketSrvc.sendBalance(r.nextLong());
+		return r.nextLong();
+	}
 
 	@RequestMapping(value = "/sample-contract", method = GET)
 	@ResponseBody
