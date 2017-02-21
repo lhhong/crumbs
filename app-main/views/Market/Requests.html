@@ -1,16 +1,19 @@
 <div>
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header"><i class="fa fa-shopping-cart fa-fw"></i><em>Market</em></h1>
+            <h1 class="page-header"><i class="fa fa-shopping-cart fa-fw"></i><em>Requests</em></h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <!-- /.row -->
     <div class="col-lg-12">
       <input type="text" ng-model="searchText.storename" placeholder="Search by Store name" />
       <input type="text" ng-model="searchText.product" placeholder="Search by Product" />
     </div>
-    <br/>
+    </br>
+    <div class="alert alert-success">
+          Current Ether Balance: <em>{{ balance }}</em>
+    </div>
+    <!-- /.row -->
     <!-- Dairy Product Tab -->
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -32,7 +35,7 @@
                             Quantity <div ng-class="getSortClass('qty')"></div>
                           </th>
                           <th ng-click="sortData('expiryDate')">
-                            Expiry Date <div ng-class="getSortClass('expiryDate')"></div>
+                            Transaction Date <div ng-class="getSortClass('expiryDate')"></div>
                           </th>
                           <th ng-click="sortData('price')">
                             Price <div ng-class="getSortClass('price')"></div>
@@ -79,7 +82,7 @@
                             Quantity <div ng-class="getSortClass('qty')"></div>
                           </th>
                           <th ng-click="sortData('expiryDate')">
-                            Expiry Date <div ng-class="getSortClass('expiryDate')"></div>
+                            Transaction Date <div ng-class="getSortClass('expiryDate')"></div>
                           </th>
                           <th ng-click="sortData('price')">
                             Price <div ng-class="getSortClass('price')"></div>
@@ -126,7 +129,7 @@
                             Quantity <div ng-class="getSortClass('qty')"></div>
                           </th>
                           <th ng-click="sortData('expiryDate')">
-                            Expiry Date <div ng-class="getSortClass('expiryDate')"></div>
+                            Transaction Date <div ng-class="getSortClass('expiryDate')"></div>
                           </th>
                           <th ng-click="sortData('price')">
                             Price <div ng-class="getSortClass('price')"></div>

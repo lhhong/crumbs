@@ -8,11 +8,29 @@
             <li ui-sref-active="active">
                 <a ui-sref="dashboard.MyPredictions"><i class="fa fa-bar-chart-o fa-fw"></i> MyPredictions</a>
             </li>
-            <li ui-sref-active="active">
-                <a ui-sref="dashboard.MyTransactions"><i class="fa fa-bitcoin fa-fw"></i> MyTransactions</a>
+            <li ng-class="{active: collapseVar==1}">{{dropDown}}
+                <a href="" ng-click="check(1)"><i class="fa fa-bitcoin fa-fw"></i> MyTransactions<span
+                        class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" collapse="collapseVar!=1">
+                    <li ui-sref-active="active">
+                        <a ui-sref="dashboard.Bought">Bought</a>
+                    </li>
+                    <li ui-sref-active="active">
+                        <a ui-sref="dashboard.Sold">Sold</a>
+                    </li>
+                </ul>
             </li>
-            <li ui-sref-active="active">
-                <a ui-sref="dashboard.Market"><i class="fa fa-shopping-cart fa-fw"></i> Market</a>
+            <li ng-class="{active: collapseVar==2}">{{dropDown}}
+                <a href="" ng-click="check(2)"><i class="fa fa-shopping-cart fa-fw"></i> Market<span
+                        class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" collapse="collapseVar!=2">
+                    <li ui-sref-active="active">
+                        <a ui-sref="dashboard.Offers">Offers</a>
+                    </li>
+                    <li ui-sref-active="active">
+                        <a ui-sref="dashboard.Requests">Requests</a>
+                    </li>
+                </ul>
             </li>
             <li ui-sref-active="active">
 
@@ -25,10 +43,10 @@
             <li ui-sref-active="active">
                 <a ui-sref="dashboard.form"><i class="fa fa-edit fa-fw"></i> Forms</a>
             </li>
-            <li ng-class="{active: collapseVar==1}">{{dropDown}}
-                <a href="" ng-click="check(1)"><i class="fa fa-wrench fa-fw"></i> UI Elements<span
+            <li ng-class="{active: collapseVar==3}">{{dropDown}}
+                <a href="" ng-click="check(3)"><i class="fa fa-wrench fa-fw"></i> UI Elements<span
                         class="fa arrow"></span></a>
-                <ul class="nav nav-second-level" collapse="collapseVar!=1">
+                <ul class="nav nav-second-level" collapse="collapseVar!=3">
                     <li ui-sref-active="active">
                         <a ui-sref="dashboard.panels-wells">Panels and Wells</a>
                     </li>
@@ -50,10 +68,10 @@
                 </ul>
                 <!-- /.nav-second-level -->
             </li>
-            <li ng-class="{active: collapseVar==2}">
-                <a href="" ng-click="check(2)"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span
+            <li ng-class="{active: collapseVar==4}">
+                <a href="" ng-click="check(4)"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span
                         class="fa arrow"></span></a>
-                <ul class="nav nav-second-level" collapse="collapseVar!=2">
+                <ul class="nav nav-second-level" collapse="collapseVar!=4">
                     <li>
                         <a href="">Second Level Item</a>
                     </li>
