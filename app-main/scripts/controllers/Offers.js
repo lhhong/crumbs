@@ -1,14 +1,25 @@
 'use strict';
 /**
  * @ngdoc function
- * @name sbAdminApp.controller:MainCtrl
+ * @name sbAdminApp.controller:OffersCtrl
  * @description
- * # MainCtrl
- * Controller of the sbAdminApp
+ * # OffersCtrl
  */
 angular.module('sbAdminApp')
-  .controller('MarketCtrl', ['$scope', function($scope) {
+  .controller('OffersCtrl', ['$scope', '$interval', 'txService', function($scope, $interval, txService) {
     console.log("loaded");
+    $scope.balance = 0;
+
+    var reloadData = function() {
+        txService.getEther(function(balance) {
+            $scope.balance = balance;
+        })
+    }
+
+    $interval(function() {
+        reloadData();
+    }, 5000)
+
     $scope.dairy = [{
       'storename' : 'NTUC',
       'product': 'Milk',

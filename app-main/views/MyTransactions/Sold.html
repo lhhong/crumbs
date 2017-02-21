@@ -1,14 +1,17 @@
 <div>
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header"><i class="fa fa-bitcoin fa-fw"></i><em> MyTransactions</em></h1>
+            <h1 class="page-header"><i class="fa fa-bitcoin fa-fw"></i><em> Sold </em></h1>
         </div>
         <!-- /.col-lg-12 -->
+    </div>
+    <div class="alert alert-success">
+        Current Ether Balance: <em>{{ balance }}</em>
     </div>
     <!-- /.row -->
     <div class="panel panel-default">
       <div class="panel-heading">
-        <strong>Bought</strong>
+        <strong>Sold</strong>
       </div>
       <!-- /.panel-heading -->
       <div class="panel-body">
@@ -21,15 +24,19 @@
                           <th>Store Name</th>
                           <th>Product</th>
                           <th>Quantity</th>
-                          <th>Price/th>
+                          <th>Price</th>
+                          <th>Transaction Date</th>
+                          <th>Disposal Date</th>
                       </tr>
                   </thead>
                   <tbody>
-                      <tr ng-repeat="x in bought | filter:searchText">
+                      <tr ng-repeat="x in sold | filter:searchText">
                           <td>{{ x.storename }}</td>
                           <td>{{ x.product }}</td>
                           <td>{{ x.qty }}</td>
                           <td>{{ x.price | currency }}</td>
+                          <td>{{ x.tdate | date }}</td>
+                          <td>{{ x.ddate | date }}</td>
                       </tr>
                   </tbody>
               </table>
