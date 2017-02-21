@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class UrgencyUtil {
 
-	private static final double PERFECT_PERCENTAGE = 0.15;
+	private static final double PERFECT_PERCENTAGE = 0.2;
 	private static final double MULTIPLIER = 4;
 
 	private static double rawPercentage(int initial, int excess) {

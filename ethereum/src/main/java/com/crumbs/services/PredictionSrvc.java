@@ -34,7 +34,7 @@ public class PredictionSrvc {
 	public PredictionVM getAndRankPredictions() {
 		PredictionVM predictionVM = new PredictionVM();
 		List<Prediction> predictions = getAllPredictions();
-		//TODO rank predictions and create new ExceShipVM or RemStockVM to be added to predictions
+		//TODO rank predictions and create new ExceShipVM or RemStockVM to be added to predictionVM
 		return predictionVM;
 	}
 
@@ -82,6 +82,7 @@ public class PredictionSrvc {
 			int predictedStock = carryOver - demand.get(i);
 			prediction.addToStockList(new RemainingStock(demand.get(i), predictedStock, i));
 			prediction.addToShipmentList(new ExcessShipment(currentStock.get(i).getDisposed(), disposals.get(i), i));
+			carryOver = Integer.max(0, carryOver - demand.get(i) - disposals.get(i)) + currentStock.get(i).getStock();
 		}
 		int predictedStock = carryOver - demand.get(7);
 		prediction.addToStockList(new RemainingStock(demand.get(7), predictedStock, 7));

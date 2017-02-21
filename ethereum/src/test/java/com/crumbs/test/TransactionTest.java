@@ -1,6 +1,8 @@
 package com.crumbs.test;
 
+import com.alibaba.fastjson.JSON;
 import com.crumbs.services.TransactionService;
+import com.crumbs.util.UrgencyUtil;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -16,6 +18,11 @@ import java.time.ZoneId;
  */
 public class TransactionTest {
 	private static final Logger logger = LoggerFactory.getLogger(TransactionTest.class);
+
+	@Test
+	public void test() {
+		logger.info(JSON.toJSONString(UrgencyUtil.excessUrg(23, -6 )));
+	}
 
 	@Test
 	public void random() {

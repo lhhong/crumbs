@@ -42,7 +42,7 @@ public class ProductRepoTest {
 		Shipment s = new Shipment();
 		s.setProduct(p);
 		s.setQuantity(1);
-		s.setExpiry(DateUtil.daysFromToday(-2));
+		s.setExpiry(DateUtil.daysFromToday(2));
 		s.setShipDate(DateUtil.daysFromToday(-8));
 		Set<Shipment> l = new HashSet<>();
 		l.add(s);
@@ -66,9 +66,9 @@ public class ProductRepoTest {
 		l.add(s4);
 		Shipment s5 = new Shipment();
 		s5.setProduct(p);
-		s5.setQuantity(5);
+		s5.setQuantity(15);
 		s5.setExpiry(DateUtil.daysFromToday(6));
-		s5.setShipDate(DateUtil.daysFromToday(-2));
+		s5.setShipDate(DateUtil.daysFromToday(3));
 		l.add(s5);
 		Shipment s6 = new Shipment();
 		s6.setProduct(p);
@@ -78,10 +78,16 @@ public class ProductRepoTest {
 		l.add(s6);
 		Shipment s7 = new Shipment();
 		s7.setProduct(p);
-		s7.setQuantity(46);
-		s7.setExpiry(DateUtil.daysFromToday(6));
+		s7.setQuantity(36);
+		s7.setExpiry(DateUtil.daysFromToday(5));
 		s7.setShipDate(DateUtil.daysFromToday(2));
 		l.add(s7);
+		Shipment s8 = new Shipment();
+		s8.setProduct(p);
+		s8.setQuantity(36);
+		s8.setExpiry(DateUtil.daysFromToday(4));
+		s8.setShipDate(DateUtil.daysFromToday(0));
+		l.add(s8);
 		p.setShipmentsRecord(l);
 		SalesRecord r1 = new SalesRecord();
 		r1.setQuantity(123456);
@@ -119,14 +125,15 @@ public class ProductRepoTest {
 		List<Integer> list = new ArrayList<>();
 		list.add(3);
 		list.add(4);
-		list.add(5);
-		list.add(6);
-		list.add(7);
 		list.add(8);
-		list.add(9);
-		list.add(10);
-		logger.info(JSON.toJSONString(inventoryService.futureStockInArray(p)));
-		logger.info(JSON.toJSONString(predictionSrvc.aggregatedStock(list, p)));
+		list.add(12);
+		list.add(7);
+		list.add(13);
+		list.add(13);
+		list.add(19);
+		logger.info(JSON.toJSONString(predictionSrvc.buildPrediction(list, "apple"), true));
+		//logger.info(JSON.toJSONString(inventoryService.futureStockInArray(p)));
+		//logger.info(JSON.toJSONString(predictionSrvc.aggregatedStock(list, p)));
 	}
 
 
