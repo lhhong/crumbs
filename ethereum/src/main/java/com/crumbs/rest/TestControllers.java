@@ -1,9 +1,13 @@
 package com.crumbs.rest;
 
+import com.alibaba.fastjson.JSON;
 import com.crumbs.components.AccountBean;
 import com.crumbs.components.EthereumBean;
+import com.crumbs.entities.Product;
 import com.crumbs.services.ContractService;
 import com.crumbs.services.WebSocketSrvc;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,11 +38,19 @@ public class TestControllers {
 
 	static Random r = new Random();
 
+	private static final Logger logger = LoggerFactory.getLogger(TestControllers.class);
+
 	@RequestMapping(value = "/random-test", method = GET)
 	@ResponseBody
 	public long testWebSocket() {
 		//webSocketSrvc.sendBalance(r.nextLong());
 		return r.nextLong();
+	}
+
+	@RequestMapping(value = "/import", method = POST)
+	@ResponseBody
+	public void receive(@RequestBody Product p) {
+		logger.info(JSON.toJSONString(p, true));
 	}
 
 	@RequestMapping(value = "/sample-contract", method = GET)

@@ -82,7 +82,7 @@ public class ProductRepoTest {
 		s7.setExpiry(DateUtil.daysFromToday(6));
 		s7.setShipDate(DateUtil.daysFromToday(2));
 		l.add(s7);
-		p.setShipments(l);
+		p.setShipmentsRecord(l);
 		SalesRecord r1 = new SalesRecord();
 		r1.setQuantity(123456);
 		r1.setDate(new Date(123456));
@@ -104,7 +104,7 @@ public class ProductRepoTest {
 		records.add(r2);
 		records.add(r3);
 		records.add(r4);
-		p.setSalesRecords(records);
+		p.setSalesRecord(records);
 
 		inventoryService.storeProduct(p);
 		ProductVM outcome = inventoryService.getProduct("apple");

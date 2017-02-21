@@ -14,5 +14,5 @@ import java.util.List;
 @Repository
 public interface SalesRecordRepo extends JpaRepository<SalesRecord, Long> {
 	List<SalesRecord> findByProductOrderByDateAsc(Product product);
-	List<SalesRecord> findByProductOrderByDateBeforeByDateAsc(Product product, Date date);
+	List<SalesRecord> findByProductAndDateBeforeOrderByDateAsc(Product product, Date date);
 }

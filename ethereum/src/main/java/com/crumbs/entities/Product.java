@@ -21,7 +21,7 @@ public class Product implements Serializable {
 	private String category;
 	private long price;
 	@OneToMany (mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<SalesRecord> salesRecords;
+	private Set<SalesRecord> salesRecord;
 	@OneToMany (mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private Set<Shipment> shipments;
+	private Set<Shipment> shipmentsRecord;
 }

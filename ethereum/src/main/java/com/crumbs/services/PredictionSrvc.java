@@ -48,7 +48,7 @@ public class PredictionSrvc {
 	public List<Integer> buildArrayQuery(String product) {
 		Product p = new Product();
 		p.setName(product);
-		List<SalesRecord> salesRecords = salesRecordRepo.findByProductOrderByDateBeforeByDateAsc(p, DateUtil.today());
+		List<SalesRecord> salesRecords = salesRecordRepo.findByProductAndDateBeforeOrderByDateAsc(p, DateUtil.today());
 		List<Integer> query = new ArrayList<>();
 		salesRecords.forEach((record) -> query.add(record.getQuantity()));
 		return query;

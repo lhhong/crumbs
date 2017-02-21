@@ -26,7 +26,7 @@ public class PredictionCtrl {
 	@Autowired
 	PredictionSrvc predictionSrvc;
 
-	@RequestMapping(method = GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "get_predictions", method = GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public List<Prediction> getPredictions() {
 		return predictionSrvc.getAllPredictions();

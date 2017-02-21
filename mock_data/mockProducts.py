@@ -1,6 +1,11 @@
 from Product import *
 from Record import *
 import pandas as pd
+import urllib2
+import urllib
+import jsonpickle
+
+url = "http://localhost:8080/import"
 
 def addSalesRecords(product):
 	filename = "spreadsheets/" + product.name + "_sales.csv"
@@ -29,5 +34,9 @@ def main():
 		products.append( Product(itemInfo[0],itemInfo[1],itemInfo[2]) )
 	for item in products:
 		addSalesRecords(item)
+	for product in products:
+		#data = urllib.urlencode(product)
+		print jsonpickle.encode(product)
+		urllib2.urlopen(urllib2.Request(url=url, data=jsonpickle.encode(product), headers={'Content-Type':'application/json'})).read() 
 
 main()
