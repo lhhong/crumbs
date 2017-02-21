@@ -11,7 +11,9 @@ def addSalesRecords(product):
 	filename = "spreadsheets/" + product.name + "_sales.csv"
 	data = pd.read_csv(filename, parse_dates=['Date'], usecols = ['Date','Sales'])
 	for row in data.itertuples():
-		try: product.addSales(Record(row[1],row[2]))
+	    timestamp = row[1].to_datetime()
+	    epoch = int( (timestamp-datetime.datetime(1970,1,1)).total_seconds()*1000 )
+		try: product.addSales(Record(epoch,row[2]))
 		except: break
 def addShipmentRecords(product):
 	filename = "spreadsheets/" + product.name + "_shipments.csv"
