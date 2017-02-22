@@ -5,17 +5,26 @@ import urllib2
 import urllib
 import jsonpickle
 import datetime
+import csv
 
 url = "http://localhost:8080/import"
 
 def addSalesRecords(product):
 	filename = "spreadsheets/" + product.name + "_sales.csv"
-	data = pd.read_csv(filename, parse_dates=['Date'], usecols = ['Date','Sales'], nrows = 468)
+	with open(filename,"r") as f:
+	    reader = csv.reader(f,delimiter = ",")
+	    data = list(reader)
+    	row_count = len(data)
+
+	data = pd.read_csv(filename, parse_dates=['Date'], usecols = ['Date','Sales'],  nrows = row_count-1)
 	for row in data.itertuples():
-		timestamp = row[1].to_datetime()
-		epoch_time = int((timestamp - datetime.datetime(1970,1,1)).total_seconds()) * 1000
-		try: product.addSales(Record(epoch_time,row[2]))
-		except: break
+		try:
+			timestamp = row[1].to_datetime() 	#Convert to python datetime
+			epoch = int( (timestamp-datetime.datetime(1970,1,1)).total_seconds()*1000 ) #Convert to epoch
+			product.addSales(Record(epoch,row[2]))
+		except:
+			break
+
 def addShipmentRecords(product):
 	filename = "spreadsheets/" + product.name + "_shipments.csv"
 	data = pd.read_csv(filename, parse_dates=['Date'], usecols = ['Date','Quantity'])
