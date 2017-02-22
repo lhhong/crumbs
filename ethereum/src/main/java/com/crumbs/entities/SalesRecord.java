@@ -21,7 +21,7 @@ public class SalesRecord implements Serializable{
 	private long id;
 
 	private int quantity;
-	private Date date;
+	private Date dateStamp;
 
 	@ManyToOne (fetch = FetchType.LAZY)
 	@JoinColumn (name = "product")

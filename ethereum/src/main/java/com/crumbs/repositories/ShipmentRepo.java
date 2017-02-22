@@ -14,5 +14,5 @@ import java.util.List;
 @Repository
 public interface ShipmentRepo extends JpaRepository<Shipment, Long> {
 	List<Shipment> findByProductAndQuantityNotAndExpiryAfter(Product product, int quantity, Date expiry);
-	List<Shipment> findByProductAndQuantityNotAndExpiryAfterAndShipDateBefore(Product product, int quantity, Date expiry, Date shipDate);
+	List<Shipment> findByProductAndQuantityNotAndExpiryAfterAndDateStampBefore(Product product, int quantity, Date expiry, Date dateStamp);
 }

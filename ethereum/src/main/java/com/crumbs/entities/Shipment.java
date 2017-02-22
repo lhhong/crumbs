@@ -20,7 +20,7 @@ public class Shipment implements Serializable {
 	@GeneratedValue
 	long id;
 
-	private Date shipDate;
+	private Date dateStamp;
 	private Date expiry;
 	private int	quantity;
 

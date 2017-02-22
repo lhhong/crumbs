@@ -16,10 +16,10 @@ public class ShipmentVM {
 
 	public ShipmentVM(Shipment shipment) {
 		quantity = shipment.getQuantity();
-		shipDate = DateUtil.toLocalDate(shipment.getShipDate());
+		dateStamp = DateUtil.toLocalDate(shipment.getDateStamp());
 		expiry = DateUtil.toLocalDate(shipment.getExpiry());
 	}
-	private LocalDate shipDate;
+	private LocalDate dateStamp;
 	private LocalDate expiry;
 	private int	quantity;
 }

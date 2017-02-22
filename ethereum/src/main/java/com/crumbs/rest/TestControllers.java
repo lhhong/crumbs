@@ -4,7 +4,6 @@ import com.alibaba.fastjson.JSON;
 import com.crumbs.components.AccountBean;
 import com.crumbs.components.EthereumBean;
 import com.crumbs.entities.Product;
-import com.crumbs.repositories.ProductRepo;
 import com.crumbs.services.ContractService;
 import com.crumbs.services.InventoryService;
 import com.crumbs.services.WebSocketSrvc;
@@ -53,20 +52,27 @@ public class TestControllers {
 		return r.nextLong();
 	}
 
+	@RequestMapping(value = "/delete_products", method = GET)
+	@ResponseBody
+	public void deleteAll() {
+		inventoryService.deleteAll();
+	}
+
 	@RequestMapping(value = "/import", method = POST)
 	@ResponseBody
 	public void receive(@RequestBody Product p) {
+		logger.info(JSON.toJSONString(p, true));
 		p.getSalesRecord().forEach(r -> {
 			r.setProduct(p);
-			r.setDate(DateUtil.toDate(r.getDate()));
+			r.setDateStamp(DateUtil.toDate(r.getDateStamp()));
 		});
 		p.getShipmentsRecord().forEach(r -> {
 			r.setProduct(p);
 			r.setExpiry(DateUtil.toDate(r.getExpiry()));
-			r.setShipDate(DateUtil.toDate(r.getShipDate()));
+			r.setDateStamp(DateUtil.toDate(r.getDateStamp()));
 		});
 		logger.info(JSON.toJSONString(p, true));
-		//TODO uncomment inventoryService.storeProduct(p);
+		inventoryService.storeProduct(p);
 	}
 
 	@RequestMapping(value = "/sample-contract", method = GET)
