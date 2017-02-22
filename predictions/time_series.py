@@ -9,7 +9,7 @@ from statsmodels.tsa.stattools import adfuller
 from statsmodels.tsa.arima_model import ARIMA
 
 @app.route('/predict', methods=['POST'])
-def test():
+def predict():
 	# Get dates and sales
 	sales = request.json['sales']
 	m = len(sales)
@@ -21,8 +21,10 @@ def test():
 		dates.append(dummy_date)
 
 	# Arrange them in a dataframe
-	ts = pd.DataFrame(data=sales,index=dates)
-	ts.columns = ['Sales']
+	data = pd.DataFrame(data=sales,index=dates)
+	data.columns = ['Sales']
+	ts = data["Sales"]
+
 
 	#test_stationarity(ts)
 	ts_log = np.log(ts)
@@ -72,7 +74,7 @@ def fitARIMA(p,q,y,realdata):
 	z = results_ARIMA.predict(start = start_index, end= len(realdata), dynamic= True)
 	diff_cumsum = z.cumsum()
 	d = np.array(diff_cumsum)
-	base = np.ones(len(d)) * ts_log.ix[start_index-1]
+	base = np.ones(len(d)) * y.ix[start_index-1]
 	log_predictions = base + d
 	real_predictions = np.exp(log_predictions)
 	return np.sqrt(sum((real_predictions-realdata[start_index-1:])**2)/len(real_predictions))
@@ -95,5 +97,5 @@ def grid(y,realdata):
 	return min_p,min_q
 
 if __name__ == '__main__':
-	app.run(debug=True, port=8080) #run app on port 8080 in debug mode
+	app.run(debug=True, port=5000) #run app on port 5000 in debug mode
 
