@@ -38,7 +38,7 @@ def addShipmentRecords(product):
 			sale_timestamp = row[1].to_datetime() 	#Convert to python datetime
 			sale_epoch = int( (sale_timestamp-datetime.datetime(1970,1,1)).total_seconds()*1000 ) #Convert to epoch
 			shipment_timestamp = row[3].to_datetime() 	#Convert to python datetime
-            shipment_epoch = int( (shipment_timestamp-datetime.datetime(1970,1,1)).total_seconds()*1000 ) #Convert to epoch
+			shipment_epoch = int( (shipment_timestamp-datetime.datetime(1970,1,1)).total_seconds()*1000 ) #Convert to epoch
 			product.addShipment(ShipmentRecord(sale_epoch,row[2],shipment_epoch))
 		except:
 			break
