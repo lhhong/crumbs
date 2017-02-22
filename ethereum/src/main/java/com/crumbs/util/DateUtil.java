@@ -26,7 +26,7 @@ public class DateUtil {
 	}
 
 	public static LocalDate todayLocalDate() {
-		return LocalDate.ofYearDay(2017,130);
+		return LocalDate.ofYearDay(2017,50);
 	}
 
 	public static Date addDays(Date date, long days) {
