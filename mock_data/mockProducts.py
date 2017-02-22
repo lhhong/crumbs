@@ -9,12 +9,16 @@ import csv
 
 url = "http://localhost:8080/import"
 
+def getFileRows(filename):
+	with open(filename,"r") as f:
+			reader = csv.reader(f,delimiter = ",")
+			data = list(reader)
+			row_count = len(data)
+	return row_count
+
 def addSalesRecords(product):
 	filename = "spreadsheets/" + product.name + "_sales.csv"
-	with open(filename,"r") as f:
-	    reader = csv.reader(f,delimiter = ",")
-	    data = list(reader)
-    	row_count = len(data)
+	row_count = getFileRows(filename)
 
 	data = pd.read_csv(filename, parse_dates=['Date'], usecols = ['Date','Sales'],  nrows = row_count-1)
 	for row in data.itertuples():
@@ -27,10 +31,7 @@ def addSalesRecords(product):
 
 def addShipmentRecords(product):
 	filename = "spreadsheets/" + product.name + "_shipments.csv"
-	with open(filename,"r") as f:
-	    reader = csv.reader(f,delimiter = ",")
-	    data = list(reader)
-    	row_count = len(data)
+	row_count = getFileRows(filename)
 
 	data = pd.read_csv(filename, parse_dates=['Date','DOE'], usecols = ['Date','Quantity','DOE'],  nrows = row_count-1)
 	for row in data.itertuples():
