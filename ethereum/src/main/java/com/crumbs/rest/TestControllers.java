@@ -6,6 +6,7 @@ import com.crumbs.components.EthereumBean;
 import com.crumbs.entities.Product;
 import com.crumbs.services.ContractService;
 import com.crumbs.services.WebSocketSrvc;
+import com.crumbs.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,6 +51,11 @@ public class TestControllers {
 	@RequestMapping(value = "/import", method = POST)
 	@ResponseBody
 	public void receive(@RequestBody Product p) {
+		p.getSalesRecord().forEach(r -> r.setDate(DateUtil.toDate(r.getDate())));
+		p.getShipmentsRecord().forEach(r -> {
+			r.setExpiry(DateUtil.toDate(r.getExpiry()));
+			r.setShipDate(DateUtil.toDate(r.getShipDate()));
+		});
 		logger.info(JSON.toJSONString(p, true));
 	}
 

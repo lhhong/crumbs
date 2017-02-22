@@ -9,6 +9,10 @@ import java.util.Date;
  */
 public class DateUtil {
 
+	public static Date toDate(Date date) {
+		return toDate(toLocalDate(date));
+	}
+
 	public static Date toDate(LocalDate localDate) {
 		return new Date(localDate.atStartOfDay(ZoneId.of("GMT")).toInstant().toEpochMilli());
 	}
