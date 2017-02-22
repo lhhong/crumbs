@@ -3,16 +3,17 @@ package com.crumbs.services;
 import com.crumbs.entities.Product;
 import com.crumbs.entities.SalesRecord;
 import com.crumbs.models.*;
+import com.crumbs.repositories.ProductRepo;
 import com.crumbs.repositories.SalesRecordRepo;
 import com.crumbs.util.DateUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by low on 18/2/17 4:31 PM.
@@ -31,17 +32,36 @@ public class PredictionSrvc {
 	@Autowired
 	SalesRecordRepo salesRecordRepo;
 
+	@Autowired
+	ProductRepo productRepo;
+
 	public PredictionVM getAndRankPredictions() {
 		PredictionVM predictionVM = new PredictionVM();
 		List<Prediction> predictions = getAllPredictions();
-		//TODO rank predictions and create new ExceShipVM or RemStockVM to be added to predictionVM
+
+		predictions.forEach(p -> {
+			p.getShipments().forEach(s -> {
+				if (!s.getUrgencyLevel().equalsIgnoreCase("green"))
+					predictionVM.addExcess(new ExceShipVM(p.getProduct(), s));
+			});
+			p.getStocks().forEach(s -> {
+				if (!s.getUrgencyLevel().equalsIgnoreCase("green"))
+					predictionVM.addShortage(new RemStockVM(p.getProduct(), s));
+			});
+		});
+		predictionVM.getExcessShipments().sort((s, s1) -> -Double.compare(s.getUrgency(), s1.getUrgency()));
+		predictionVM.getStockShortages().sort((s, s1) -> -Double.compare(s.getUrgency(), s1.getUrgency()));
 		return predictionVM;
 	}
 
 	public List<Prediction> getAllPredictions() {
-		restTemplate.postForEntity("url", Integer[].class, Integer[].class);
+
 		List<Prediction> predictions = new ArrayList<>();
-		//TODO for each product, send array with buildArrayQuery to python and call buildPredictionVM for the product demand
+		Iterable<Product> products = productRepo.findAll();
+		products.forEach(p -> {
+			ResponseEntity<Integer[]> response = restTemplate.postForEntity("url", buildArrayQuery(p.getName()), Integer[].class);
+			predictions.add(buildPrediction(Arrays.asList(response.getBody()), p.getName()));
+		});
 		return predictions;
 	}
 
