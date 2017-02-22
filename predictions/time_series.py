@@ -46,7 +46,7 @@ def predict():
 	log_predictions = base + diff_cumsum
 	real_predictions = np.exp(log_predictions)              #Scale predictions back to normal
 
-	return jsonify({'predictions' : real_predictions})
+	return jsonify({'predictions' : real_predictions.tolist()})
 
 def test_stationarity(timeseries):
 	#Determing rolling statistics
