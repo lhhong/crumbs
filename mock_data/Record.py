@@ -1,12 +1,12 @@
 class Record:
-	def __init__(self,date,quantity):
-		self.date = date
+	def __init__(self,dateStamp,quantity):
+		self.dateStamp = dateStamp
 		self.quantity = int(quantity)
 
 	def printDetails(self):
-		print self.date
+		print self.dateStamp
 		print self.quantity
 
 class ShipmentRecord(Record):
-	def __init__(self,date,quantity,doe):
+	def __init__(self,dateStamp,quantity,doe):
 		self.expiry = doe
