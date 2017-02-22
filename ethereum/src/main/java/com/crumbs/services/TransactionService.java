@@ -149,6 +149,12 @@ public class TransactionService {
 				}
 				tx.setAccepter(accepter);
 				tx.setTransportPrice(((BigInteger) result[5]).longValue());
+				if(tx.isSell()) {
+					tx.setTxDate(new Date(((BigInteger) result[6]).longValue()));
+				}
+				else {
+					tx.setExpiry(new Date(((BigInteger) result[6]).longValue()));
+				}
 				logger.info("transaction {} accepted", tx.getUuid());
 				tx.setPending(true);
 				txSentRepo.save(tx);
@@ -184,7 +190,14 @@ public class TransactionService {
 		tx.setPrice(txReceived.getPrice());
 		tx.setTxDate(txReceived.getTxDate());
 		txSentRepo.save(tx);
-		contractService.sendToTxContract("newOffer", 0, uuid, tx.getPrice(), tx.getItem(), tx.getQuantity(), tx.getExpiry().getTime(), tx.isSell(), tx.getTxDate());
+		long date = 0;
+		if (tx.isSell()) {
+			date = tx.getExpiry().getTime();
+		}
+		else {
+			date = tx.getTxDate().getTime();
+		}
+		contractService.sendToTxContract("newOffer", 0, uuid, tx.getPrice(), tx.getItem(), tx.getQuantity(), date, tx.isSell());
 		logger.info("Created new offer transaction {}", uuid);
 		return uuid;
 	}
@@ -294,7 +307,7 @@ public class TransactionService {
 		return keys.split(";");
 	}
 
-	public void accept(String uuid, long transportPrice) {
+	public void accept(String uuid, long transportPrice, Date expiry, Date txDate) {
 		Object[] result = contractService.constFunction("getTxById", uuid);
 		if (result == null) {
 			logger.warn("offer {} no longer exist", uuid);
@@ -330,14 +343,19 @@ public class TransactionService {
 		}
 		tx.setPending(true);
 		long payment = 0;
+		long date = 0;
 		if (tx.isSell()) {
+			date = txDate.getTime();
 			payment = tx.getPrice() + transportPrice;
 		}
-		accept(tx, transportPrice, payment);
+		else {
+			date = expiry.getTime();
+		}
+		accept(tx, transportPrice, payment, date);
 	}
 
-	public void accept(TxAccepted tx, long transportPrice, long payment) {
-		contractService.sendToTxContract("accept", payment, tx.getUuid(), transportPrice);
+	public void accept(TxAccepted tx, long transportPrice, long payment, long date) {
+		contractService.sendToTxContract("accept", payment, tx.getUuid(), transportPrice, date);
 		txAcceptedRepo.save(tx);
 		logger.info("Created accepting transaction {}", tx.getUuid());
 	}

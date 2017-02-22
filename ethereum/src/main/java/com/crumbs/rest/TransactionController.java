@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -75,7 +76,7 @@ public class TransactionController {
 	@RequestMapping(value = "/accept", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public void accept(@RequestBody TransactionVM tx) {
-		transactionService.accept(tx.getUuid(), tx.getTransportPrice());
+		transactionService.accept(tx.getUuid(), tx.getTransportPrice(), tx.getExpiry(), tx.getTxDate());
 	}
 
 	@RequestMapping(value = "/agree", method = POST, produces = APPLICATION_JSON_VALUE)

@@ -88,6 +88,12 @@ public class ProductRepoTest {
 		s8.setExpiry(DateUtil.daysFromToday(4));
 		s8.setShipDate(DateUtil.daysFromToday(0));
 		l.add(s8);
+		Shipment s9 = new Shipment();
+		s9.setProduct(p);
+		s9.setQuantity(36);
+		s9.setExpiry(DateUtil.daysFromToday(14));
+		s9.setShipDate(DateUtil.daysFromToday(7));
+		l.add(s9);
 		p.setShipmentsRecord(l);
 		SalesRecord r1 = new SalesRecord();
 		r1.setQuantity(123456);
@@ -127,7 +133,7 @@ public class ProductRepoTest {
 		list.add(4);
 		list.add(8);
 		list.add(12);
-		list.add(7);
+		list.add(68);
 		list.add(13);
 		list.add(13);
 		list.add(19);

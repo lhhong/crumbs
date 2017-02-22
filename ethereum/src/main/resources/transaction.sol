@@ -65,7 +65,7 @@ contract transaction {
 		memList.members[memList.keys[key].addr].y_loc = _y;
 	}
 
-	function newOffer(string _uuid, uint64 _price, string _item, uint32 _quantity, uint64 _expiry, bool _toSell, uint64 _txDate) public {
+	function newOffer(string _uuid, uint64 _price, string _item, uint32 _quantity, uint64 _date, bool _toSell) public {
 		if (memList.members[msg.sender].x_loc == 0) {
 			throw;
 		}
@@ -83,9 +83,13 @@ contract transaction {
 		list.txs[list.keys[key].uuid].price = _price;
 		list.txs[list.keys[key].uuid].item = _item;
 		list.txs[list.keys[key].uuid].quantity = _quantity;
-		list.txs[list.keys[key].uuid].expiry = _expiry;
 		list.txs[list.keys[key].uuid].toSell = _toSell;
-		list.txs[list.keys[key].uuid].txDate = _txDate;
+		if (_toSell) {
+		    list.txs[list.keys[key].uuid].expiry = _date;
+		}
+		else {
+		    list.txs[list.keys[key].uuid].txDate = _date;
+		}
 	}
 
 	function strConcat(string _a, string _b) internal returns (string){
@@ -143,7 +147,7 @@ contract transaction {
 		_txDate = list.txs[_uuid].txDate;
 	}
 
-	function checkPendingStatus(string _uuid) constant returns (bool _pending, address _addr, string _name, int64 _x, int64 _y, uint64 _transportPrice) {
+	function checkPendingStatus(string _uuid) constant returns (bool _pending, address _addr, string _name, int64 _x, int64 _y, uint64 _transportPrice, uint64 _date) {
 		if (list.txs[_uuid].quantity == 0) {
 			throw;
 		}
@@ -153,6 +157,12 @@ contract transaction {
 		_x = list.txs[_uuid].accepter.x_loc;
 		_y = list.txs[_uuid].accepter.y_loc;
 		_transportPrice = list.txs[_uuid].transportPrice;
+		if (list.txs[_uuid].toSell) {
+		    _date = list.txs[_uuid].txDate;
+		}
+		else {
+		    _date = list.txs[_uuid].expiry;
+		}
 	}
 
 	function checkDoneStatus(string _uuid) constant returns (bool _done) {
@@ -162,7 +172,7 @@ contract transaction {
 		_done = list.txs[_uuid].done;
 	}
 
-	function accept(string _uuid, uint64 _transportPrice) payable public {
+	function accept(string _uuid, uint64 _transportPrice, uint64 _date) payable public {
 		if (list.txs[_uuid].pending || list.txs[_uuid].quantity == 0) {
 			throw;
 		}
@@ -175,6 +185,12 @@ contract transaction {
 		list.txs[_uuid].accepter = _accepter;
 		list.txs[_uuid].pending = true;
 		list.txs[_uuid].transportPrice = _transportPrice;
+		if (list.txs[_uuid].toSell) {
+		    list.txs[_uuid].txDate = _date;
+		}
+		else {
+		    list.txs[_uuid].expiry = _date;
+		}
 	}
 
 	function stringsEqual(string storage _a, string memory _b) internal returns (bool) {
