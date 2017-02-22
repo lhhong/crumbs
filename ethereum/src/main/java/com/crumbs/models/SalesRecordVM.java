@@ -16,9 +16,9 @@ public class SalesRecordVM {
 
 	public SalesRecordVM(SalesRecord record) {
 		this.quantity = record.getQuantity();
-		this.date = DateUtil.toLocalDate(record.getDate());
+		this.dateStamp = DateUtil.toLocalDate(record.getDateStamp());
 	}
 
 	private int quantity;
-	private LocalDate date;
+	private LocalDate dateStamp;
 }

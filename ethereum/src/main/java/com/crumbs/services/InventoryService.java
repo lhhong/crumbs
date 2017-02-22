@@ -42,11 +42,11 @@ public class InventoryService {
 		Map<LocalDate,Integer> result = new HashMap<>();
 		List<Shipment> shipments = shipmentRepo.findByProductAndQuantityNotAndExpiryAfter(product,0, DateUtil.today());
 		for (Shipment record : shipments) {
-			if (result.containsKey(DateUtil.toLocalDate(record.getShipDate()))) {
-				result.merge(DateUtil.toLocalDate(record.getShipDate()), record.getQuantity(), (current, addition) -> (current + addition));
+			if (result.containsKey(DateUtil.toLocalDate(record.getDateStamp()))) {
+				result.merge(DateUtil.toLocalDate(record.getDateStamp()), record.getQuantity(), (current, addition) -> (current + addition));
 			}
 			else {
-				result.put(DateUtil.toLocalDate(record.getShipDate()), record.getQuantity());
+				result.put(DateUtil.toLocalDate(record.getDateStamp()), record.getQuantity());
 			}
 		}
 		return result;
@@ -75,7 +75,7 @@ public class InventoryService {
 		List<ShipmentVM> shipmentVMS = new ArrayList<>();
 		shipments.forEach((shipment) -> shipmentVMS.add(new ShipmentVM(shipment)));
 		for (ShipmentVM shipment : shipmentVMS) {
-			if (shipment.getShipDate().isBefore(DateUtil.todayLocalDate().plusDays(1))) {
+			if (shipment.getDateStamp().isBefore(DateUtil.todayLocalDate().plusDays(1))) {
 				if (result.keySet().contains(shipment.getExpiry())) {
 					result.get(shipment.getExpiry()).dispose(shipment.getQuantity());
 					LocalDate date = shipment.getExpiry().minusDays(1);
@@ -90,9 +90,9 @@ public class InventoryService {
 					}
 				}
 			}
-			else if (shipment.getShipDate().isBefore(DateUtil.todayLocalDate().plusDays(8))) {
-				LocalDate date = shipment.getShipDate();
-				result.get(shipment.getShipDate()).stockUp(shipment.getQuantity());
+			else if (shipment.getDateStamp().isBefore(DateUtil.todayLocalDate().plusDays(8))) {
+				LocalDate date = shipment.getDateStamp();
+				result.get(shipment.getDateStamp()).stockUp(shipment.getQuantity());
 				date = date.plusDays(1);
 				while (date.isBefore(DateUtil.todayLocalDate().plusDays(8))) {
 					if (date.isEqual(shipment.getExpiry())) {
@@ -109,7 +109,7 @@ public class InventoryService {
 
 	public List<Integer> productToDateQuantityArray(Product product) {
 		List<Integer> result = new ArrayList<>();
-		List<SalesRecord> records = salesRecordRepo.findByProductOrderByDateAsc(product);
+		List<SalesRecord> records = salesRecordRepo.findByProductOrderByDateStampAsc(product);
 		for (SalesRecord record : records) {
 			result.add(record.getQuantity());
 		}
@@ -126,5 +126,11 @@ public class InventoryService {
 
 	public void deleteProduct(String product) {
 		productRepo.delete(product);
+	}
+
+	public void deleteAll() {
+		productRepo.deleteAll();
+		shipmentRepo.deleteAll();
+		salesRecordRepo.deleteAll();
 	}
 }

@@ -36,9 +36,12 @@ public class PredictionSrvc {
 	ProductRepo productRepo;
 
 	public PredictionVM getAndRankPredictions() {
-		PredictionVM predictionVM = new PredictionVM();
 		List<Prediction> predictions = getAllPredictions();
+		return pullAndRankRelavantPredictions(predictions);
+	}
 
+	public PredictionVM pullAndRankRelavantPredictions(List<Prediction> predictions) {
+		PredictionVM predictionVM = new PredictionVM();
 		predictions.forEach(p -> {
 			p.getShipments().forEach(s -> {
 				if (!s.getUrgencyLevel().equalsIgnoreCase("green"))
@@ -68,7 +71,7 @@ public class PredictionSrvc {
 	public List<Integer> buildArrayQuery(String product) {
 		Product p = new Product();
 		p.setName(product);
-		List<SalesRecord> salesRecords = salesRecordRepo.findByProductAndDateBeforeOrderByDateAsc(p, DateUtil.today());
+		List<SalesRecord> salesRecords = salesRecordRepo.findByProductAndDateStampBeforeOrderByDateStampAsc(p, DateUtil.today());
 		List<Integer> query = new ArrayList<>();
 		salesRecords.forEach((record) -> query.add(record.getQuantity()));
 		return query;

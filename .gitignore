@@ -14,3 +14,5 @@ ethereum/src/main/resources/user.conf
 datafile.mv.db
 datafile.trace.db
 app-main/npm-debug.log
+mock_data/Product.pyc
+mock_data/Record.pyc
