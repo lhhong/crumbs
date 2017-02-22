@@ -46,9 +46,9 @@ def main():
 		products.append( Product(itemInfo[0],itemInfo[1],itemInfo[2]) )
 	for item in products:
 		addSalesRecords(item)
-	for product in products:
-		#data = urllib.urlencode(product)
-		print jsonpickle.encode(product)
-		urllib2.urlopen(urllib2.Request(url=url, data=jsonpickle.encode(product), headers={'Content-Type':'application/json'})).read() 
+		addShipmentRecords(item)
+		#data = urllib.urlencode(item)
+		print jsonpickle.encode(item)
+		urllib2.urlopen(urllib2.Request(url=url, data=jsonpickle.encode(item), headers={'Content-Type':'application/json'})).read()
 
 main()
