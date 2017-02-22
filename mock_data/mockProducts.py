@@ -16,6 +16,12 @@ def getFileRows(filename):
 			row_count = len(data)
 	return row_count
 
+def getEpochTime(timestamp):
+	py_timestamp = timestamp.to_datetime() 	#Convert to python datetime
+	epoch_time = int( (py_timestamp-datetime.datetime(1970,1,1)).total_seconds()*1000 ) #Convert to epoch
+	return epoch_time
+
+
 def addSalesRecords(product):
 	filename = "spreadsheets/" + product.name + "_sales.csv"
 	row_count = getFileRows(filename)
@@ -23,9 +29,8 @@ def addSalesRecords(product):
 	data = pd.read_csv(filename, parse_dates=['Date'], usecols = ['Date','Sales'],  nrows = row_count-1)
 	for row in data.itertuples():
 		try:
-			timestamp = row[1].to_datetime() 	#Convert to python datetime
-			epoch = int( (timestamp-datetime.datetime(1970,1,1)).total_seconds()*1000 ) #Convert to epoch
-			product.addSales(Record(epoch,row[2]))
+			sale_epoch = getEpochTime(row[1])
+			product.addSales(Record(sale_epoch,row[2]))
 		except:
 			break
 
@@ -36,10 +41,8 @@ def addShipmentRecords(product):
 	data = pd.read_csv(filename, parse_dates=['Date','DOE'], usecols = ['Date','Quantity','DOE'],  nrows = row_count-1)
 	for row in data.itertuples():
 		try:
-			shipment_timestamp = row[1].to_datetime() 	#Convert to python datetime
-			shipment_epoch = int( (shipment_timestamp-datetime.datetime(1970,1,1)).total_seconds()*1000 ) #Convert to epoch
-			doe_timestamp = row[3].to_datetime() 	#Convert to python datetime
-			doe_epoch = int( (doe_timestamp-datetime.datetime(1970,1,1)).total_seconds()*1000 ) #Convert to epoch
+			shipment_epoch = getEpochTime(row[1])
+			doe_epoch = getEpochTime(row[3])
 			product.addShipment(ShipmentRecord(shipment_epoch,row[2],doe_epoch))
 			print "TEST"
 		except:

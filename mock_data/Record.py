@@ -7,6 +7,8 @@ class Record:
 		print self.dateStamp
 		print self.quantity
 
-class ShipmentRecord(Record):
+class ShipmentRecord:
 	def __init__(self,dateStamp,quantity,doe):
+		self.dateStamp = dateStamp
+		self.quantity = int(quantity)
 		self.expiry = doe
