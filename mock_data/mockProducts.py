@@ -32,7 +32,7 @@ def addShipmentRecords(product):
 	    data = list(reader)
     	row_count = len(data)
 
-	data = pd.read_csv(filename, parse_dates=['Date'], usecols = ['Date','Quantity','DOE'],  nrows = row_count-1)
+	data = pd.read_csv(filename, parse_dates=['Date','DOE'], usecols = ['Date','Quantity','DOE'],  nrows = row_count-1)
 	for row in data.itertuples():
 		try:
 			shipment_timestamp = row[1].to_datetime() 	#Convert to python datetime
