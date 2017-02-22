@@ -27,10 +27,21 @@ def addSalesRecords(product):
 
 def addShipmentRecords(product):
 	filename = "spreadsheets/" + product.name + "_shipments.csv"
-	data = pd.read_csv(filename, parse_dates=['Date'], usecols = ['Date','Quantity'])
+	with open(filename,"r") as f:
+	    reader = csv.reader(f,delimiter = ",")
+	    data = list(reader)
+    	row_count = len(data)
+
+	data = pd.read_csv(filename, parse_dates=['Date'], usecols = ['Date','Sales','DOE'],  nrows = row_count-1)
 	for row in data.itertuples():
-		try: product.addShipment(ShipmentRecord(row[1],row[2],row[3]))
-		except: break
+		try:
+			sale_timestamp = row[1].to_datetime() 	#Convert to python datetime
+			sale_epoch = int( (sale_timestamp-datetime.datetime(1970,1,1)).total_seconds()*1000 ) #Convert to epoch
+			shipment_timestamp = row[3].to_datetime() 	#Convert to python datetime
+            shipment_epoch = int( (shipment_timestamp-datetime.datetime(1970,1,1)).total_seconds()*1000 ) #Convert to epoch
+			product.addShipment(ShipmentRecord(sale_epoch,row[2],shipment_epoch))
+		except:
+			break
 
 def main():
 	#populate a list of products
