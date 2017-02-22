@@ -14,3 +14,4 @@ ethereum/src/main/resources/user.conf
 datafile.mv.db
 datafile.trace.db
 app-main/npm-debug.log
+/predictions/time_series.py
