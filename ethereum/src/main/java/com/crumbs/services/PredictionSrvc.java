@@ -1,5 +1,6 @@
 package com.crumbs.services;
 
+import com.alibaba.fastjson.JSON;
 import com.crumbs.entities.Product;
 import com.crumbs.entities.SalesRecord;
 import com.crumbs.models.*;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by low on 18/2/17 4:31 PM.
@@ -61,9 +63,13 @@ public class PredictionSrvc {
 
 		List<Prediction> predictions = new ArrayList<>();
 		Iterable<Product> products = productRepo.findAll();
+
 		products.forEach(p -> {
-			ResponseEntity<Integer[]> response = restTemplate.postForEntity("url", buildArrayQuery(p.getName()), Integer[].class);
-			predictions.add(buildPrediction(Arrays.asList(response.getBody()), p.getName()));
+			Map<String, List<Integer>> map = new HashMap<>();
+			map.put("sales", buildArrayQuery(p.getName()));
+			ResponseEntity<PredictionReceipt> response = restTemplate.postForEntity("http://localhost:5000/predict", map, PredictionReceipt.class);
+			logger.info(JSON.toJSONString(response.getBody()));
+			predictions.add(buildPrediction(response.getBody().getPredictions(), p.getName()));
 		});
 		return predictions;
 	}
