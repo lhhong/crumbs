@@ -45,11 +45,23 @@ public class TransactionController {
 		transactionService.register(member.getName(), member.getX(), member.getY());
 	}
 
-	@RequestMapping(value = "/offer", method = POST, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/offer_excess", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public boolean postOffer(@RequestBody TransactionVM offer) {
-		String uuid = transactionService.newOffer(offer);
-		ResponseEntity.BodyBuilder builder = ResponseEntity.ok();
+	public boolean postOffer(@RequestBody ExceShipVM exceShip) {
+		return postOffer(exceShip);
+	}
+
+	@RequestMapping(value = "/offer_shortgae", method = POST, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public boolean postOffer(@RequestBody RemStockVM remStock) {
+		return postOffer(remStock);
+	}
+
+	private boolean postOffer(BasicShortExceVM shortExce) {
+		String uuid = transactionService.newOffer(shortExce);
+		if (uuid == null) {
+			return false;
+		}
 		Thread t = Thread.currentThread();
 		transactionService.addListener(tx -> {
 			logger.info("onIncluded called");

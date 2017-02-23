@@ -10,26 +10,20 @@ import java.util.Date;
  */
 @Getter
 @Setter
-public class RemStockVM {
+public class RemStockVM extends BasicShortExceVM{
 
-	private int quantity;
-	private double urgency;
-	private String urgencyLevel;
-	private int percentExtra;
 	private Date requestDate;
-	private String name;
-	private String category;
-	private long price;
 
 	public RemStockVM(ProductVM product, RemainingStock rStock) {
-		quantity = rStock.getQuantity();
-		urgency = rStock.getUrgency();
-		urgencyLevel = rStock.getUrgencyLevel();
-		percentExtra = rStock.getPercentExtra();
+		super();
+		super.setQuantity(rStock.getQuantity());
+		super.setUrgency(rStock.getUrgency());
+		super.setUrgencyLevel(rStock.getUrgencyLevel());
+		super.setPercentExtra(rStock.getPercentExtra());
 		requestDate = rStock.getRequestDate();
-		name = product.getName();
-		category = product.getCategory();
-		price = product.getPrice();
+		super.setName(product.getName());
+		super.setCategory(product.getCategory());
+		super.setPrice(product.getPrice());
 	}
 
 }

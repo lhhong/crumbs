@@ -179,24 +179,29 @@ public class TransactionService {
 		}
 	}
 
-	public String newOffer(TransactionVM txReceived) {
+	public String newOffer(BasicShortExceVM shortExce) {
 		TxSent tx = new TxSent();
 		String uuid = generateUUID();
 		tx.setUuid(uuid);
-		tx.setExpiry(txReceived.getExpiry());
-		tx.setSell(txReceived.isSell());
-		tx.setQuantity(txReceived.getQuantity());
-		tx.setItem(txReceived.getItem());
-		tx.setPrice(txReceived.getPrice());
-		tx.setTxDate(txReceived.getTxDate());
-		txSentRepo.save(tx);
+		tx.setQuantity(shortExce.getQuantity());
+		tx.setItem(shortExce.getName());
+		tx.setPrice(shortExce.getPrice() * shortExce.getQuantity());
 		long date = 0;
-		if (tx.isSell()) {
+		if (shortExce instanceof ExceShipVM) {
+			tx.setSell(true);
+			tx.setExpiry(((ExceShipVM) shortExce).getExpiry());
 			date = tx.getExpiry().getTime();
 		}
-		else {
+		else if (shortExce instanceof RemStockVM) {
+			tx.setSell(false);
+			tx.setTxDate(((RemStockVM) shortExce).getRequestDate());
 			date = tx.getTxDate().getTime();
 		}
+		else {
+			logger.error("Unknown error");
+			return null;
+		}
+		txSentRepo.save(tx);
 		contractService.sendToTxContract("newOffer", 0, uuid, tx.getPrice(), tx.getItem(), tx.getQuantity(), date, tx.isSell());
 		logger.info("Created new offer transaction {}", uuid);
 		return uuid;

@@ -10,26 +10,20 @@ import java.util.Date;
  */
 @Getter
 @Setter
-public class ExceShipVM {
+public class ExceShipVM extends BasicShortExceVM {
 
-	private int quantity;
-	private double urgency;
-	private String urgencyLevel;
-	private double percentExtra;
 	private Date expiry;
-	private String name;
-	private String category;
-	private long price;
 
 	public ExceShipVM(ProductVM product, ExcessShipment eShip) {
-		quantity = eShip.getQuantity();
-		urgency = eShip.getUrgency();
-		urgencyLevel = eShip.getUrgencyLevel();
-		percentExtra = eShip.getPercentExtra();
+		super();
+		super.setQuantity(eShip.getQuantity());
+		super.setUrgency(eShip.getUrgency());
+		super.setUrgencyLevel(eShip.getUrgencyLevel());
+		super.setPercentExtra(eShip.getPercentExtra());
 		expiry = eShip.getExpiry();
-		name = product.getName();
-		category = product.getCategory();
-		price = product.getPrice();
+		super.setName(product.getName());
+		super.setCategory(product.getCategory());
+		super.setPrice(product.getPrice());
 	}
 
 }
