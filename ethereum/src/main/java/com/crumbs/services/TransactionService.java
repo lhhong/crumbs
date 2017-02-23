@@ -3,12 +3,11 @@ package com.crumbs.services;
 import com.crumbs.components.AccountBean;
 import com.crumbs.components.CheckIncludedListener;
 import com.crumbs.entities.Member;
+import com.crumbs.entities.Shipment;
 import com.crumbs.entities.TxAccepted;
 import com.crumbs.entities.TxSent;
 import com.crumbs.models.*;
-import com.crumbs.repositories.MemberRepo;
-import com.crumbs.repositories.TxAcceptedRepo;
-import com.crumbs.repositories.TxSentRepo;
+import com.crumbs.repositories.*;
 import com.crumbs.util.CrumbsUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +39,12 @@ public class TransactionService {
 
 	@Autowired
 	MemberRepo memberRepo;
+
+	@Autowired
+	ProductRepo productRepo;
+
+	@Autowired
+	ShipmentRepo shipmentRepo;
 
 	private List<CheckIncludedListener> checkIncludedListeners = new ArrayList<>();
 
@@ -110,6 +115,18 @@ public class TransactionService {
 				logger.info("transaction {} agreed", tx.getUuid());
 				tx.setDone(true);
 				txAcceptedRepo.save(tx);
+				Shipment shipment = new Shipment();
+				shipment.setId((long) tx.getUuid().hashCode());
+				shipment.setProduct(productRepo.findOne(tx.getItem()));
+				shipment.setExpiry(tx.getExpiry());
+				shipment.setDateStamp(tx.getTxDate());
+				if (tx.isSell()) {
+					shipment.setQuantity(tx.getQuantity());
+				}
+				else {
+					shipment.setQuantity(-tx.getQuantity());
+				}
+				shipmentRepo.save(shipment);
 			}
 		}
 		List<TxAccepted> done = txAcceptedRepo.findByIncludedAndDone(true, true);
@@ -123,7 +140,8 @@ public class TransactionService {
 			}
 			if (!(boolean) result[0]) {
 				logger.info("transaction {} excluded when checking agreed", tx.getUuid());
-				tx.setDone(true);
+				tx.setDone(false);
+				shipmentRepo.delete((long) tx.getUuid().hashCode());
 				txAcceptedRepo.save(tx);
 			}
 		}
@@ -281,6 +299,18 @@ public class TransactionService {
 						logger.info("Agreeing transaction {} included!", uuid);
 						tx.setIncluded(true);
 						txSentRepo.save(tx);
+						Shipment shipment = new Shipment();
+						shipment.setId((long) tx.getUuid().hashCode());
+						shipment.setProduct(productRepo.findOne(tx.getItem()));
+						shipment.setExpiry(tx.getExpiry());
+						shipment.setDateStamp(tx.getTxDate());
+						if (tx.isSell()) {
+							shipment.setQuantity(-tx.getQuantity());
+						}
+						else {
+							shipment.setQuantity(tx.getQuantity());
+						}
+						shipmentRepo.save(shipment);
 						for (CheckIncludedListener l : checkIncludedListeners) {
 							l.onIncluded(tx);
 						}
@@ -297,6 +327,7 @@ public class TransactionService {
 					logger.warn("Agreeing transaction with uuid: {} excluded", tx.getUuid());
 					tx.setIncluded(false);
 					txSentRepo.save(tx);
+					shipmentRepo.delete((long) tx.getUuid().hashCode());
 				}
 			}
 			else {

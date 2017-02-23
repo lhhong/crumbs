@@ -1,5 +1,8 @@
 package com.crumbs.rest;
 
+import com.crumbs.components.CheckIncludedListener;
+import com.crumbs.components.SendingTxListener;
+import com.crumbs.entities.BasicTx;
 import com.crumbs.entities.Member;
 import com.crumbs.entities.TxAccepted;
 import com.crumbs.models.*;
@@ -47,13 +50,13 @@ public class TransactionController {
 
 	@RequestMapping(value = "/offer_excess", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public boolean postOffer(@RequestBody ExceShipVM exceShip) {
+	public boolean postOfferExcess(@RequestBody ExceShipVM exceShip) {
 		return postOffer(exceShip);
 	}
 
 	@RequestMapping(value = "/offer_shortgae", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public boolean postOffer(@RequestBody RemStockVM remStock) {
+	public boolean postOfferShort(@RequestBody RemStockVM remStock) {
 		return postOffer(remStock);
 	}
 
@@ -63,18 +66,21 @@ public class TransactionController {
 			return false;
 		}
 		Thread t = Thread.currentThread();
-		transactionService.addListener(tx -> {
+		CheckIncludedListener listener = txIncluded -> {
 			logger.info("onIncluded called");
-			if (tx.getUuid().equalsIgnoreCase(uuid)) {
+			if (txIncluded.getUuid().equalsIgnoreCase(uuid)) {
 				logger.info("sending included receipt to client for offer {}", uuid);
 				t.interrupt();
 			}
-		});
+		};
+		transactionService.addListener(listener);
 		try {
 			Thread.sleep(60000);
 		} catch (InterruptedException e) {
+			transactionService.dropListener(listener);
 			return true;
 		}
+		transactionService.dropListener(listener);
 		return false;
 	}
 

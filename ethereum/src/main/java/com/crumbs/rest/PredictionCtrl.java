@@ -41,12 +41,12 @@ public class PredictionCtrl {
 	@RequestMapping(value = "matchingTxForShortage", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public List<TransactionVM> getMatchingTxForShortage(@RequestBody RemStockVM remStockVM) {
-		return matchMakingSrvc.getMatchingTxForShortage(remStockVM);
+		return matchMakingSrvc.getMatchingTx(remStockVM);
 	}
 
 	@RequestMapping(value = "matchingTxForExcess", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public List<TransactionVM> getMatchingTxForExcess(@RequestBody ExceShipVM exceShipVM) {
-		return matchMakingSrvc.getMatchingTxForExcess(exceShipVM);
+		return matchMakingSrvc.getMatchingTx(exceShipVM);
 	}
 }
