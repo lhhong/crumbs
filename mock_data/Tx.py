@@ -1,10 +1,10 @@
 class Tx:
-	def __init__(self,seller,price,item,quantity,expiry,txDate,toSell,accepter):
+	def __init__(self,seller,price,item,quantity,expiry,txDate,sell,accepter):
 		self.seller = seller
 		self.price = price
 		self.item = item
 		self.quantity = quantity
 		self.expiry = expiry
 		self.txDate = txDate
-		self.toSell = toSell
+		self.sell = sell
 		self.accepter = accepter
