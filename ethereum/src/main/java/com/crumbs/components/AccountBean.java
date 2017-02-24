@@ -44,7 +44,7 @@ public class AccountBean {
 		return key;
 	}
 
-	private void topUp(ECKey key) {
+	public void topUp(ECKey key) {
 		if (ethereumBean.getAccountBal(key.getAddress()).compareTo(new BigInteger("28000000000000000000000000")) < 0) {
 			logger.info("topping up ether");
 			ethereumBean.sendEtherFromRich(key.getAddress());

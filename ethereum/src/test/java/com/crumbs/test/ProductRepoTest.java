@@ -137,7 +137,7 @@ public class ProductRepoTest {
 		list.add(13);
 		list.add(13);
 		list.add(19);
-		logger.info(JSON.toJSONString(predictionSrvc.buildPrediction(list, "apple"), true));
+		logger.info(JSON.toJSONString(predictionSrvc.buildPrediction(list, "test"), true));
 		//logger.info(JSON.toJSONString(inventoryService.futureStockInArray(p)));
 		//logger.info(JSON.toJSONString(predictionSrvc.aggregatedStock(list, p)));
 	}

@@ -1,6 +1,7 @@
 package com.crumbs.models;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
@@ -10,6 +11,7 @@ import java.util.Date;
  */
 @Getter
 @Setter
+@NoArgsConstructor
 public class ExceShipVM extends BasicShortExceVM {
 
 	private Date expiry;

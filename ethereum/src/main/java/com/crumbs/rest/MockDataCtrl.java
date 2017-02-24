@@ -3,11 +3,16 @@ package com.crumbs.rest;
 import com.alibaba.fastjson.JSON;
 import com.crumbs.components.AccountBean;
 import com.crumbs.components.EthereumBean;
+import com.crumbs.entities.Account;
+import com.crumbs.entities.Member;
 import com.crumbs.entities.Product;
+import com.crumbs.repositories.AccountRepo;
 import com.crumbs.services.ContractService;
 import com.crumbs.services.InventoryService;
+import com.crumbs.services.TransactionService;
 import com.crumbs.services.WebSocketSrvc;
 import com.crumbs.util.DateUtil;
+import org.ethereum.crypto.ECKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +29,10 @@ import static org.springframework.web.bind.annotation.RequestMethod.POST;
  * Created by low on 4/2/17 2:58 PM.
  */
 @RestController
-public class TestControllers {
+public class MockDataCtrl {
+
+	@Autowired
+	private TransactionService txService;
 
 	@Autowired
 	private EthereumBean ethereumBean;
@@ -41,15 +49,28 @@ public class TestControllers {
 	@Autowired
 	private InventoryService inventoryService;
 
+	@Autowired
+	private AccountRepo accountRepo;
+
 	static Random r = new Random();
 
-	private static final Logger logger = LoggerFactory.getLogger(TestControllers.class);
+	private static final Logger logger = LoggerFactory.getLogger(MockDataCtrl.class);
 
-	@RequestMapping(value = "/random-test", method = GET)
+	@RequestMapping(value = "mock_register_id_NOT_1/{id}", method = POST)
 	@ResponseBody
-	public long testWebSocket() {
-		//webSocketSrvc.sendBalance(r.nextLong());
-		return r.nextLong();
+	public void mockRegister(@PathVariable("id") int id, @RequestBody Member member) {
+		ECKey key = new ECKey();
+		Account account = new Account();
+		if (id == 1) {
+			logger.error("SCREW YOU!!! DON'T POST ACCOUNT WITH ID 1!!!");
+			return;
+		}
+		account.setId(id);
+		account.setPrivateKey(key.getPrivKeyBytes());
+		accountRepo.save(account);
+
+		member.setAddr(key.getAddress());
+
 	}
 
 	@RequestMapping(value = "/delete_products", method = GET)
