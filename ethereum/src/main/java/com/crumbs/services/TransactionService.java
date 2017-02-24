@@ -100,7 +100,11 @@ public class TransactionService {
 		me.setY(y);
 		memberRepo.save(me);
 		//contractService.sendToTxContract("deleteTx", 0, name);
-		contractService.sendToTxContract("register", 0, name, BigInteger.valueOf(x), BigInteger.valueOf(y));
+		contractService.sendToTxContract("register", 0, name, x, y);
+	}
+
+	public void register(byte[] senderPrivKey, Member mem) {
+		contractService.sendToTxContract(senderPrivKey, "register", 0, mem.getName(), mem.getX(), mem.getY());
 	}
 
 	public void checkAcceptanceAgreed() {
@@ -195,6 +199,15 @@ public class TransactionService {
 				txSentRepo.save(tx);
 			}
 		}
+	}
+
+	public void newOffer(byte[] senderPrivAddr, TxSent tx) {
+		long date;
+		if (tx.isSell())
+			date = tx.getExpiry().getTime();
+		else
+			date = tx.getTxDate().getTime();
+		contractService.sendToTxContract(senderPrivAddr, "newOffer", 0, tx.getUuid(), tx.getPrice(), tx.getItem(),tx.getQuantity(), date, tx.isSell());
 	}
 
 	public String newOffer(BasicShortExceVM shortExce) {
@@ -466,7 +479,7 @@ public class TransactionService {
 		return txs;
 	}
 
-	private String generateUUID() {
+	public String generateUUID() {
 		UUID id = UUID.randomUUID();
 		return (Long.toUnsignedString(id.getMostSignificantBits(), 36) + Long.toUnsignedString(id.getLeastSignificantBits(), 36));
 	}

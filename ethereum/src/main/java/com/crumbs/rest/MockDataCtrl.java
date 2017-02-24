@@ -6,11 +6,13 @@ import com.crumbs.components.EthereumBean;
 import com.crumbs.entities.Account;
 import com.crumbs.entities.Member;
 import com.crumbs.entities.Product;
+import com.crumbs.entities.TxSent;
 import com.crumbs.repositories.AccountRepo;
 import com.crumbs.services.ContractService;
 import com.crumbs.services.InventoryService;
 import com.crumbs.services.TransactionService;
 import com.crumbs.services.WebSocketSrvc;
+import com.crumbs.util.CrumbsUtil;
 import com.crumbs.util.DateUtil;
 import org.ethereum.crypto.ECKey;
 import org.slf4j.Logger;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.Random;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -58,19 +61,42 @@ public class MockDataCtrl {
 
 	@RequestMapping(value = "mock_register_id_NOT_1/{id}", method = POST)
 	@ResponseBody
-	public void mockRegister(@PathVariable("id") int id, @RequestBody Member member) {
+	public boolean mockRegister(@PathVariable("id") int id, @RequestBody Member member) {
 		ECKey key = new ECKey();
 		Account account = new Account();
 		if (id == 1) {
 			logger.error("SCREW YOU!!! DON'T POST ACCOUNT WITH ID 1!!!");
-			return;
+			return false;
 		}
 		account.setId(id);
 		account.setPrivateKey(key.getPrivKeyBytes());
 		accountRepo.save(account);
+		ethereumBean.sendEtherFromRich(key.getAddress());
 
-		member.setAddr(key.getAddress());
+		Thread t = Thread.currentThread();
+		ethereumBean.addListener((block) -> {
+			if (ethereumBean.getAccountBal(key.getAddress()).compareTo(BigInteger.valueOf(99999999999L)) > 0) {
+				t.interrupt();
+			}
+		});
+		try {
+			Thread.sleep(80000);
+		} catch (InterruptedException e) {
+			member.setAddr(key.getAddress());
+			txService.register(key.getPrivKeyBytes(), member);
+			return true;
+		}
+		return false;
+	}
 
+	@RequestMapping(value = "mock_sample_tx/{memberId}")
+	@ResponseBody
+	public String mockTx(@PathVariable("memberId") int memberId, @RequestBody TxSent txSent) {
+		Account account = accountRepo.findOne(memberId);
+		String uuid = txService.generateUUID();
+		txSent.setUuid(uuid);
+		txService.newOffer(account.getPrivateKey(), txSent);
+		return uuid;
 	}
 
 	@RequestMapping(value = "/delete_products", method = GET)

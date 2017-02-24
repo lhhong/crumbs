@@ -9,6 +9,7 @@ import org.ethereum.core.Transaction;
 import org.ethereum.crypto.ECKey;
 import org.ethereum.facade.Ethereum;
 import org.ethereum.facade.EthereumFactory;
+import org.ethereum.listener.EthereumListenerAdapter;
 import org.ethereum.util.ByteUtil;
 import org.ethereum.vm.program.ProgramResult;
 import org.slf4j.Logger;
@@ -40,6 +41,10 @@ public class EthereumBean{
 		this.ethereum.addListener(new CrumbsEthereumListener(ethereum, this));
 		this.ethereum.getBlockMiner().addListener(new CrumbsMinerListener());
 		this.ethereum.getBlockMiner().startMining();
+	}
+
+	public void addListener(OnBlockListener listener) {
+		ethereum.addListener(listener);
 	}
 
 	public CrumbsContractRepo getCrumbsContractRepo() {
@@ -85,6 +90,9 @@ public class EthereumBean{
 		sendTransaction(createTx(receiverAddress, value, new byte[0]));
 	}
 
+	public void sendTransaction(byte[] senderPrivKey, byte[] receiverAddress, long payment, byte[] data) {
+		sendTransaction(createTx(senderPrivKey,receiverAddress,payment,data));
+	}
 	public void sendTransaction(byte[] receiverAddress, byte[] data) {
 		sendTransaction(createTx(receiverAddress, data));
 	}

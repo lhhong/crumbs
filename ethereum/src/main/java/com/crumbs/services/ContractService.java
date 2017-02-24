@@ -85,6 +85,18 @@ public class ContractService {
 		ethereumBean.sendTransaction(Hex.decode(compiledContract), listener);
 	}
 
+	public void sendToTxContract(byte[] senderPrivKey, String functionName, long payment, Object... args) {
+		CrumbsContract contractDef = crumbsContractRepo.findOne("crumbs_tx");
+		if (contractDef == null) {
+			logger.error("crumbs_tx contract not loaded");
+			return;
+		}
+		CallTransaction.Contract contract = new CallTransaction.Contract(contractDef.getAbi());
+		byte[] functionCallBytes = contract.getByName(functionName).encode(args);
+		ethereumBean.sendTransaction(senderPrivKey, contractDef.getContractAddr(), payment, functionCallBytes);
+		logger.info("transaction to crumbs_tx sent");
+	}
+
 	public void sendToTxContract(String functionName, long payment, Object... args) {
 		CrumbsContract contractDef = crumbsContractRepo.findOne("crumbs_tx");
 		if (contractDef == null) {
