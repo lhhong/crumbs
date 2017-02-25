@@ -71,7 +71,7 @@ public class MatchMakingTest {
 		excess.setQuantity(12412);
 		//TODO mock all these for testing
 
-		logger.info(JSON.toJSONString(matchMakingSrvc.getMatchingTx(excess, list)));
+		logger.info(JSON.toJSONString(matchMakingSrvc.getMatchingTx(excess, list), true));
 	}
 
 
