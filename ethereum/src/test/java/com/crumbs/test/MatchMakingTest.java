@@ -3,8 +3,6 @@ package com.crumbs.test;
 import com.alibaba.fastjson.JSON;
 import com.crumbs.entities.Member;
 import com.crumbs.entities.TxAccepted;
-import com.crumbs.entities.TxSent;
-import com.crumbs.models.BasicShortExceVM;
 import com.crumbs.models.ExceShipVM;
 import com.crumbs.repositories.MemberRepo;
 import com.crumbs.services.MatchMakingSrvc;
@@ -18,6 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -41,37 +41,90 @@ public class MatchMakingTest {
 		Member own = new Member();
 		byte[] addr = {0x3e, 0x2f};
 		own.setAddr(addr);
-		own.setName("Own Name");
-		own.setX(12);
-		own.setY(1234);
+		own.setName("NTUC Bedok Mall");
+		own.setX(100);
+		own.setY(80);
 		memberRepo.save(own);
 	}
 
 	@Test
 	public void testMatchMake() {
 
-		Member mem1 = new Member(new byte[0], "asd", 123, 1234, false);
-		Member mem2 = new Member(new byte[0], "asd2", 13, -14, false);
+		Member own = memberRepo.findByOwn(true).get(0);
+
+		Member mem1 = new Member(new byte[0], "Giant Tampines Mall", 13, 14, false);
+		Member mem2 = new Member(new byte[0], "Cold Storage Katong V", 53, 3, false);
+		Member mem3 = new Member(new byte[0], "Lee Minimart Katong V", 23, 88, false);
+		Member mem4 = new Member(new byte[0], "Bedok Givers Charity", 45, 60, false);
 		//TODO add more members
 
-		TxAccepted tx1 = new TxAccepted();
-		tx1.setSender(mem1);
-		tx1.setQuantity(123);
-		tx1.setPrice(123452341);
+		Calendar cal = Calendar.getInstance();
 
-		TxAccepted tx2 = new TxAccepted();
-		//TODO fill in all info and create more tx
+		List<TxAccepted> tx_list = new ArrayList<>();
+		int numTransactions = 10;
+		List<Long> prices = new ArrayList<>(Arrays.asList(1500L, 50L,400L,600L,250L,420L,10L,1300L,550L,350L));
+		List<String> names = new ArrayList<>(Arrays.asList("Parmesan Cheese","Onion","Sardines",
+															"Marigold Milk","Carrot","Corn","Carrot",
+															"Parmesan Cheese","Onion","Marigold Milk"));
+		List<Integer> quantities = new ArrayList<>(Arrays.asList(100,500,430,350,200,300,300,150,500,200));
 
-		List<TxAccepted> list = new ArrayList<>();
-		list.add(tx1);
-		list.add(tx2);
+		for (int i = 0;i<numTransactions;i++){
+			TxAccepted tx = new TxAccepted();
+			tx.setPrice(prices.get(i));
+			tx.setItem(names.get(i));
+			tx.setQuantity(quantities.get(i));
+			tx_list.add(tx);
+		}
+
+		cal.set(2017, Calendar.MARCH, 5);
+		tx_list.get(0).setExpiry(cal.getTime());
+		tx_list.get(0).setSell(Boolean.TRUE);
+		tx_list.get(0).setSender(own);
+
+		cal.set(2017, Calendar.MARCH, 4);
+		tx_list.get(1).setExpiry(cal.getTime());
+		tx_list.get(1).setSell(Boolean.TRUE);
+		tx_list.get(1).setSender(mem1);
+
+		cal.set(2017, Calendar.MARCH, 3);
+		tx_list.get(2).setExpiry(cal.getTime());
+		tx_list.get(2).setSell(Boolean.TRUE);
+		tx_list.get(2).setSender(own);
+
+		tx_list.get(3).setSell(Boolean.FALSE);
+		tx_list.get(3).setSender(mem4);
+
+		tx_list.get(4).setSell(Boolean.FALSE);
+		tx_list.get(4).setSender(mem3);
+
+		cal.set(2017, Calendar.MARCH, 5);
+		tx_list.get(5).setExpiry(cal.getTime());
+		tx_list.get(5).setSell(Boolean.TRUE);
+		tx_list.get(5).setSender(mem2);
+
+		cal.set(2017, Calendar.MARCH, 4);
+		tx_list.get(6).setExpiry(cal.getTime());
+		tx_list.get(6).setSell(Boolean.TRUE);
+		tx_list.get(6).setSender(mem1);
+
+		tx_list.get(7).setSell(Boolean.FALSE);
+		tx_list.get(7).setSender(own);
+
+		tx_list.get(8).setSell(Boolean.FALSE);
+		tx_list.get(8).setSender(own);
+
+		cal.set(2017, Calendar.MARCH, 5);
+		tx_list.get(9).setExpiry(cal.getTime());
+		tx_list.get(9).setSell(Boolean.TRUE);
+		tx_list.get(9).setSender(mem1);
+
 
 		//For excess, use RemStockVM for shortages
 		ExceShipVM excess = new ExceShipVM();
-		excess.setQuantity(12412);
+		excess.setQuantity(500);
 		//TODO mock all these for testing
 
-		logger.info(JSON.toJSONString(matchMakingSrvc.getMatchingTx(excess, list), true));
+		logger.info(JSON.toJSONString(matchMakingSrvc.getMatchingTx(excess, tx_list), true));
 	}
 
 
