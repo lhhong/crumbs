@@ -18,8 +18,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.function.ToDoubleFunction;
-import java.util.function.ToIntFunction;
 
 /**
  * Created by low on 22/2/17 6:21 PM.
@@ -44,17 +42,16 @@ public class MatchMakingSrvc {
 	}
 
 	public List<TransactionVM> getMatchingTx(BasicShortExceVM shortExce, List<TxAccepted> availTxs) {
+		Member own = memberRepo.findByOwn(true).get(0);
 		List<TransactionVM> possibleTx = new ArrayList<>();
 		availTxs.forEach(tx -> {
 			if (shortExce instanceof RemStockVM) {
-				if (tx.isSell() && DateUtil.toLocalDate(tx.getExpiry()).isAfter(DateUtil.toLocalDate(((RemStockVM) shortExce).getRequestDate()))
-						&& tx.getItem().equalsIgnoreCase(shortExce.getName())) {
+				if (isSuitableSeller(own, shortExce, tx)) {
 					possibleTx.add(CrumbsUtil.toTxVM(tx));
 				}
 			}
 			else if (shortExce instanceof ExceShipVM) {
-				if (!tx.isSell() && DateUtil.toLocalDate(tx.getTxDate()).isBefore(DateUtil.toLocalDate(((ExceShipVM) shortExce).getExpiry()))
-						&& tx.getItem().equalsIgnoreCase(shortExce.getName())) {
+				if (isSuitableBuyer(own, shortExce, tx)) {
 					possibleTx.add(CrumbsUtil.toTxVM(tx));
 				}
 			}
@@ -64,16 +61,46 @@ public class MatchMakingSrvc {
 
 		});
 
-		//TODO calculate transport cost and rank
+		//Calculate transport cost and rank
 		possibleTx.forEach(tx -> tx.setTransportPrice(optimize.calcTransportCost(tx)));
 		possibleTx.sort(Collections.reverseOrder(Comparator.comparingDouble((tx) -> getRank(tx, shortExce))));
 		return possibleTx;
 
 	}
 
+	private boolean isSuitableSeller(Member own, BasicShortExceVM shortExce, TxAccepted tx){
+		boolean expiryCheck = DateUtil.toLocalDate(tx.getExpiry()).isAfter(DateUtil.toLocalDate(((RemStockVM) shortExce).getRequestDate()));
+		boolean itemCheck = tx.getItem().equalsIgnoreCase(shortExce.getName());
+		boolean quantityCheck = tx.getQuantity() >= 0.8 * shortExce.getQuantity() && tx.getQuantity() <= 1.2 * shortExce.getQuantity();
+		boolean notYourselfCheck = !tx.getSender().equals(own);
+
+		return tx.isSell() && expiryCheck && itemCheck && quantityCheck && notYourselfCheck;
+	}
+
+	private boolean isSuitableBuyer(Member own, BasicShortExceVM shortExce, TxAccepted tx){
+		boolean expiryCheck = DateUtil.toLocalDate(tx.getTxDate()).isBefore(DateUtil.toLocalDate(((ExceShipVM) shortExce).getExpiry()));
+		boolean itemCheck = tx.getItem().equalsIgnoreCase(shortExce.getName());
+		boolean quantityCheck = tx.getQuantity() >= 0.8 * shortExce.getQuantity() && tx.getQuantity() <= 1.2 * shortExce.getQuantity();
+		boolean notYourselfCheck = !tx.getSender().equals(own);
+
+		return !tx.isSell() && expiryCheck && itemCheck && quantityCheck && notYourselfCheck;
+	}
+
 	private double getRank(TransactionVM tx, BasicShortExceVM shortExce) {
-		Member own = memberRepo.findByOwn(true).get(0);
-		//TODO use own and tx and shortExce to calculate ranking, the list will then auto sort by ranking
-		return 1.0d;
+		//Member own = memberRepo.findByOwn(true).get(0);
+		double rank = 0;
+		if (shortExce instanceof RemStockVM) {
+			// To rank potential sellers, prefer low price and more days before expiry
+			// Assume that each day before expiry is worth $100
+			double price = tx.getPrice() + tx.getTransportPrice();
+			int daysBeforeExpiry = DateUtil.toLocalDate(tx.getExpiry()).getDayOfYear()-DateUtil.toLocalDate(((RemStockVM) shortExce).getRequestDate()).getDayOfYear();
+			rank = 1/(price-100*daysBeforeExpiry); //Take the inverse of price
+		}
+		else if (shortExce instanceof ExceShipVM) {
+			// To rank potential buyers, prefer higher price
+			rank = tx.getPrice();
+		}
+
+		return rank;
 	}
 }
