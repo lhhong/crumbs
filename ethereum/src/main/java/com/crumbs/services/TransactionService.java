@@ -91,6 +91,30 @@ public class TransactionService {
 		return status;
 	}
 
+	public List<TransactionVM> getBought(TxStatus status) {
+		List<TransactionVM> bought = new ArrayList<>();
+		//String name = memberRepo.findByOwn(true).get(0).getName();
+		status.getDoneTx().forEach((tx) -> {
+			if (tx.isSell() && tx.getAccepter() == null) {
+				bought.add(tx);
+			} else if (!tx.isSell() && tx.getSender() == null) {
+				bought.add(tx);
+			}
+		});
+		return bought;
+	}
+	public List<TransactionVM> getSold(TxStatus status) {
+		List<TransactionVM> sold = new ArrayList<>();
+		status.getDoneTx().forEach((tx) -> {
+			if (tx.isSell() && tx.getSender() == null) {
+				sold.add(tx);
+			} else if (!tx.isSell() && tx.getAccepter() == null) {
+				sold.add(tx);
+			}
+		});
+		return sold;
+	}
+
 	public void register(String name, long x, long y) {
 		Member me = new Member();
 		me.setName(name);

@@ -51,8 +51,57 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
         })
     }
 
+    var getSold = function(callback, failureCallback) {
+        $http({
+            method: 'GET',
+            url: baseUrl + "sold_tx"
+        }).success(function(response) {
+            if (callback) {
+                callback(response);
+            }
+        }).error(function(response, status)  {
+            console.log("server error, code = " + status)
+            if (failureCallback) {
+                failureCallback();
+            }
+        })
+    }
+
+    var getBought = function(callback, failureCallback) {
+        $http({
+            method: 'GET',
+            url: baseUrl + "bought_tx"
+        }).success(function(response) {
+            if (callback) {
+                callback(response);
+            }
+        }).error(function(response, status)  {
+            console.log("server error, code = " + status)
+            if (failureCallback) {
+                failureCallback();
+            }
+        })
+    }
+
+    var getTransactions = function(callback) {
+        $http({
+            method: 'GET',
+            url: baseUrl + "all_tx"
+        }).success(function(response) {
+            if (callback) {
+                callback(response);
+            }
+        }).error(function(response, status)  {
+            console.log("server error, code = " + status)
+        })
+    }
+
     return {
+        register: register,
         sendOffer: sendOffer,
-        getEther: getEther
+        getEther: getEther,
+        getTransactions: getTransactions,
+        getBought: getBought,
+        getSold: getSold
     }
 }]);

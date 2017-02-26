@@ -36,10 +36,24 @@ public class TransactionController {
 	@Autowired
 	private Optimize optimize;
 
-	@RequestMapping(method = GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/all_tx", method = GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public TxStatus getStatus() {
 		return transactionService.getTxStatus();
+	}
+
+	@RequestMapping(value = "/sold_tx", method = GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<TransactionVM> getSold() {
+		TxStatus status = transactionService.getTxStatus();
+		return transactionService.getSold(status);
+	}
+
+	@RequestMapping(value = "/bought_tx", method = GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<TransactionVM> getBought() {
+		TxStatus status = transactionService.getTxStatus();
+		return transactionService.getBought(status);
 	}
 
 	@RequestMapping(value = "/register", method = POST, produces = APPLICATION_JSON_VALUE)

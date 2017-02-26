@@ -31,12 +31,12 @@
                   </thead>
                   <tbody>
                       <tr ng-repeat="x in bought | filter:searchText">
-                          <td>{{ x.storename }}</td>
-                          <td>{{ x.product }}</td>
-                          <td>{{ x.qty }}</td>
+                          <td>{{ x.accepter.name }}{{ x.sender.name }}</td>
+                          <td>{{ x.item }}</td>
+                          <td>{{ x.quantity }}</td>
                           <td>{{ x.price | currency }}</td>
-                          <td>{{ x.tdate | date }}</td>
-                          <td>{{ x.ddate | date }}</td>
+                          <td>{{ x.txDate | date }}</td>
+                          <td>{{ x.expiry | date }}</td>
                       </tr>
                   </tbody>
               </table>

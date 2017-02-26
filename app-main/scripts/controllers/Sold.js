@@ -15,6 +15,11 @@ angular.module('sbAdminApp')
         txService.getEther(function(balance) {
             $scope.balance = balance;
         })
+        txService.getSold(function(txs) {
+            $scope.sold = txs;
+        }, function() {
+            $scope.sold = [];
+        })
     }
 
     $interval(function() {
