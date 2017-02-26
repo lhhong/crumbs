@@ -6,6 +6,7 @@ import com.crumbs.entities.TxAccepted;
 import com.crumbs.models.ExceShipVM;
 import com.crumbs.repositories.MemberRepo;
 import com.crumbs.services.MatchMakingSrvc;
+import com.crumbs.util.DateUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,6 +45,7 @@ public class MatchMakingTest {
 		own.setName("NTUC Bedok Mall");
 		own.setX(100);
 		own.setY(80);
+		own.setOwn(true);
 		memberRepo.save(own);
 	}
 
@@ -91,11 +93,17 @@ public class MatchMakingTest {
 		tx_list.get(2).setSell(Boolean.TRUE);
 		tx_list.get(2).setSender(own);
 
+		cal.set(2017, Calendar.MARCH, 1);
+		tx_list.get(3).setTxDate(cal.getTime());
 		tx_list.get(3).setSell(Boolean.FALSE);
 		tx_list.get(3).setSender(mem4);
 
+		cal.set(2017, Calendar.FEBRUARY, 27);
+		tx_list.get(4).setTxDate(cal.getTime());
+		tx_list.get(4).setItem("test");
 		tx_list.get(4).setSell(Boolean.FALSE);
 		tx_list.get(4).setSender(mem3);
+		tx_list.get(4).setQuantity(510);
 
 		cal.set(2017, Calendar.MARCH, 5);
 		tx_list.get(5).setExpiry(cal.getTime());
@@ -107,9 +115,13 @@ public class MatchMakingTest {
 		tx_list.get(6).setSell(Boolean.TRUE);
 		tx_list.get(6).setSender(mem1);
 
+		cal.set(2017, Calendar.FEBRUARY, 27);
+		tx_list.get(7).setTxDate(cal.getTime());
 		tx_list.get(7).setSell(Boolean.FALSE);
 		tx_list.get(7).setSender(own);
 
+		cal.set(2017, Calendar.FEBRUARY, 27);
+		tx_list.get(8).setTxDate(cal.getTime());
 		tx_list.get(8).setSell(Boolean.FALSE);
 		tx_list.get(8).setSender(own);
 
@@ -121,6 +133,8 @@ public class MatchMakingTest {
 
 		//For excess, use RemStockVM for shortages
 		ExceShipVM excess = new ExceShipVM();
+		excess.setName("test");
+		excess.setExpiry(DateUtil.daysFromToday(40));
 		excess.setQuantity(500);
 		//TODO mock all these for testing
 

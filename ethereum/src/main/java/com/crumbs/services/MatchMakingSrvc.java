@@ -69,20 +69,33 @@ public class MatchMakingSrvc {
 	}
 
 	private boolean isSuitableSeller(Member own, BasicShortExceVM shortExce, TxAccepted tx){
-		boolean expiryCheck = DateUtil.toLocalDate(tx.getExpiry()).isAfter(DateUtil.toLocalDate(((RemStockVM) shortExce).getRequestDate()));
-		boolean itemCheck = tx.getItem().equalsIgnoreCase(shortExce.getName());
-		boolean quantityCheck = tx.getQuantity() >= 0.8 * shortExce.getQuantity() && tx.getQuantity() <= 1.2 * shortExce.getQuantity();
-		boolean notYourselfCheck = !tx.getSender().equals(own);
+		if (!tx.isSell()) return false;
+		boolean expiryCheck, itemCheck, quantityCheck, notYourselfCheck;
+		try {
+			expiryCheck = DateUtil.toLocalDate(tx.getExpiry()).isAfter(DateUtil.toLocalDate(((RemStockVM) shortExce).getRequestDate()));
+			itemCheck = tx.getItem().equalsIgnoreCase(shortExce.getName());
+			quantityCheck = tx.getQuantity() >= 0.8 * shortExce.getQuantity() && tx.getQuantity() <= 1.2 * shortExce.getQuantity();
+			notYourselfCheck = !tx.getSender().equals(own);
+		} catch (NullPointerException e) {
+			logger.error("NULL Pointer encountered");
+			return false;
+		}
 
 		return tx.isSell() && expiryCheck && itemCheck && quantityCheck && notYourselfCheck;
 	}
 
 	private boolean isSuitableBuyer(Member own, BasicShortExceVM shortExce, TxAccepted tx){
-		boolean expiryCheck = DateUtil.toLocalDate(tx.getTxDate()).isBefore(DateUtil.toLocalDate(((ExceShipVM) shortExce).getExpiry()));
-		boolean itemCheck = tx.getItem().equalsIgnoreCase(shortExce.getName());
-		boolean quantityCheck = tx.getQuantity() >= 0.8 * shortExce.getQuantity() && tx.getQuantity() <= 1.2 * shortExce.getQuantity();
-		boolean notYourselfCheck = !tx.getSender().equals(own);
-
+		if (tx.isSell()) return false;
+		boolean expiryCheck, itemCheck, quantityCheck, notYourselfCheck;
+		try {
+			expiryCheck = DateUtil.toLocalDate(tx.getTxDate()).isBefore(DateUtil.toLocalDate(((ExceShipVM) shortExce).getExpiry()));
+			itemCheck = tx.getItem().equalsIgnoreCase(shortExce.getName());
+			quantityCheck = tx.getQuantity() >= 0.8 * shortExce.getQuantity() && tx.getQuantity() <= 1.2 * shortExce.getQuantity();
+			notYourselfCheck = !tx.getSender().equals(own);
+		} catch (NullPointerException e) {
+			logger.error("NULL Pointer encountered");
+			return false;
+		}
 		return !tx.isSell() && expiryCheck && itemCheck && quantityCheck && notYourselfCheck;
 	}
 
