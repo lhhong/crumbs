@@ -24,5 +24,4 @@ public class TransactionVM implements Serializable{
 	Member sender;
 	Member accepter;
 	long transportPrice;
-	boolean ownSell;
 }

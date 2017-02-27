@@ -83,7 +83,7 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
         })
     }
 
-    var getTransactions = function(callback) {
+    var getTransactions = function(callback, failureCallback) {
         $http({
             method: 'GET',
             url: baseUrl + "all_tx"
@@ -93,6 +93,9 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
             }
         }).error(function(response, status)  {
             console.log("server error, code = " + status)
+            if (failureCallback) {
+                failureCallback();
+            }
         })
     }
 

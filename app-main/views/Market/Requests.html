@@ -13,6 +13,109 @@
     <div class="alert alert-success">
           Current Ether Balance: <em>{{ balance }}</em>
     </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong>Requests Made</strong>
+      </div>
+      <!-- /.panel-heading -->
+      <div class="panel-body">
+          <div class="table-responsive">
+              <table class="table table-striped">
+                  <thead>
+                      <tr>
+                          <th ng-click="sortData('sell')">
+                            Buy/Sell <div ng-class="getSortClass('sell')"></div>
+                          </th>
+                          <th ng-click="sortData('item')">
+                            Product <div ng-class="getSortClass('item')"></div>
+                          </th>
+                          <th ng-click="sortData('quantity')">
+                            Quantity <div ng-class="getSortClass('quantity')"></div>
+                          </th>
+                          <th ng-click="sortData('expiry')">
+                            Transaction Date <div ng-class="getSortClass('expiry')"></div>
+                          </th>
+                          <th ng-click="sortData('price')">
+                            Price <div ng-class="getSortClass('price')"></div>
+                          </th>
+                          <th ng-click="sortData('pending')">
+                              Included <div ng-class="getSortClass('pending')"></div>
+                          </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr ng-repeat="x in offers | filter:searchText | orderBy:sortColumn:reverseSort" ng-style="getBackground(x.pending)">
+                          <td ng-if="x.sell">SELL</td>
+                          <td ng-if="!x.sell">BUY</td>
+                          <td>{{ x.item }}</td>
+                          <td>{{ x.quantity }}</td>
+                          <td>{{ x.expiry | date }}</td>
+                          <td>{{ x.price | currency }}</td>
+                          <td ng-if="x.pending">NO</td>
+                          <td ng-if="!x.pending">YES</td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+          <!-- /.table-responsive -->
+      </div>
+      <!-- /.panel-body -->
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong>Pending Agree</strong>
+      </div>
+      <!-- /.panel-heading -->
+      <div class="panel-body">
+          <div class="table-responsive">
+              <table class="table table-striped">
+                  <thead>
+                      <tr>
+                          <th ng-click="sortData('sell')">
+                            Buy/Sell <div ng-class="getSortClass('sell')"></div>
+                          </th>
+                          <th ng-click="sortData('accepter.name')">
+                              Store Name <div ng-class="getSortClass('accepter.name')"></div>
+                          </th>
+                          <th ng-click="sortData('item')">
+                            Product <div ng-class="getSortClass('item')"></div>
+                          </th>
+                          <th ng-click="sortData('quantity')">
+                            Quantity <div ng-class="getSortClass('quantity')"></div>
+                          </th>
+                          <th ng-click="sortData('expiry')">
+                            Transaction Date <div ng-class="getSortClass('expiry')"></div>
+                          </th>
+                          <th ng-click="sortData('price')">
+                            Price <div ng-class="getSortClass('price')"></div>
+                          </th>
+                          <th>Transport Cost</th>
+                          <th>Total Cost</th>
+                          <th></th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr ng-repeat="x in agrees track by $index | filter:searchText | orderBy:sortColumn:reverseSort" ng-style="getBackground(x.agreeing)">
+                          <td ng-if="x.sell">SELL</td>
+                          <td ng-if="!x.sell">BUY</td>
+                          <td>{{ x.accepter.name }}</td>
+                          <td>{{ x.item }}</td>
+                          <td>{{ x.quantity }}</td>
+                          <td>{{ x.expiry | date }}</td>
+                          <td>{{ x.price | currency }}</td>
+                          <td>{{ x.transportCost | currency }}</td>
+                          <td>{{ x.price + x.transportCost | currency }}</td>
+                          <td ng-if="!x.agreeing"><button ng-click="agree($index)" type="button" class="btn btn-success btn-xs">Agree</button></td>
+                          <td ng-if="x.agreeing">Waiting to be included</td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+          <!-- /.table-responsive -->
+      </div>
+      <!-- /.panel-body -->
+    </div>
+
     <!-- /.row -->
     <!-- Dairy Product Tab -->
     <div class="panel panel-default">

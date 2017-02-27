@@ -14,11 +14,32 @@ angular.module('sbAdminApp')
         txService.getEther(function(balance) {
             $scope.balance = balance;
         })
+        txService.getTransactions(function(txs) {
+            $scope.txs = txs;
+            for (var i = 0; i<txs.pendingOffers.length; i++) {
+                txs.pendingOffers[i].pending = true;
+            }
+            $scope.offers = txs.pendingOffers.concat(txs.successfulOffers);
+            for (var i = 0; i<txs.pendingAgrees.length; i++) {
+                txs.pendingAgrees[i].agreeing = true;
+            }
+            $scope.agrees = txs.pendingAgrees.concat(txs.offersAccepted);
+        }, function() {
+            //add mock data here when server not running
+        })
     }
 
     $interval(function() {
         reloadData();
     }, 5000)
+
+    $scope.getBackground = function(pending) {
+        if (pending) {
+            return {
+                background: '#ffb888'
+            }
+        }
+    }
 
     $scope.dairy = [{
       'storename' : 'NTUC',
