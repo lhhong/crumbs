@@ -20,12 +20,21 @@ angular.module('sbAdminApp')
                 txs.pendingOffers[i].pending = true;
             }
             $scope.offers = txs.pendingOffers.concat(txs.successfulOffers);
+
+            for (var i = 0; i<txs.pendingAccepts.length; i++) {
+                txs.pendingAccepts[i].pending = true;
+            }
+            $scope.accepts = txs.pendingAccepts.concat(txs.successfulAccepts);
+
             for (var i = 0; i<txs.pendingAgrees.length; i++) {
                 txs.pendingAgrees[i].agreeing = true;
             }
             $scope.agrees = txs.pendingAgrees.concat(txs.offersAccepted);
         }, function() {
             //add mock data here when server not running
+            $scope.offers = []; //Offers you made
+            $scope.accepts = []; //Offers that you accepted and waiting for other party to agree
+            $scope.agrees = []; //Offers accepted waiting for you to agree, or agreed but not included in block chain
         })
     }
 
