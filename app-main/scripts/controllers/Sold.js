@@ -18,7 +18,23 @@ angular.module('sbAdminApp')
         txService.getSold(function(txs) {
             $scope.sold = txs;
         }, function() {
-            $scope.sold = [];
+            $scope.sold = [
+                {
+                    accepter:{name:'NTUC'},
+                    item: 'Apples',
+                    quantity: 300,
+                    price: 2,
+                    txDate: 12315234522,
+                    expiry: 143624624245
+                },{
+                    accepter:{name:'GIANT'},
+                    item: 'Oranges',
+                    quantity: 300,
+                    price: 2,
+                    txDate: 12315234522,
+                    expiry: 143624624245
+                }
+            ];
         })
     }
 
@@ -26,21 +42,4 @@ angular.module('sbAdminApp')
         reloadData();
     }, 5000)
 
-    $scope.sold = [{
-      'storename' : 'NTUC',
-      'product': 'Apples',
-      'qty': 12,
-      'price': 120,
-      'tdate': 123145123,
-      'ddate': 123145123
-    },
-    {
-      'storename' : 'Giant',
-      'product': 'Oranges',
-      'qty': 21,
-      'price': 120.09,
-      'tdate': 123145123,
-      'ddate': 123145123
-    }
-    ]
   }]);
