@@ -2,10 +2,42 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
 
     var baseUrl = 'http://localhost:8080/'
 
-    var sendOffer = function(offer, callback) {
+    var accept = function(tx, callback) {
         $http({
             method: 'POST',
-            url: baseUrl + 'offer',
+            url: baseUrl + 'accept',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: tx
+        }).success(function(response) {
+            if (callback) {
+                callback(response)
+            }
+        })
+    }
+
+    var excessOffer = function(offer, callback) {
+        $http({
+            method: 'POST',
+            url: baseUrl + 'offer_excess',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: offer
+        }).success(function(response) {
+            if (callback) {
+                if (response) console.log("offer included in blockchain");
+                else console.log("check again later")
+                callback(response)
+            }
+        })
+    }
+
+    var shortageOffer = function(offer, callback) {
+        $http({
+            method: 'POST',
+            url: baseUrl + 'offer_shortage',
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -99,12 +131,30 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
         })
     }
 
+    var agree = function(uuid, callback) {
+        $http({
+            method: 'GET',
+            url: baseUrl + "agree",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: uuid
+        }).success(function(response) {
+            if (callback) {
+                callback(response)
+            }
+        })
+    }
+
     return {
+        accept: accept,
         register: register,
-        sendOffer: sendOffer,
+        shortageOffer: shortageOffer,
+        excessOffer: excessOffer,
         getEther: getEther,
         getTransactions: getTransactions,
         getBought: getBought,
-        getSold: getSold
+        getSold: getSold,
+        agree: agree
     }
 }]);

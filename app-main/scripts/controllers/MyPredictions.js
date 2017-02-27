@@ -16,36 +16,43 @@ angular.module('sbAdminApp')
             $scope.predictions = predictions;
         },
         function() {
-
-            $scope.predictions = {stockShortages:  [{
-              name : 'Apples',
-              quantity: -3,
-              percentExtra: -12,
-              requestDate : 123145123,
-              price : 123145123,
-              urgencyLevel: "red"
-            },
-            {
-              name : 'Orange',
-              quantity: -3,
-              percentExtra: -12,
-              requestDate : 123145123,
-              price : 12323,
-              urgencyLevel: "orange"
-            }
-            ],
-            excessShipments: [{
-              name : 'Orange',
-              quantity: 354,
-              percentExtra: 12,
-              expiry : 23153145123,
-              price : 1232,
-              urgencyLevel: "orange"
-            }]
+            $scope.predictions = {
+                stockShortages:  [{
+                  name : 'Apples',
+                  quantity: -3,
+                  percentExtra: -12,
+                  requestDate : 123145123,
+                  price : 123145123,
+                  urgencyLevel: "red"
+                },
+                {
+                  name : 'Orange',
+                  quantity: -3,
+                  percentExtra: -12,
+                  requestDate : 123145123,
+                  price : 12323,
+                  urgencyLevel: "orange"
+                }
+                ],
+                excessShipments: [{
+                  name : 'Orange',
+                  quantity: 354,
+                  percentExtra: 12,
+                  expiry : 23153145123,
+                  price : 1232,
+                  urgencyLevel: "orange"
+                }]
             };
-                //TODO add default mock data
         }
     )
+
+    $scope.shortageOffer = function(index) {
+        txService.shortageOffer($scope.predictions.stockShortages[index], function(response) {})
+    }
+
+    $scope.excessOffer = function(index) {
+        txService.excessOffer($scope.predictions.excessShipments[index], function(response) {})
+    }
 
     $scope.getColour = function(shortOrExce, index) {
         var code = $scope.predictions[shortOrExce][index].urgencyLevel;
@@ -80,19 +87,5 @@ angular.module('sbAdminApp')
         txService.getEther(function (data) {
             console.log(data)
         })
-        var offer = {
-            price: 20,
-            item: "dasdsf",
-            quantity: 100,
-            expiry: 1234523452,
-            isSell: true,
-            txDate: 274523454543
-        }
-        /*txService.sendOffer(offer, function(data) {
-            console.log(data)
-            if (data) {
-                //codes when transaction is included
-            }
-        })*/
     }
   }]);

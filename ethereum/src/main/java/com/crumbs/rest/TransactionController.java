@@ -68,7 +68,7 @@ public class TransactionController {
 		return postOffer(exceShip);
 	}
 
-	@RequestMapping(value = "/offer_shortgae", method = POST, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "/offer_shortage", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public boolean postOfferShort(@RequestBody RemStockVM remStock) {
 		return postOffer(remStock);

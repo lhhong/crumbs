@@ -26,6 +26,7 @@ public class ExceShipVM extends BasicShortExceVM {
 		super.setName(product.getName());
 		super.setCategory(product.getCategory());
 		super.setPrice(product.getPrice());
+		super.setQToOffer(eShip.getQToOffer());
 	}
 
 }

@@ -50,6 +50,12 @@ angular.module('sbAdminApp')
         }
     }
 
+    $scope.agree = function(uuid) {
+        txService.agree(uuid, function(response) {
+            console.log("Agree sent");
+        })
+    }
+
     $scope.dairy = [{
       'storename' : 'NTUC',
       'product': 'Milk',

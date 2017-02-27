@@ -19,5 +19,6 @@ public class BasicShortExceVM implements Serializable {
 	private String name;
 	private String category;
 	private long price;
+	private int qToOffer;
 
 }

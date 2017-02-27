@@ -74,7 +74,7 @@ public class MatchMakingSrvc {
 		try {
 			expiryCheck = DateUtil.toLocalDate(tx.getExpiry()).isAfter(DateUtil.toLocalDate(((RemStockVM) shortExce).getRequestDate()));
 			itemCheck = tx.getItem().equalsIgnoreCase(shortExce.getName());
-			quantityCheck = tx.getQuantity() >= 0.8 * shortExce.getQuantity() && tx.getQuantity() <= 1.2 * shortExce.getQuantity();
+			quantityCheck = tx.getQuantity() >= 0.8 * shortExce.getQToOffer() && tx.getQuantity() <= 1.2 * shortExce.getQToOffer();
 			notYourselfCheck = !tx.getSender().equals(own);
 		} catch (NullPointerException e) {
 			logger.error("NULL Pointer encountered");
@@ -90,7 +90,7 @@ public class MatchMakingSrvc {
 		try {
 			expiryCheck = DateUtil.toLocalDate(tx.getTxDate()).isBefore(DateUtil.toLocalDate(((ExceShipVM) shortExce).getExpiry()));
 			itemCheck = tx.getItem().equalsIgnoreCase(shortExce.getName());
-			quantityCheck = tx.getQuantity() >= 0.8 * shortExce.getQuantity() && tx.getQuantity() <= 1.2 * shortExce.getQuantity();
+			quantityCheck = tx.getQuantity() >= 0.8 * shortExce.getQToOffer() && tx.getQuantity() <= 1.2 * shortExce.getQToOffer();
 			notYourselfCheck = !tx.getSender().equals(own);
 		} catch (NullPointerException e) {
 			logger.error("NULL Pointer encountered");

@@ -7,6 +7,7 @@ import com.crumbs.models.*;
 import com.crumbs.repositories.ProductRepo;
 import com.crumbs.repositories.SalesRecordRepo;
 import com.crumbs.util.DateUtil;
+import com.crumbs.util.UrgencyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,12 +110,16 @@ public class PredictionSrvc {
 			}
 
 			int predictedStock = carryOver - demand.get(i);
-			prediction.addToStockList(new RemainingStock(demand.get(i), predictedStock, i));
-			prediction.addToShipmentList(new ExcessShipment(currentStock.get(i).getDisposed(), disposals.get(i), i));
+			//ideal value to be put up to offer
+			int toOffer = (int) (demand.get(i) * (UrgencyUtil.getPerfectExcess())) - predictedStock;
+			prediction.addToStockList(new RemainingStock(demand.get(i), predictedStock, i, toOffer));
+			toOffer = disposals.get(i) - (int) (currentStock.get(i).getDisposed() * UrgencyUtil.getPerfectExcess());
+			prediction.addToShipmentList(new ExcessShipment(currentStock.get(i).getDisposed(), disposals.get(i), i, toOffer));
 			carryOver = Integer.max(0, carryOver - demand.get(i) - disposals.get(i)) + currentStock.get(i).getStock();
 		}
 		int predictedStock = carryOver - demand.get(7);
-		prediction.addToStockList(new RemainingStock(demand.get(7), predictedStock, 7));
+		int toOffer = (int) (demand.get(7) * (UrgencyUtil.getPerfectExcess())) - predictedStock;
+		prediction.addToStockList(new RemainingStock(demand.get(7), predictedStock, 7, toOffer));
 		return prediction;
 	}
 

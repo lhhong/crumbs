@@ -19,14 +19,16 @@ public class ExcessShipment {
 	private String urgencyLevel;
 	private double percentExtra;
 	private Date expiry;
+	private int qToOffer;
 
 	public ExcessShipment() {}
 
-	public ExcessShipment(int initialDispose, int actualDispose, int index) {
+	public ExcessShipment(int initialDispose, int actualDispose, int index, int qToOffer) {
 		quantity = actualDispose;
 		urgency = UrgencyUtil.excessUrg(initialDispose, actualDispose);
 		urgencyLevel = UrgencyUtil.getUrgencyLevel(urgency);
 		percentExtra = UrgencyUtil.percentageExtra(initialDispose, actualDispose);
 		expiry = DateUtil.daysFromToday(index + 1);
+		this.qToOffer = qToOffer;
 	}
 }

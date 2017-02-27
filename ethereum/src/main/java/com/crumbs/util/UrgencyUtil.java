@@ -11,6 +11,10 @@ public class UrgencyUtil {
 	private static final double PERFECT_PERCENTAGE = 0.2;
 	private static final double MULTIPLIER = 4;
 
+	public static double getPerfectExcess() {
+		return PERFECT_PERCENTAGE;
+	}
+
 	private static double rawPercentage(int initial, int excess) {
 		return  ((double) excess) / ((double) initial);
 	}

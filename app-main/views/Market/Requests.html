@@ -154,7 +154,7 @@
                       </tr>
                   </thead>
                   <tbody>
-                      <tr ng-repeat="x in agrees track by $index | filter:searchText | orderBy:sortColumn:reverseSort" ng-style="getBackground(x.agreeing)">
+                      <tr ng-repeat="x in agrees | filter:searchText | orderBy:sortColumn:reverseSort" ng-style="getBackground(x.agreeing)">
                           <td ng-if="x.sell">SELL</td>
                           <td ng-if="!x.sell">BUY</td>
                           <td>{{ x.accepter.name }}</td>
@@ -164,7 +164,7 @@
                           <td>{{ x.price | currency }}</td>
                           <td>{{ x.transportCost | currency }}</td>
                           <td>{{ x.price + x.transportCost | currency }}</td>
-                          <td ng-if="!x.agreeing"><button ng-click="agree($index)" type="button" class="btn btn-success btn-xs">Agree</button></td>
+                          <td ng-if="!x.agreeing"><button ng-click="agree(x.uuid)" type="button" class="btn btn-success btn-xs">Agree</button></td>
                           <td ng-if="x.agreeing">Waiting to be included</td>
                       </tr>
                   </tbody>
