@@ -9,7 +9,6 @@ import org.ethereum.core.Transaction;
 import org.ethereum.crypto.ECKey;
 import org.ethereum.facade.Ethereum;
 import org.ethereum.facade.EthereumFactory;
-import org.ethereum.listener.EthereumListenerAdapter;
 import org.ethereum.util.ByteUtil;
 import org.ethereum.vm.program.ProgramResult;
 import org.slf4j.Logger;
@@ -67,27 +66,14 @@ public class EthereumBean{
 	public final String RICH_KEY = "9afb9a8e71fa44275fca9d421760cd712abb1493c396d4d36fd3f0a01f1cc9f6";
 	public final String RICH_ADDR = "c82f55da06ec7a3b1c878aa48ad0f8b78257e6d0";
 
-	public void sendTransaction(byte[] data) {
-		Transaction tx = createTx(data);
-		sendTransaction(tx);
-	}
-
 	public void sendTransaction(byte[] data, SendingTxListener listener) {
 		sendTransaction(createTx(data), listener);
-	}
-
-	public void sendTransaction(byte[] data, long payment, SendingTxListener listener) {
-		sendTransaction(createTx(payment, data),listener);
 	}
 
 	public void sendTransaction(Transaction tx, SendingTxListener listener) {
 		Future<Transaction> ft = ethereum.submitTransaction(tx);
 		Thread t = new Thread(new WaitingThread(tx, ft, listener));
 		t.start();
-	}
-
-	public void sendTransaction(byte[] receiverAddress, long value) {
-		sendTransaction(createTx(receiverAddress, value, new byte[0]));
 	}
 
 	public void sendTransaction(byte[] senderPrivKey, byte[] receiverAddress, long payment, byte[] data) {
@@ -117,15 +103,11 @@ public class EthereumBean{
 	}
 
 	public void sendEtherFromRich (byte[] receiveAddr) {
-		sendTransaction(createTx(RICH_KEY, receiveAddr, 9000000000000L , null));
+		sendTransaction(createTx(RICH_KEY, receiveAddr, 90000L , null));
 	}
 
 	public Transaction createTx(byte[] data) {
 		return createTx(new byte[0], data);
-	}
-
-	public Transaction createTx(long payment, byte[] data) {
-		return createTx(new byte[0], payment, data);
 	}
 
 	public Transaction createTx(byte[] receiverAddr, byte[] data) {
@@ -136,38 +118,13 @@ public class EthereumBean{
 		return createTx(accountBean.getKey(), receiverAddr, value, data);
 	}
 
-	public Transaction createTx(String senderPrivKey, String receiverAddr, long etherToTransact, byte[] data) {
-		return createTx(ByteUtil.hexStringToBytes(senderPrivKey), receiverAddr, etherToTransact, data);
-	}
-
 	public Transaction createTx(String senderPrivKey, byte[] receiverAddr, long etherToTransact, byte[] data) {
 		return createTx(ByteUtil.hexStringToBytes(senderPrivKey), receiverAddr, etherToTransact, data);
-	}
-
-	public Transaction createTx(byte[] senderPrivKey, String receiverAddr, long etherToTransact, byte[] data) {
-		return createTx(senderPrivKey, ByteUtil.hexStringToBytes(receiverAddr), etherToTransact, data);
-	}
-
-	public Transaction createTx(ECKey senderKey, String receiverAddr, long etherToTransact, byte[] data) {
-		return createTx(senderKey, ByteUtil.hexStringToBytes(receiverAddr), etherToTransact, data);
 	}
 
 	public Transaction createTx(byte[] senderPrivKey, byte[] receiverAddr, long etherToTransact, byte[] data) {
 		ECKey senderKey = ECKey.fromPrivate(senderPrivKey);
 		return createTx(senderKey, receiverAddr, etherToTransact, data);
-	}
-
-	public Transaction createContractTx(byte[] contractAddr, long etherToTransact, CallTransaction.Function function, Object... args) {
-		ECKey key = accountBean.getKey();
-		return CallTransaction.createCallTransaction(
-				ethereum.getRepository().getNonce(key.getAddress()).longValue(),
-				ethereum.getGasPrice(),
-				4000000,
-				ByteUtil.toHexString(contractAddr),
-				CrumbsUtil.etherToWei(etherToTransact).longValue(),
-				function,
-				args
-		);
 	}
 
 	public Transaction createTx(ECKey senderKey, byte[] receiverAddr, long etherToTransact, byte[] data) {

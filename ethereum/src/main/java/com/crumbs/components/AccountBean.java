@@ -2,6 +2,7 @@ package com.crumbs.components;
 
 import com.crumbs.entities.Account;
 import com.crumbs.repositories.AccountRepo;
+import com.crumbs.util.CrumbsUtil;
 import org.ethereum.core.Transaction;
 import org.ethereum.crypto.ECKey;
 import org.ethereum.util.ByteUtil;
@@ -45,7 +46,7 @@ public class AccountBean {
 	}
 
 	public void topUp(ECKey key) {
-		if (ethereumBean.getAccountBal(key.getAddress()).compareTo(new BigInteger("28000000000000000000000000")) < 0) {
+		if (ethereumBean.getAccountBal(key.getAddress()).compareTo(CrumbsUtil.etherToWei(35000)) < 0) {
 			logger.info("topping up ether");
 			ethereumBean.sendEtherFromRich(key.getAddress());
 		}
