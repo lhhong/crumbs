@@ -381,6 +381,10 @@ public class TransactionService {
 	}
 
 	public void accept(String uuid, long transportPrice, Date expiry, Date txDate) {
+		accept(new byte[0], uuid, transportPrice, expiry, txDate, false);
+	}
+
+	public void accept(byte[] senderPrivKey, String uuid, long transportPrice, Date expiry, Date txDate, boolean isMock) {
 		Object[] result = contractService.constFunction("getTxById", uuid);
 		if (result == null) {
 			logger.warn("offer {} no longer exist", uuid);
@@ -424,13 +428,22 @@ public class TransactionService {
 		else {
 			date = expiry.getTime();
 		}
-		accept(tx, transportPrice, payment, date);
+		if (isMock) {
+			mockAccept(senderPrivKey, tx, transportPrice, payment, date);
+		}
+		else {
+			accept(tx, transportPrice, payment, date);
+		}
 	}
 
 	public void accept(TxAccepted tx, long transportPrice, long payment, long date) {
 		contractService.sendToTxContract("accept", payment, tx.getUuid(), transportPrice, date);
 		txAcceptedRepo.save(tx);
 		logger.info("Created accepting transaction {}", tx.getUuid());
+	}
+
+	public void mockAccept(byte[] senderPrivKey, TxAccepted tx, long transportPrice, long payment, long date) {
+		contractService.sendToTxContract(senderPrivKey,"accept", payment, tx.getUuid(), transportPrice, date);
 	}
 
 	public void agree(String uuid) {
@@ -507,4 +520,5 @@ public class TransactionService {
 		UUID id = UUID.randomUUID();
 		return (Long.toUnsignedString(id.getMostSignificantBits(), 36) + Long.toUnsignedString(id.getLeastSignificantBits(), 36));
 	}
+
 }

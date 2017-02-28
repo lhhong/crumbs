@@ -7,6 +7,7 @@ import com.crumbs.entities.Account;
 import com.crumbs.entities.Member;
 import com.crumbs.entities.Product;
 import com.crumbs.entities.TxSent;
+import com.crumbs.models.TransactionVM;
 import com.crumbs.repositories.AccountRepo;
 import com.crumbs.services.ContractService;
 import com.crumbs.services.InventoryService;
@@ -59,15 +60,19 @@ public class MockDataCtrl {
 
 	private static final Logger logger = LoggerFactory.getLogger(MockDataCtrl.class);
 
-	@RequestMapping(value = "mock_register_id_NOT_1/{id}", method = POST)
+	@RequestMapping(value = "mock_register/{id}", method = POST)
 	@ResponseBody
 	public boolean mockRegister(@PathVariable("id") int id, @RequestBody Member member) {
-		ECKey key = new ECKey();
-		Account account = new Account();
 		if (id == 1) {
 			logger.error("SCREW YOU!!! DON'T POST ACCOUNT WITH ID 1!!!");
 			return false;
 		}
+		if (accountRepo.exists(id)) {
+			logger.error("Account with id {} exists", id);
+			return false;
+		}
+		ECKey key = new ECKey();
+		Account account = new Account();
 		account.setId(id);
 		account.setPrivateKey(key.getPrivKeyBytes());
 		accountRepo.save(account);
@@ -89,7 +94,7 @@ public class MockDataCtrl {
 		return false;
 	}
 
-	@RequestMapping(value = "mock_sample_tx/{memberId}")
+	@RequestMapping(value = "mock_offer/{memberId}", method = POST)
 	@ResponseBody
 	public String mockTx(@PathVariable("memberId") int memberId, @RequestBody TxSent txSent) {
 		Account account = accountRepo.findOne(memberId);
@@ -97,6 +102,13 @@ public class MockDataCtrl {
 		txSent.setUuid(uuid);
 		txService.newOffer(account.getPrivateKey(), txSent);
 		return uuid;
+	}
+
+	@RequestMapping(value = "mock_accept/{memberId}", method = POST)
+	@ResponseBody
+	public void mockAccept(@PathVariable("memberId") int id, @RequestBody TransactionVM tx) {
+		Account account = accountRepo.findOne(id);
+		txService.accept(account.getPrivateKey(), tx.getUuid(), tx.getTransportPrice(), tx.getExpiry(), tx.getTxDate(), true);
 	}
 
 	@RequestMapping(value = "/delete_products", method = GET)
