@@ -238,9 +238,9 @@ public class TransactionService {
 		TxSent tx = new TxSent();
 		String uuid = generateUUID();
 		tx.setUuid(uuid);
-		tx.setQuantity(shortExce.getQuantity());
+		tx.setQuantity(shortExce.getQToOffer());
 		tx.setItem(shortExce.getName());
-		tx.setPrice(shortExce.getPrice() * shortExce.getQuantity());
+		tx.setPrice(shortExce.getPrice() * shortExce.getQToOffer());
 		long date = 0;
 		if (shortExce instanceof ExceShipVM) {
 			tx.setSell(true);

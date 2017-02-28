@@ -16,3 +16,5 @@ datafile.trace.db
 app-main/npm-debug.log
 mock_data/Product.pyc
 mock_data/Record.pyc
+*.backup
+/**/*.backup
