@@ -55,7 +55,7 @@
                           <td>{{ x.percentExtra }}%</td>
                           <td>{{ x.price }}</td>
                           <td><button ng-click="viewChart(x.product)" type="button" class="btn btn-success btn-xs">View Chart</button></td>
-                          <td><button type="button" class="btn btn-info btn-xs">View Market</button></td>
+                          <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarket">View Market</button></td>
                       </tr>
                   </tbody>
               </table>
@@ -100,4 +100,43 @@
       </div>
       <!-- /.panel-body -->
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="ViewMarket" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">Recommended Offers</h4>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-hover">
+                      <thead>
+                          <tr>
+                              <th>Store Name</th>
+                              <th>Product</th>
+                              <th>Quantity</th>
+                              <th>Disposal Date</th>
+                              <th>Price</th>
+                              <th></th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td>NTUC</td>
+                              <td>Milk</td>
+                              <td>12</td>
+                              <td>03/02/1993</td>
+                              <td>$3</td>
+                              <td><button type="button" class="btn btn-success btn-xs">Purchase</button></td>
+                      </tbody>
+                  </table>
+                  <p class="text-muted text-center"><small>If none of the above offers are satisfactory, click button below to make new request on the market</small></p>
+                  <button type="button" class="btn btn-primary btn-lg btn-block">Make Request</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
 </div>

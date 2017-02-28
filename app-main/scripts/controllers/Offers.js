@@ -9,7 +9,6 @@ angular.module('sbAdminApp')
   .controller('OffersCtrl', ['$scope', '$interval', 'txService', function($scope, $interval, txService) {
     console.log("loaded");
     $scope.balance = 0;
-
     var reloadData = function() {
         txService.getEther(function(balance) {
             $scope.balance = balance;

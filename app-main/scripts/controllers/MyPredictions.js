@@ -7,7 +7,7 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('PredictCtrl', ['$interval', '$scope', 'txService', 'predictionService', function($interval, $scope, txService, predictionService) {
+  .controller('PredictCtrl', ['$interval', '$scope', 'txService', 'predictionService', function($interval, $scope, txService, predictionService, $mdDialog) {
 
     console.log("loaded");
     $scope.balance = 0;
@@ -44,15 +44,15 @@ angular.module('sbAdminApp')
                 }]
             };
         }
-    )
+    );
 
     $scope.shortageOffer = function(index) {
         txService.shortageOffer($scope.predictions.stockShortages[index], function(response) {})
-    }
+    };
 
     $scope.excessOffer = function(index) {
         txService.excessOffer($scope.predictions.excessShipments[index], function(response) {})
-    }
+    };
 
     $scope.getColour = function(shortOrExce, index) {
         var code = $scope.predictions[shortOrExce][index].urgencyLevel;
@@ -70,17 +70,17 @@ angular.module('sbAdminApp')
         return {
             background: colour
         }
-    }
+    };
 
     var reloadData = function() {
         txService.getEther(function(balance) {
             $scope.balance = balance;
         })
-    }
+    };
 
     $interval(function() {
         reloadData();
-    }, 5000)
+    }, 5000);
     reloadData();
 
     $scope.viewChart = function(productName) {
@@ -88,5 +88,5 @@ angular.module('sbAdminApp')
         txService.getEther(function (data) {
             console.log(data)
         })
-    }
+    };
   }]);
