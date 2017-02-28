@@ -41,7 +41,7 @@
                           <th>Date of Shortage</th>
                           <th>Product</th>
                           <th>Ending Inventory</th>
-                          <th>Percentage Extra</th>
+                          <th>Percentage Excess</th>
                           <th>Unit Price (ether)</th>
                           <th>View</th>
                           <th>Market</th>
@@ -55,7 +55,7 @@
                           <td>{{ x.percentExtra }}%</td>
                           <td>{{ x.price }}</td>
                           <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewPrediction">View Chart</button></td>
-                          <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarket">View Market</button></td>
+                          <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarket" ng-click="shortageViewOffer($index)">View Market</button></td>
                       </tr>
                   </tbody>
               </table>
@@ -77,8 +77,8 @@
                       <tr>
                           <th>Date of Disposal</th>
                           <th>Product</th>
-                          <th>Ending Inventory</th>
-                          <th>Percentage Extra</th>
+                          <th>Quantity To Dispose</th>
+                          <th>Percentage Disposal</th>
                           <th>Unit Price (ether)</th>
                           <th>View</th>
                           <th>Market</th>
@@ -92,7 +92,7 @@
                           <td>{{ x.percentExtra }}%</td>
                           <td>{{ x.price }}</td>
                           <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewPrediction">View Chart</button></td>
-                          <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarket">View Market</button></td>
+                          <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarket" ng-click="excessViewOffer($index)">View Market</button></td>
                       </tr>
                   </tbody>
               </table>
@@ -107,7 +107,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Recommended Offers</h4>
+                    <h4 class="modal-title">Recommended Offers for {{ offering.name }}</h4>
                 </div>
                 <div class="modal-body">
                   <table class="table table-hover">
@@ -116,23 +116,28 @@
                               <th>Store Name</th>
                               <th>Product</th>
                               <th>Quantity</th>
-                              <th>Disposal Date</th>
+                              <th ng-if="forExcess">Disposal Date</th>
+                              <th ng-if="!forExcess">Transaction Date</th>
                               <th>Price</th>
+                              <th>Suggested Transport Cost</th>
                               <th></th>
                           </tr>
                       </thead>
                       <tbody>
-                          <tr>
-                              <td>NTUC</td>
-                              <td>Milk</td>
-                              <td>12</td>
-                              <td>03/02/1993</td>
-                              <td>$3</td>
-                              <td><button type="button" class="btn btn-success btn-xs">Purchase</button></td>
+                          <tr ng-repeat="x in offers track by $index">
+                              <td>{{ x.sender.name }}</td>
+                              <td>{{ x.item }}</td>
+                              <td>{{ x.quantity }}</td>
+                              <td ng-if="forExcess">{{ x.expiry | date }}</td>
+                              <td ng-if="!forExcess">{{ x.txDate | date }}</td>
+                              <td>{{ x.price | currency }}</td>
+                              <td>{{ x.transportCost | currency }}</td>
+                              <td><button type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index)">Purchase</button></td>
                       </tbody>
                   </table>
                   <p class="text-muted text-center"><small>If none of the above offers are satisfactory, click button below to make new request on the market</small></p>
-                  <button type="button" class="btn btn-primary btn-lg btn-block">Make Request</button>
+                  <button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessOffer(offering)">Make Request</button>
+                    <button type="button" class="btn btn-primary btn-lg btn-block" ng-if="!forExcess" ng-click="shortageOffer(offering)">Make Request</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -146,7 +151,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">Prediction Model</h4>
+                    <h4 class="modal-title">Prediction Model</h4>
                 </div>
                 <div class="modal-body">
                   <div class="col-lg-6 col-sm-12" id="line-chart" ng-controller="PredictCtrl">

@@ -103,8 +103,11 @@
                           <th ng-click="sortData('quantity')">
                             Quantity <div ng-class="getSortClass('quantity')"></div>
                           </th>
+                          <th ng-click="sortData('txDate')">
+                            Transaction Date <div ng-class="getSortClass('txDate')"></div>
+                          </th>
                           <th ng-click="sortData('expiry')">
-                            Transaction Date <div ng-class="getSortClass('expiry')"></div>
+                              Transaction Date <div ng-class="getSortClass('expiry')"></div>
                           </th>
                           <th ng-click="sortData('price')">
                             Price <div ng-class="getSortClass('price')"></div>
@@ -123,6 +126,7 @@
                           <td>{{ x.sender.name }}</td>
                           <td>{{ x.item }}</td>
                           <td>{{ x.quantity }}</td>
+                          <td>{{ x.txDate | date }}</td>
                           <td>{{ x.expiry | date }}</td>
                           <td>{{ x.price | currency }}</td>
                           <td>{{ x.transportCost | currency }}</td>

@@ -47,11 +47,13 @@ public class MatchMakingSrvc {
 		availTxs.forEach(tx -> {
 			if (shortExce instanceof RemStockVM) {
 				if (isSuitableSeller(own, shortExce, tx)) {
+					tx.setTxDate(((RemStockVM) shortExce).getRequestDate());
 					possibleTx.add(CrumbsUtil.toTxVM(tx));
 				}
 			}
 			else if (shortExce instanceof ExceShipVM) {
 				if (isSuitableBuyer(own, shortExce, tx)) {
+					tx.setExpiry(((ExceShipVM) shortExce).getExpiry());
 					possibleTx.add(CrumbsUtil.toTxVM(tx));
 				}
 			}
