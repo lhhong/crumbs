@@ -81,6 +81,7 @@ angular.module('sbAdminApp')
     $interval(function() {
         reloadData();
     }, 5000)
+    reloadData();
 
     $scope.viewChart = function(productName) {
         console.log(productName);

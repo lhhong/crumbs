@@ -41,5 +41,6 @@ angular.module('sbAdminApp')
     $interval(function() {
         reloadData();
     }, 5000)
+    reloadData();
 
   }]);
