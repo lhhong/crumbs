@@ -7,7 +7,7 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('PredictCtrl', ['$interval', '$scope', 'txService', 'predictionService', function($interval, $scope, txService, predictionService, $mdDialog) {
+  .controller('PredictCtrl', ['$interval', '$timeout', '$scope', 'txService', 'predictionService', function($interval, $timeout, $scope, txService, predictionService) {
 
     console.log("loaded");
     $scope.balance = 0;
@@ -88,5 +88,16 @@ angular.module('sbAdminApp')
         txService.getEther(function (data) {
             console.log(data)
         })
+    };
+    $scope.line = {
+	    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+	    series: ['Series A', 'Series B'],
+	    data: [
+	      [65, 59, 80, 81, 56, 55, 40],
+	      [28, 48, 40, 19, 86, 27, 90]
+	    ],
+	    onClick: function (points, evt) {
+	      console.log(points, evt);
+	    }
     };
   }]);

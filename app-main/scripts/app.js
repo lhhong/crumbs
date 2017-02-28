@@ -109,6 +109,13 @@ angular
 		resolve: {
 			loadMyFile:function($ocLazyLoad) {
 				return $ocLazyLoad.load({
+					name:'chart.js',
+					files:[
+						'bower_components/angular-chart.js/dist/angular-chart.min.js',
+						'bower_components/angular-chart.js/dist/angular-chart.css'
+					]
+				}),
+				$ocLazyLoad.load({
 					name:'sbAdminApp',
 					files:[
 					    'scripts/controllers/MyPredictions.js',
@@ -140,10 +147,7 @@ angular
 			loadMyFile:function($ocLazyLoad) {
 				return $ocLazyLoad.load({
 					name:'sbAdminApp',
-					files:[
-					    'scripts/controllers/Requests.js',
-					    'scripts/services/transaction-service.js'
-					]
+					files:['scripts/controllers/Requests.js']
 				})
 			}
 		}
