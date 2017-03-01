@@ -179,7 +179,6 @@ public class TransactionService {
 	public void checkOfferAccepted() {
 		List<TxSent> offers = txSentRepo.findByIncludedAndPending(true, false);
 		for (TxSent tx : offers) {
-			logger.info(JSON.toJSONString(contractService.constFunction("getTxById", tx.getUuid())));
 			Object[] result = contractService.constFunction("checkPendingStatus", tx.getUuid());
 			if (result == null) {
 				logger.error("null returned when checking offers");
