@@ -1,5 +1,6 @@
 package com.crumbs.rest;
 
+import com.alibaba.fastjson.JSON;
 import com.crumbs.components.CheckIncludedListener;
 import com.crumbs.components.SendingTxListener;
 import com.crumbs.entities.BasicTx;
@@ -65,6 +66,7 @@ public class TransactionController {
 	@RequestMapping(value = "/offer_excess", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public boolean postOfferExcess(@RequestBody ExceShipVM exceShip) {
+		logger.info(JSON.toJSONString(exceShip));
 		return postOffer(exceShip);
 	}
 

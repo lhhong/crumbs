@@ -19,17 +19,17 @@ public class RemainingStock {
 	private String urgencyLevel;
 	private int percentExtra;
 	private Date requestDate;
-	private int qToOffer;
+	private int offerQuantity;
 
 	public RemainingStock() {}
 
-	public RemainingStock(int demand, int stockLeft, int index, int qToOffer) {
+	public RemainingStock(int demand, int stockLeft, int index, int offerQuantity) {
 		quantity = stockLeft;
 		urgency = UrgencyUtil.shortageUrg(demand, stockLeft);
 		urgencyLevel = UrgencyUtil.getUrgencyLevel(urgency);
 		percentExtra = UrgencyUtil.percentageExtra(demand, stockLeft);
 		requestDate = DateUtil.daysFromToday(index);
-		this.qToOffer = qToOffer;
+		this.offerQuantity = offerQuantity;
 	}
 
 }

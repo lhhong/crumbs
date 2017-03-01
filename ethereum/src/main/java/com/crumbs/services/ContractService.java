@@ -160,6 +160,7 @@ public class ContractService {
 				crumbsContract.setBin(metadata.bin);
 				crumbsContract.setSolc(metadata.solInterface);
 				crumbsContract.setMetadata(metadata.metadata);
+				crumbsContract.setContractAddr(tx.getContractAddress());
 				crumbsContract.setIncluded(false);
 				logger.info("CONTRACT ADDRESS ON CREATION: " + ByteUtil.toHexString(tx.getContractAddress()));
 				//crumbsContractRepo.delete("mortal_contract");
@@ -183,12 +184,12 @@ public class ContractService {
 
 	public void modifyMortalGreeting() {
 
-		CrumbsContract testContract = crumbsContractRepo.findOne("mortal_contract");
+		CrumbsContract testContract = crumbsContractRepo.findOne("mortal_tx");
 		logger.info("loaded contract : " + JSON.toJSONString(testContract, true) );
-		if (!testContract.isIncluded()) {
+		/*if (!testContract.isIncluded()) {
 			logger.warn("Contract not yet included to chain");
 			return;
-		}
+		}*/
 		logger.info("Calling the contract constructor");
 		CallTransaction.Contract contract = new CallTransaction.Contract(testContract.getAbi());
 		byte[] functionCallBytes = contract.getByName("changeGreeter").encode("HI THERE!");
@@ -198,13 +199,13 @@ public class ContractService {
 	}
 
 	public void callMortalGreet() {
-		CrumbsContract testContract = crumbsContractRepo.findOne("mortal_contract");
+		CrumbsContract testContract = crumbsContractRepo.findOne("mortal_tx");
 		logger.info("loaded contract : " + JSON.toJSONString(testContract, true) );
 		logger.info("Contract address: " + ByteUtil.toHexString(testContract.getContractAddr()));
-		if (!testContract.isIncluded()) {
+		/*if (!testContract.isIncluded()) {
 			logger.warn("Contract not yet included to chain");
 			return;
-		}
+		}*/
 		CallTransaction.Contract contract = new CallTransaction.Contract(testContract.getAbi());
 		ProgramResult r = ethereumBean.callConstantFunction(Hex.toHexString(testContract.getContractAddr()), accountBean.getKey(),
 				contract.getByName("greet"));

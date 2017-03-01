@@ -1,5 +1,6 @@
 package com.crumbs.services;
 
+import com.alibaba.fastjson.JSON;
 import com.crumbs.components.AccountBean;
 import com.crumbs.components.CheckIncludedListener;
 import com.crumbs.entities.Member;
@@ -178,6 +179,7 @@ public class TransactionService {
 	public void checkOfferAccepted() {
 		List<TxSent> offers = txSentRepo.findByIncludedAndPending(true, false);
 		for (TxSent tx : offers) {
+			logger.info(JSON.toJSONString(contractService.constFunction("getTxById", tx.getUuid())));
 			Object[] result = contractService.constFunction("checkPendingStatus", tx.getUuid());
 			if (result == null) {
 				logger.error("null returned when checking offers");
@@ -238,9 +240,9 @@ public class TransactionService {
 		TxSent tx = new TxSent();
 		String uuid = generateUUID();
 		tx.setUuid(uuid);
-		tx.setQuantity(shortExce.getQToOffer());
+		tx.setQuantity(shortExce.getOfferQuantity());
 		tx.setItem(shortExce.getName());
-		tx.setPrice(shortExce.getPrice() * shortExce.getQToOffer());
+		tx.setPrice(shortExce.getPrice() * shortExce.getOfferQuantity());
 		long date = 0;
 		if (shortExce instanceof ExceShipVM) {
 			tx.setSell(true);
@@ -257,6 +259,7 @@ public class TransactionService {
 			return null;
 		}
 		txSentRepo.save(tx);
+		logger.info("new offer: price {}, item {}, quantity {}", tx.getPrice(), tx.getItem(), tx.getQuantity());
 		contractService.sendToTxContract("newOffer", 0, uuid, tx.getPrice(), tx.getItem(), tx.getQuantity(), date, tx.isSell());
 		logger.info("Created new offer transaction {}", uuid);
 		return uuid;
@@ -373,6 +376,10 @@ public class TransactionService {
 				txSentRepo.save(tx);
 			}
 		}
+	}
+
+	public String getAllMembers() {
+		return (String) contractService.constFunction("getMember")[0];
 	}
 
 	public String[] getAllTxKeys() {

@@ -41,31 +41,6 @@ contract transaction {
 
 	MemberList memList;
 	TxList list;
-	string test = "default";
-
-	function topup() payable {
-
-	}
-	function setTest(string _test) {
-	    test = _test;
-	}
-	function getFixed() constant returns (string _test) {
-	    _test = "ASDF";
-	}
-	function getTest() constant returns (string _test) {
-	    _test = test;
-	}
-
-	function getMember() constant returns (string all){
-	    all = "";
-		uint key = 0;
-		while (key < list.nextKey) {
-			if (!memList.keys[key].deleted) {
-				all = strConcat(all, memList.members[memList.keys[key].addr].name);
-			}
-			key++;
-		}
-	}
 
 	function register(string _name, int64 _x, int64 _y) public {
 		uint key = 0;
@@ -149,7 +124,6 @@ contract transaction {
 			key++;
 		}
 	}
-
 	function getTxById(string _uuid) constant returns (address _addr, string _name, int64 _x, int64 _y, uint64 _price, string _item, uint32 _quantity, uint64 _expiry, bool _toSell, bool _pending, bool _done, uint64 _txDate) {
 		if (list.txs[_uuid].pending || list.txs[_uuid].quantity == 0) {
 			throw;
@@ -245,22 +219,5 @@ contract transaction {
 			throw;
 		}
 		list.txs[_uuid].done = true;
-
-	}
-
-	function deleteTx(string _uuid) public {
-		if (msg.sender != list.txs[_uuid].from.addr) {
-			throw;
-		}
-		uint key = 0;
-		while (!stringsEqual(list.keys[key].uuid, _uuid)) {
-			key++;
-			if (key == list.nextKey) {
-			    throw;
-			}
-		}
-
-		list.keys[key].deleted = true;
-		delete list.txs[_uuid];
 	}
 }

@@ -60,6 +60,26 @@ public class MockDataCtrl {
 
 	private static final Logger logger = LoggerFactory.getLogger(MockDataCtrl.class);
 
+	@RequestMapping(value = "test_screwed", method = GET)
+	@ResponseBody
+	public String testScrewed() {
+		logger.info(JSON.toJSONString(contractService.constFunction("getFixed")));
+		return (String) contractService.constFunction("getFixed")[0];
+	}
+
+	@RequestMapping(value = "test_tx", method = GET)
+	@ResponseBody
+	public String getTest() {
+		logger.info(JSON.toJSONString(contractService.constFunction("getTest")));
+		return (String) contractService.constFunction("getTest")[0];
+	}
+
+	@RequestMapping(value = "test_tx", method = POST)
+	@ResponseBody
+	public void setTest(@RequestBody String test) {
+		contractService.sendToTxContract("setTest", 0, test);
+	}
+
 	@RequestMapping(value = "mock_register/{id}", method = POST)
 	@ResponseBody
 	public boolean mockRegister(@PathVariable("id") int id, @RequestBody Member member) {
@@ -115,6 +135,12 @@ public class MockDataCtrl {
 	@ResponseBody
 	public void deleteAll() {
 		inventoryService.deleteAll();
+	}
+
+	@RequestMapping(value = "/block_chain_members", method = GET)
+	@ResponseBody
+	public String getAllMembers() {
+		return txService.getAllMembers();
 	}
 
 	@RequestMapping(value = "/block_chain_tx", method = GET)

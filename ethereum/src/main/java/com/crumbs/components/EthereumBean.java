@@ -163,7 +163,7 @@ public class EthereumBean{
 		Transaction tx = new Transaction(
 				ByteUtil.bigIntegerToBytes(nonce),
 				ByteUtil.longToBytesNoLeadZeroes(ethereum.getGasPrice()),
-				ByteUtil.longToBytesNoLeadZeroes(200000),
+				ByteUtil.longToBytesNoLeadZeroes(200000000),
 				receiveAddress,
 				ByteUtil.bigIntegerToBytes(BigInteger.valueOf(1)),  // 1_000_000_000 gwei, 1_000_000_000_000L szabo, 1_000_000_000_000_000L finney, 1_000_000_000_000_000_000L ether
 				data,

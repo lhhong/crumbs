@@ -15,8 +15,8 @@ public class StateUpdater {
 	public void update() {
 		transactionService.checkOfferIncluded();
 		transactionService.checkAcceptanceIncluded();
-		transactionService.checkAgreeIncluded();
+		//transactionService.checkAgreeIncluded();
 		transactionService.checkOfferAccepted();
-		transactionService.checkAcceptanceAgreed();
+		//transactionService.checkAcceptanceAgreed();
 	}
 }
