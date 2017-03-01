@@ -46,12 +46,42 @@ angular.module('sbAdminApp')
         }
     );
 
-    $scope.shortageOffer = function(index) {
-        txService.shortageOffer($scope.predictions.stockShortages[index], function(response) {})
+    $scope.excessViewOffer = function(index) {
+        $scope.forExcess = true;
+        $scope.offering = $scope.predictions.excessShipments[index];
+        predictionService.excessViewOffers($scope.predictions.excessShipments[index],
+            function(response) {
+                $scope.offers = response;
+            }, function(response) {
+                console.log("server error");
+                $scope.offers = [{price: 567}, {price: 22}];
+            });
+    }
+
+    $scope.shortageViewOffer = function(index) {
+        $scope.forExcess = false;
+        $scope.offering = $scope.predictions.stockShortages[index];
+        predictionService.shortageViewOffers($scope.predictions.stockShortages[index],
+            function(response) {
+                $scope.offers = response;
+            }, function(response) {
+                console.log("server error");
+                $scope.offers = [{price: 567}, {price: 23452}];
+            });
+    }
+
+    $scope.acceptOffer = function(index) {
+        txService.accept($scope.offers[index], function(response) {});
     };
 
-    $scope.excessOffer = function(index) {
-        txService.excessOffer($scope.predictions.excessShipments[index], function(response) {})
+    $scope.shortageOffer = function(stockShortage) {
+        txService.shortageOffer(stockShortage, function(response) {})
+    };
+
+    $scope.excessOffer = function(excessShipment) {
+        console.log("printing offer");
+        console.log(excessShipment);
+        txService.excessOffer(excessShipment, function(response) {})
     };
 
     $scope.getColour = function(shortOrExce, index) {

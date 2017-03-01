@@ -134,7 +134,9 @@ angular
 			loadMyFile:function($ocLazyLoad) {
 				return $ocLazyLoad.load({
 					name:'sbAdminApp',
-					files:['scripts/controllers/InProgress.js']
+					files:[
+					    'scripts/services/transaction-service.js',
+					    'scripts/controllers/InProgress.js']
 				})
 			}
 		}

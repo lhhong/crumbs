@@ -16,7 +16,49 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
         })
     }
 
+    var shortageViewOffers = function(remStockVM, callback, errorCallback) {
+        $http({
+            method: 'POST',
+            url: baseUrl + "matchingTxForShortage",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: remStockVM
+        }).success(function(response) {
+            if (callback) {
+                callback(response)
+            }
+        }).error(function(response, status)  {
+            console.log("server error, code = " + status)
+            if (errorCallback) {
+                errorCallback();
+            }
+        })
+    }
+    var excessViewOffers = function(exceShipVM, callback, errorCallback) {
+        $http({
+            method: 'POST',
+            url: baseUrl + "matchingTxForExcess",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: exceShipVM
+        }).success(function(response) {
+            if (callback) {
+                callback(response)
+            }
+        }).error(function(response, status)  {
+            console.log("server error, code = " + status)
+            if (errorCallback) {
+                errorCallback();
+            }
+        })
+    }
+
+
     return {
-        getPredictions: getPredictions
+        getPredictions: getPredictions,
+        excessViewOffers: excessViewOffers,
+        shortageViewOffers: shortageViewOffers,
     }
 }]);
