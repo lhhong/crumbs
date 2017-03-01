@@ -126,58 +126,43 @@ angular
 			}
 		}
 	})
-	.state('dashboard.Offers',{
-		url:'/Offers',
-		templateUrl:'views/Market/Offers.html',
-		controller: 'OffersCtrl',
+	.state('dashboard.InProgress',{
+		url:'/InProgress',
+		templateUrl:'views/MyTransactions/InProgress.html',
+		controller: 'InProgressCtrl',
 		resolve: {
 			loadMyFile:function($ocLazyLoad) {
 				return $ocLazyLoad.load({
 					name:'sbAdminApp',
-					files:['scripts/controllers/Offers.js']
+					files:['scripts/controllers/InProgress.js']
 				})
 			}
 		}
 	})
-	.state('dashboard.Requests',{
-		url:'/Requests',
-		templateUrl:'views/Market/Requests.html',
-		controller: 'RequestsCtrl',
-		resolve: {
-			loadMyFile:function($ocLazyLoad) {
-				return $ocLazyLoad.load({
-					name:'sbAdminApp',
-					files:['scripts/controllers/Requests.js']
-				})
-			}
-		}
-	})
-	.state('dashboard.Bought',{
-		url:'/Bought',
-		templateUrl:'views/MyTransactions/Bought.html',
-		controller: 'BoughtCtrl',
+	.state('dashboard.Completed',{
+		url:'/Completed',
+		templateUrl:'views/MyTransactions/Completed.html',
+		controller: 'CompletedCtrl',
 		resolve: {
 			loadMyFile:function($ocLazyLoad) {
 				return $ocLazyLoad.load({
 					name:'sbAdminApp',
 					files:[
 					    'scripts/services/transaction-service.js',
-					    'scripts/controllers/Bought.js']
+					    'scripts/controllers/Completed.js']
 				})
 			}
 		}
 	})
-	.state('dashboard.Sold',{
-		url:'/Sold',
-		templateUrl:'views/MyTransactions/Sold.html',
-		controller: 'SoldCtrl',
+	.state('dashboard.Market',{
+		url:'/Market',
+		templateUrl:'views/dashboard/Market.html',
+		controller: 'MarketCtrl',
 		resolve: {
 			loadMyFile:function($ocLazyLoad) {
 				return $ocLazyLoad.load({
 					name:'sbAdminApp',
-					files:[
-					    'scripts/services/transaction-service.js',
-					    'scripts/controllers/Sold.js']
+					files:['scripts/controllers/Market.js']
 				})
 			}
 		}
