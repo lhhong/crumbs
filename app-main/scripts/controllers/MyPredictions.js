@@ -48,7 +48,7 @@ angular.module('sbAdminApp')
 
     $scope.excessViewOffer = function(index) {
         $scope.forExcess = true;
-        $scope.offering = $scope.predictions.excessShipments[index].name;
+        $scope.offering = $scope.predictions.excessShipments[index];
         predictionService.excessViewOffers($scope.predictions.excessShipments[index],
             function(response) {
                 $scope.offers = response;
@@ -79,6 +79,8 @@ angular.module('sbAdminApp')
     };
 
     $scope.excessOffer = function(excessShipment) {
+        console.log("printing offer");
+        console.log(excessShipment);
         txService.excessOffer(excessShipment, function(response) {})
     };
 

@@ -133,7 +133,7 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
 
     var agree = function(uuid, callback) {
         $http({
-            method: 'GET',
+            method: 'POST',
             url: baseUrl + "agree",
             headers: {
                 'Content-Type': 'application/json'

@@ -117,6 +117,12 @@ public class MockDataCtrl {
 		inventoryService.deleteAll();
 	}
 
+	@RequestMapping(value = "/block_chain_tx", method = GET)
+	@ResponseBody
+	public String[] getAllTx() {
+		return txService.getAllTxKeys();
+	}
+
 	@RequestMapping(value = "/import", method = POST)
 	@ResponseBody
 	public void receive(@RequestBody Product p) {

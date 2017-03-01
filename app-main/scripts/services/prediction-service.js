@@ -18,7 +18,7 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
 
     var shortageViewOffers = function(remStockVM, callback, errorCallback) {
         $http({
-            method: 'GET',
+            method: 'POST',
             url: baseUrl + "matchingTxForShortage",
             headers: {
                 'Content-Type': 'application/json'
@@ -37,7 +37,7 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
     }
     var excessViewOffers = function(exceShipVM, callback, errorCallback) {
         $http({
-            method: 'GET',
+            method: 'POST',
             url: baseUrl + "matchingTxForExcess",
             headers: {
                 'Content-Type': 'application/json'
