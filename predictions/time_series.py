@@ -82,8 +82,10 @@ def fitARIMA(p,q,y,realdata):
 
 # Finds the p and q values that result in the lowest validation mse
 def grid(y,realdata):
-	p_values = [0,1,2,3,4]
-	q_values = [0,1]
+	#p_values = [0,1,2,3,4]                       #Uncomment for extensive grid search
+	#q_values = [0,1]
+	p_values = [1,2]
+	q_values = [1]
 	cv_results = []
 	min_cv = 50000000
 	for p in p_values:
