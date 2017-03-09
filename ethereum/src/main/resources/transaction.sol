@@ -41,31 +41,6 @@ contract transaction {
 
 	MemberList memList;
 	TxList list;
-	string test = "default";
-
-	function topup() payable {
-
-	}
-	function setTest(string _test) {
-	    test = _test;
-	}
-	function getFixed() constant returns (string _test) {
-	    _test = "ASDF";
-	}
-	function getTest() constant returns (string _test) {
-	    _test = test;
-	}
-
-	function getMember() constant returns (string all){
-	    all = "";
-		uint key = 0;
-		while (key < list.nextKey) {
-			if (!memList.keys[key].deleted) {
-				all = strConcat(all, memList.members[memList.keys[key].addr].name);
-			}
-			key++;
-		}
-	}
 
 	function register(string _name, int64 _x, int64 _y) public {
 		uint key = 0;
@@ -151,7 +126,7 @@ contract transaction {
 	}
 
 	function getTxById(string _uuid) constant returns (address _addr, string _name, int64 _x, int64 _y, uint64 _price, string _item, uint32 _quantity, uint64 _expiry, bool _toSell, bool _pending, bool _done, uint64 _txDate) {
-		if (list.txs[_uuid].pending || list.txs[_uuid].quantity == 0) {
+		if (list.txs[_uuid].quantity == 0) {
 			throw;
 		}
 		_addr = list.txs[_uuid].from.addr;
@@ -173,16 +148,18 @@ contract transaction {
 			throw;
 		}
 		_pending = list.txs[_uuid].pending;
-		_addr = list.txs[_uuid].accepter.addr;
-		_name = list.txs[_uuid].accepter.name;
-		_x = list.txs[_uuid].accepter.x_loc;
-		_y = list.txs[_uuid].accepter.y_loc;
-		_transportPrice = list.txs[_uuid].transportPrice;
-		if (list.txs[_uuid].toSell) {
-		    _date = list.txs[_uuid].txDate;
-		}
-		else {
-		    _date = list.txs[_uuid].expiry;
+		if (_pending) {
+    		_addr = list.txs[_uuid].accepter.addr;
+	    	_name = list.txs[_uuid].accepter.name;
+		    _x = list.txs[_uuid].accepter.x_loc;
+	    	_y = list.txs[_uuid].accepter.y_loc;
+    		_transportPrice = list.txs[_uuid].transportPrice;
+	    	if (list.txs[_uuid].toSell) {
+    		    _date = list.txs[_uuid].txDate;
+		    }
+	    	else {
+		        _date = list.txs[_uuid].expiry;
+		    }
 		}
 	}
 
@@ -213,18 +190,6 @@ contract transaction {
 		    list.txs[_uuid].expiry = _date;
 		}
 	}
-
-	function stringsEqual(string storage _a, string memory _b) internal returns (bool) {
-		bytes storage a = bytes(_a);
-		bytes memory b = bytes(_b);
-		if (a.length != b.length)
-			return false;
-		for (uint i = 0; i < a.length; i ++)
-			if (a[i] != b[i])
-				return false;
-		return true;
-	}
-
 	function agree(string _uuid) payable public {
 		if (msg.sender != list.txs[_uuid].from.addr) {
 			throw;
@@ -245,22 +210,16 @@ contract transaction {
 			throw;
 		}
 		list.txs[_uuid].done = true;
-
+	}
+	function stringsEqual(string storage _a, string memory _b) internal returns (bool) {
+		bytes storage a = bytes(_a);
+		bytes memory b = bytes(_b);
+		if (a.length != b.length)
+			return false;
+		for (uint i = 0; i < a.length; i ++)
+			if (a[i] != b[i])
+				return false;
+		return true;
 	}
 
-	function deleteTx(string _uuid) public {
-		if (msg.sender != list.txs[_uuid].from.addr) {
-			throw;
-		}
-		uint key = 0;
-		while (!stringsEqual(list.keys[key].uuid, _uuid)) {
-			key++;
-			if (key == list.nextKey) {
-			    throw;
-			}
-		}
-
-		list.keys[key].deleted = true;
-		delete list.txs[_uuid];
-	}
 }

@@ -68,6 +68,7 @@ public class PredictionSrvc {
 		products.forEach(p -> {
 			Map<String, List<Integer>> map = new HashMap<>();
 			map.put("sales", buildArrayQuery(p.getName()));
+			logger.info("predicting for {}", p.getName());
 			ResponseEntity<PredictionReceipt> response = restTemplate.postForEntity("http://localhost:5000/predict", map, PredictionReceipt.class);
 			logger.info(JSON.toJSONString(response.getBody()));
 			predictions.add(buildPrediction(response.getBody().getPredictions(), p.getName()));
