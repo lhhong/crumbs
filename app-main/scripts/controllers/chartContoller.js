@@ -22,24 +22,25 @@ angular.module('sbAdminApp')
     };
 
     $scope.bar = {
-	    labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
-		series: ['Series A', 'Series B'],
+	    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+		series: ['Sold', 'Redistributed', 'Wasted'],
 
 		data: [
-		   [65, 59, 80, 81, 56, 55, 40],
-		   [28, 48, 40, 19, 86, 27, 90]
+		   [65, 59, 80, 81, 56, 55],
+		   [28, 48, 40, 19, 86, 27],
+       [30, 32, 21, 33, 42, 55]
 		]
-    	
+
     };
 
     $scope.donut = {
-    	labels: ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
-    	data: [300, 500, 100]
+    	labels: ["Percentage Sold", "Percentage Redistributed", "Percentage Wasted"],
+    	data: [50, 5, 45]
     };
 
     $scope.radar = {
-    	labels:["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
-
+    	labels:["Grains", "Dairy", "Fruit", "Vegetables", "Meat/Poultry", "Sweets", "Oils"],
+      series: ["Redistributed", "Wasted"],
     	data:[
     	    [65, 59, 90, 81, 56, 55, 40],
     	    [28, 48, 40, 19, 96, 27, 100]
@@ -61,10 +62,17 @@ angular.module('sbAdminApp')
     	data : [300, 500, 100, 40, 120],
     	type : 'PolarArea',
 
-    	toggle : function () 
+    	toggle : function ()
     	{
     		this.type = this.type === 'PolarArea' ?
     	    'Pie' : 'PolarArea';
 		}
     };
+    $scope.donutcolours = ["#70DBDB", "#66CD00", "#DB2929"];
+    $scope.barcolours = ["#66CCCC", "#66CD00", "#EE0000"];
+    $scope.radarcolours = ["#66CD00", "#EE0000"]
+
+    /*["rgba(224, 108, 112, 1)",
+            "rgba(224, 108, 112, 1)",
+            "rgba(224, 108, 112, 1)"]*/
 }]);

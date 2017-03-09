@@ -1,0 +1,54 @@
+<div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Crumbs <em>Dashboard</em></h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <stats number="6" comments="New Shortage Prediction" colour="red" type="bar-chart-o"></stats>
+        <stats number="3" comments="New Excess Prediction" colour="green" type="bar-chart-o"></stats>
+        <stats number="2" comments="Transactions" colour="yellow" type="dollar"></stats>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-sm-12" id="doughnut-chart" ng-controller="ChartCtrl">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+              <i class="fa fa-table fa-fw"></i>  <em><strong>Year</strong> in Review</em>
+            </div>
+            <div class="panel-body">
+            <canvas id="doughnut" class="chart chart-doughnut chart-xs" chart-colours="colours" data="donut.data" labels="donut.labels" legend="true" colours="donutcolours"></canvas>
+            </div>
+            <p class="text-muted text-center"><small>*Percentage Wasted is defined as excess food that is either thrown away or given away to other parties at low or zero cost</small></p>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-sm-12" id="bar-chart" ng-controller="ChartCtrl">
+          <div class="panel panel-default">
+              <div class="panel-heading">
+                <i class="fa fa-bar-chart-o fa-fw"></i>  <em><strong>Monthly</strong> Summary</em>
+              </div>
+              <div class="panel-body">
+                  <canvas id="bar" class="chart chart-bar" data="bar.data" labels="bar.labels" series="bar.series" options="bar.options" legend="true" colours="barcolours"></canvas>
+              </div>
+              <p class="text-muted text-center"><small>*Wasted is defined as excess food that is either thrown away or given away to other parties at low or zero cost</small></p>
+          </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-sm-12" id="radar-chart" ng-controller="ChartCtrl">
+          <div class="panel panel-default">
+              <div class="panel-heading">
+                <i class="fa fa-spinner fa-fw"></i>  <em><strong>Breakdown</strong> by Category</em>
+              </div>
+              <div class="panel-body">
+                  <canvas id="area" class="chart chart-radar" data="radar.data" labels="radar.labels" series=radar.series click="onClick" legend="true" colours="radarcolours"></canvas>
+              </div>
+              <p class="text-muted text-center"><small>*Wasted is defined as excess food that is either thrown away or given away to other parties at low or zero cost</small></p>
+          </div>
+      </div>
+    </div>
+
+</div>
