@@ -20,17 +20,27 @@ angular.module('sbAdminApp')
 	      console.log(points, evt);
 	    }
     };
+    $scope.lineMonth = {
+      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+		  series: ['Sold', 'Redistributed', 'Wasted'],
+      data: [
+		   [65, 59, 80, 81, 56, 55],
+		   [28, 48, 40, 19, 86, 27],
+       [30, 32, 21, 33, 42, 55]
+     ],
+     onClick: function (points, evt) {
+       console.log(points, evt);
+     }
+    };
 
     $scope.bar = {
 	    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
-		series: ['Sold', 'Redistributed', 'Wasted'],
-
-		data: [
+		  series: ['Sold', 'Redistributed', 'Wasted'],
+      data: [
 		   [65, 59, 80, 81, 56, 55],
 		   [28, 48, 40, 19, 86, 27],
        [30, 32, 21, 33, 42, 55]
 		]
-
     };
 
     $scope.donut = {
@@ -70,7 +80,8 @@ angular.module('sbAdminApp')
     };
     $scope.donutcolours = ["#70DBDB", "#66CD00", "#DB2929"];
     $scope.barcolours = ["#66CCCC", "#66CD00", "#EE0000"];
-    $scope.radarcolours = ["#66CD00", "#EE0000"]
+    $scope.radarcolours = ["#66CD00", "#EE0000"];
+    $scope.lineMonthColours = ["#66CCCC", "#66CD00", "#EE0000"];
 
     /*["rgba(224, 108, 112, 1)",
             "rgba(224, 108, 112, 1)",
