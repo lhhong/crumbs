@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Created by low on 19/2/17 10:57 AM.
+ * collection of all predictions made
  */
 @Getter
 @Setter

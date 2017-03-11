@@ -12,6 +12,7 @@ import java.io.Serializable;
 
 /**
  * Created by low on 6/2/17 12:51 AM.
+ * A member defined in the solidity contract
  */
 @Table(name = "member")
 @Entity

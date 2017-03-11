@@ -8,6 +8,7 @@ import java.util.Date;
 
 /**
  * Created by low on 21/2/17 12:49 AM.
+ * View model used in front-end to display shortages
  */
 @Getter
 @Setter

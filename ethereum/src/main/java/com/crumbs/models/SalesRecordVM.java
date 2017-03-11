@@ -9,6 +9,7 @@ import java.time.LocalDate;
 
 /**
  * Created by low on 17/2/17 10:35 PM.
+ * Used when receiving mock data from python script
  */
 @Getter
 @Setter

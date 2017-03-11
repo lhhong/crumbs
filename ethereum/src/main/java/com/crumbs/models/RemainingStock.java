@@ -9,6 +9,7 @@ import java.util.Date;
 
 /**
  * Created by low on 19/2/17 11:03 AM.
+ * Used to track shortages
  */
 @Getter
 @Setter
@@ -23,6 +24,13 @@ public class RemainingStock {
 
 	public RemainingStock() {}
 
+	/**
+	 * Calculates urgency rankings based on disposal data calculated in PredictionSrvc
+	 * @param demand
+	 * @param stockLeft
+	 * @param index
+	 * @param offerQuantity
+	 */
 	public RemainingStock(int demand, int stockLeft, int index, int offerQuantity) {
 		quantity = stockLeft;
 		urgency = UrgencyUtil.shortageUrg(demand, stockLeft);

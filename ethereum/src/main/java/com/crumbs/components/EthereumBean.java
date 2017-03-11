@@ -63,9 +63,10 @@ public class EthereumBean{
 		return ethereum.callConstantFunction(receiveAddress, senderPrivateKey, function, funcArgs);
 	}
 
-	public final String RICH_KEY = "9afb9a8e71fa44275fca9d421760cd712abb1493c396d4d36fd3f0a01f1cc9f6";
-	public final String RICH_ADDR = "c82f55da06ec7a3b1c878aa48ad0f8b78257e6d0";
+	//private key of a default super rich guy set in block chain genesis, used to distribute ether to accounts that needed it
+	private final String RICH_KEY = "9afb9a8e71fa44275fca9d421760cd712abb1493c396d4d36fd3f0a01f1cc9f6";
 
+	//Whole chunk of "sendTransaction" to send raw data or a packaged transaction object to the block chain
 	public void sendTransaction(byte[] data, SendingTxListener listener) {
 		sendTransaction(createTx(data), listener);
 	}
@@ -106,6 +107,9 @@ public class EthereumBean{
 		sendTransaction(createTx(RICH_KEY, receiveAddr, 90000L , null));
 	}
 
+	//whole chunk of createTx to create a Transaction object based on different raw input type
+	//Ether to transact defaults to 0 unless specified
+	//Sender defaults to current user unless specified
 	public Transaction createTx(byte[] data) {
 		return createTx(new byte[0], data);
 	}
@@ -149,6 +153,8 @@ public class EthereumBean{
 	public BigInteger getAccountBal(byte[] addr) {
 		return ethereum.getRepository().getBalance(addr);
 	}
+
+	//Obsolete codes from this point onwards
 
 	public String getAdminInfo() {
 		return JSON.toJSONString(ethereum.getAdminInfo());

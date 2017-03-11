@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Created by low on 7/2/17 9:46 PM.
+ * to pass transaction status info to front-end
  */
 @Getter
 @Setter

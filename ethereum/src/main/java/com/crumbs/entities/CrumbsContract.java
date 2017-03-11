@@ -26,6 +26,10 @@ public class CrumbsContract {
 	@Lob
 	@Column (length = 8195)
 	private String abi;
+
+	//metadata and solc no longer needed
+	//Left untouched for compatibility with older data
+
 	@Lob
 	@Column (length = 8195)
 	private String metadata;

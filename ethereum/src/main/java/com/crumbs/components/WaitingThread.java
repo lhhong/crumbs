@@ -10,6 +10,7 @@ import java.util.concurrent.Future;
 
 /**
  * Created by low on 4/2/17 3:17 PM.
+ * Waits for a transaction to be sent to block chain and calls method in SendingTxListener
  */
 public class WaitingThread implements Runnable {
 

@@ -7,6 +7,7 @@ import java.io.Serializable;
 
 /**
  * Created by low on 23/2/17 2:49 PM.
+ * common view model for shortages and excess
  */
 @Getter
 @Setter

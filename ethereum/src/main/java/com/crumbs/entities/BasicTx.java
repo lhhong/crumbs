@@ -11,6 +11,7 @@ import java.util.Date;
 
 /**
  * Created by low on 7/2/17 8:47 PM.
+ * contract transaction
  */
 @MappedSuperclass
 @Getter

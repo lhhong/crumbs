@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Created by low on 23/2/17 12:50 AM.
+ * view model for demand predictions coming from python Neural Network predictor
  */
 @Getter
 @Setter

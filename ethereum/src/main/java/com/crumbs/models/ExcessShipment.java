@@ -23,6 +23,13 @@ public class ExcessShipment {
 
 	public ExcessShipment() {}
 
+	/**
+	 * Calculates urgency rankings based on disposal data calculated in PredictionSrvc
+	 * @param initialDispose
+	 * @param actualDispose
+	 * @param index
+	 * @param offerQuantity
+	 */
 	public ExcessShipment(int initialDispose, int actualDispose, int index, int offerQuantity) {
 		quantity = actualDispose;
 		urgency = UrgencyUtil.excessUrg(initialDispose, actualDispose);

@@ -17,6 +17,7 @@ import java.util.Scanner;
 
 /**
  * Created by low on 25/2/17 12:52 AM.
+ * Specialised Listener with only onBlock that needs to be implemented for easy lambda expression use
  */
 public interface OnBlockListener extends EthereumListener{
 	@Override
