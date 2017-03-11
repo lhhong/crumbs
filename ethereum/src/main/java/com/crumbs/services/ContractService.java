@@ -18,8 +18,7 @@ import org.spongycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.Scanner;
 
 /**
@@ -41,7 +40,19 @@ public class ContractService {
 	@Autowired
 	private AccountBean accountBean;
 
-	public void sendContract() throws IOException {
+	public void saveContractAddr(String addr) throws IOException {
+
+		CrumbsContract crumbsContract = new CrumbsContract();
+		crumbsContract.setAbi(getAbi());
+		crumbsContract.setBin(getBin());
+		crumbsContract.setIncluded(true);
+		crumbsContract.setContractName("crumbs_tx");
+		crumbsContract.setContractAddr(ByteUtil.hexStringToBytes(addr));
+		crumbsContractRepo.save(crumbsContract);
+
+	}
+
+	private String getBin() throws IOException {
 		StringBuilder bin = new StringBuilder("");
 		ClassLoader loader = getClass().getClassLoader();
 		File file = new File(loader.getResource("crumbs_tx").getFile());
@@ -50,16 +61,36 @@ public class ContractService {
 			bin.append(scanner.nextLine());
 		}
 		scanner.close();
+		return bin.toString();
+	}
 
+	private String getAbi() throws IOException {
+		ClassLoader loader = getClass().getClassLoader();
 		StringBuilder abi = new StringBuilder("");
-		file = new File(loader.getResource("crumbs_tx-abi").getFile());
-		scanner = new Scanner(file);
+		File file = new File(loader.getResource("crumbs_tx-abi").getFile());
+		Scanner scanner = new Scanner(file);
 		while (scanner.hasNextLine()) {
 			abi.append(scanner.nextLine());
 		}
 		scanner.close();
+		return abi.toString();
+	}
 
-		sendContract(bin.toString(), abi.toString(), "crumbs_tx");
+	public void writeContractAddressToFile(String addr) {
+		PrintWriter writer = null;
+		try {
+			writer = new PrintWriter("contract-address", "UTF-8");
+			writer.println(addr);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			assert writer != null;
+			writer.close();
+		}
+	}
+
+	public void sendContract() throws IOException {
+		sendContract(getBin(), getAbi(), "crumbs_tx");
 	}
 
 	public void sendContract(String compiledContract, String abi, String name) {
@@ -74,6 +105,7 @@ public class ContractService {
 				crumbsContract.setIncluded(false);
 				logger.info("CONTRACT ADDRESS ON CREATION: " + ByteUtil.toHexString(tx.getContractAddress()));
 				crumbsContractRepo.save(crumbsContract);
+				writeContractAddressToFile(ByteUtil.toHexString(tx.getContractAddress()));
 			}
 
 			@Override

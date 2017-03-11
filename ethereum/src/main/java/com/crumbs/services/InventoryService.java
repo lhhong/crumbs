@@ -1,5 +1,6 @@
 package com.crumbs.services;
 
+import com.alibaba.fastjson.JSON;
 import com.crumbs.entities.Product;
 import com.crumbs.entities.SalesRecord;
 import com.crumbs.entities.Shipment;
@@ -54,6 +55,7 @@ public class InventoryService {
 
 	public List<StockUpdate> futureStockInArray(String product) {
 		Map<LocalDate, StockUpdate> map = futureStock(product);
+		logger.info("stock updates: {}", JSON.toJSONString(map));
 		List<StockUpdate> list = new ArrayList<>();
 		List<LocalDate> dates = new ArrayList<>();
 		dates.addAll(map.keySet());
@@ -72,6 +74,9 @@ public class InventoryService {
 		Product p = new Product();
 		p.setName(product);
 		List<Shipment> shipments = shipmentRepo.findByProductAndQuantityNotAndExpiryAfter(p, 0, DateUtil.today());
+		logger.info("Shipments: {}", JSON.toJSONString(shipments.stream().map(Shipment::getQuantity).toArray()));
+		logger.info("ShipDate: {}", JSON.toJSONString(shipments.stream().map(shipment -> DateUtil.toLocalDate(shipment.getDateStamp())).toArray()));
+		logger.info("Expiry: {}", JSON.toJSONString(shipments.stream().map(shipment -> DateUtil.toLocalDate(shipment.getExpiry())).toArray()));
 		List<ShipmentVM> shipmentVMS = new ArrayList<>();
 		shipments.forEach((shipment) -> shipmentVMS.add(new ShipmentVM(shipment)));
 		for (ShipmentVM shipment : shipmentVMS) {

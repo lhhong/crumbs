@@ -3,6 +3,8 @@ package com.crumbs.rest;
 
 import com.crumbs.components.AccountBean;
 import com.crumbs.components.EthereumBean;
+import com.crumbs.entities.CrumbsContract;
+import com.crumbs.repositories.CrumbsContractRepo;
 import com.crumbs.services.ContractService;
 import com.crumbs.util.CrumbsUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +29,19 @@ public class MyRestController {
 	@Autowired
 	private ContractService contractService;
 
+	@Autowired
+	private CrumbsContractRepo contractRepo;
+
 	@RequestMapping(value = "/send-contract", method = GET)
 	@ResponseBody
 	public void sendSampleContract() throws IOException {
 		contractService.sendContract();
+	}
+
+	@RequestMapping(value = "/add-contract", method = POST)
+	@ResponseBody
+	public void addContract(@RequestBody String addr) throws IOException {
+		contractService.saveContractAddr(addr);
 	}
 
 	@RequestMapping(value = "/topup-contract", method = GET)

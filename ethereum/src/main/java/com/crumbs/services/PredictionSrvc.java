@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by low on 18/2/17 4:31 PM.
@@ -38,9 +37,21 @@ public class PredictionSrvc {
 	@Autowired
 	ProductRepo productRepo;
 
+	@Autowired
+	PredictionCacheSrvc predictionCache;
+
 	public PredictionVM getAndRankPredictions() {
-		List<Prediction> predictions = getAllPredictions();
-		return pullAndRankRelavantPredictions(predictions);
+		if (predictionCache.needsFirstRun()) {
+			List<Prediction> predictions = getAllPredictions();
+			predictionCache.setPredictionCache(pullAndRankRelavantPredictions(predictions));
+		}
+		else {
+			List<String> products = predictionCache.getNeedsCalc();
+			if (!products.isEmpty()) {
+				predictionCache.addPredictions(getPredictions(products));
+			}
+		}
+		return predictionCache.getPredictionCache();
 	}
 
 	public PredictionVM pullAndRankRelavantPredictions(List<Prediction> predictions) {
@@ -61,10 +72,16 @@ public class PredictionSrvc {
 	}
 
 	public List<Prediction> getAllPredictions() {
+		return getPredictions(productRepo.findAll());
+	}
+
+	public List<Prediction> getPredictions(List<String> products) {
+		return getPredictions(productRepo.findAll(products));
+	}
+
+	public List<Prediction> getPredictions(Iterable<Product> products) {
 
 		List<Prediction> predictions = new ArrayList<>();
-		Iterable<Product> products = productRepo.findAll();
-
 		products.forEach(p -> {
 			Map<String, List<Integer>> map = new HashMap<>();
 			map.put("sales", buildArrayQuery(p.getName()));
