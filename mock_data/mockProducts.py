@@ -44,7 +44,6 @@ def addShipmentRecords(product):
 			shipment_epoch = getEpochTime(row[1])
 			doe_epoch = getEpochTime(row[3])
 			product.addShipment(ShipmentRecord(shipment_epoch,row[2],doe_epoch))
-			print "TEST"
 		except:
 			break
 
