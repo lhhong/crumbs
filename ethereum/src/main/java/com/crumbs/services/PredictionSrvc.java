@@ -58,7 +58,7 @@ public class PredictionSrvc {
 		PredictionVM predictionVM = new PredictionVM();
 		predictions.forEach(p -> {
 			p.getShipments().forEach(s -> {
-				if (!s.getUrgencyLevel().equalsIgnoreCase("green"))
+				if (!s.getUrgencyLevel().equalsIgnoreCase("green") && !s.getExpiry().before(DateUtil.daysFromToday(2)))
 					predictionVM.addExcess(new ExceShipVM(p.getProduct(), s));
 			});
 			p.getStocks().forEach(s -> {

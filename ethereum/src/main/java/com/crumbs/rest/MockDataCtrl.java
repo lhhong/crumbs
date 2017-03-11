@@ -131,6 +131,16 @@ public class MockDataCtrl {
 		txService.accept(account.getPrivateKey(), tx.getUuid(), tx.getTransportPrice(), tx.getExpiry(), tx.getTxDate(), true);
 	}
 
+	@RequestMapping(value = "mock_agree/{memberId}", method = POST)
+	public void mockAgree(@PathVariable("memberId") int id, @RequestBody TransactionVM tx) {
+		Account account = accountRepo.findOne(id);
+		long payment = 0;
+		if (!tx.isSell()) {
+			payment = tx.getTransportPrice() + tx.getPrice();
+		}
+		txService.agree(tx.getUuid(), payment);
+	}
+
 	@RequestMapping(value = "/delete_products", method = GET)
 	@ResponseBody
 	public void deleteAll() {

@@ -18,7 +18,6 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 
 	private static final Logger logger = LoggerFactory.getLogger(CrumbsEthereumListener.class);
 	private Ethereum ethereum;
-	private boolean syncDone = false;
 
 	private EthereumBean bean;
 	private CrumbsContractRepo crumbsContractRepo;
@@ -32,6 +31,10 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 	public void onTransactionExecuted(TransactionExecutionSummary summary) {
 	}
 
+	/**
+	 * on transaction updates, checks if a contract is included. if yes adds it to the database.
+	 * To facilitate easy synchronization of contract across nodes
+	 */
 	@Override
 	public void onPendingTransactionUpdate(TransactionReceipt txReceipt, PendingTransactionState state, Block block) {
 		logger.info("@@@@@@@@@@ onPendingTransactionUpdate invoked @@@@@@@@@");
@@ -85,6 +88,9 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 		}*/
 	}
 
+	/**
+	 * runs supermarket transaction state updater when a new block is received
+	 */
 	@Override
 	public void onBlock(Block block, List<TransactionReceipt> receipts) {
 		logger.info("Received block: " + block.getNumber());
@@ -111,12 +117,11 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 	/**
 	 *  Mark the fact that you are touching
 	 *  the head of the chain
+	 *  Not used in prototype as block chain is small enough to be downloaded almost instantly
 	 */
 	@Override
 	public void onSyncDone(SyncState state) {
-
 		System.out.println(" ** SYNC DONE ** ");
-		syncDone = true;
 	}
 
 }

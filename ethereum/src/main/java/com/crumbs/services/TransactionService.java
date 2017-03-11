@@ -3,10 +3,7 @@ package com.crumbs.services;
 import com.alibaba.fastjson.JSON;
 import com.crumbs.components.AccountBean;
 import com.crumbs.components.CheckIncludedListener;
-import com.crumbs.entities.Member;
-import com.crumbs.entities.Shipment;
-import com.crumbs.entities.TxAccepted;
-import com.crumbs.entities.TxSent;
+import com.crumbs.entities.*;
 import com.crumbs.models.*;
 import com.crumbs.repositories.*;
 import com.crumbs.util.CrumbsUtil;
@@ -450,6 +447,10 @@ public class TransactionService {
 
 	public void mockAccept(byte[] senderPrivKey, TxAccepted tx, long transportPrice, long payment, long date) {
 		contractService.sendToTxContract(senderPrivKey,"accept", payment, tx.getUuid(), transportPrice, date);
+	}
+
+	public void agree(Account account, String uuid, long payment) {
+		contractService.sendToTxContract(account.getPrivateKey(), "agree", payment, uuid);
 	}
 
 	public void agree(String uuid) {
