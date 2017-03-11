@@ -152,17 +152,16 @@ public class MockDataCtrl {
 	@RequestMapping(value = "/import", method = POST)
 	@ResponseBody
 	public void receive(@RequestBody Product p) {
-		logger.info(JSON.toJSONString(p, true));
+		logger.info("Storing product info of {}", p.getName());
 		p.getSalesRecord().forEach(r -> {
 			r.setProduct(p);
 			r.setDateStamp(DateUtil.toDate(r.getDateStamp()));
 		});
 		p.getShipmentsRecord().forEach(r -> {
-			r.setProduct(p);
 			r.setExpiry(DateUtil.toDate(r.getExpiry()));
 			r.setDateStamp(DateUtil.toDate(r.getDateStamp()));
+			r.setProduct(p);
 		});
-		logger.info(JSON.toJSONString(p, true));
 		inventoryService.storeProduct(p);
 	}
 
