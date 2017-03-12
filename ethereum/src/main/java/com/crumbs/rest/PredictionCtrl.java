@@ -32,6 +32,12 @@ public class PredictionCtrl {
 	@Autowired
 	MatchMakingSrvc matchMakingSrvc;
 
+	@RequestMapping(value = "prediction_qty", method = GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public PredictionQty getPredictionQty() {
+		return predictionSrvc.getPredictionQty();
+	}
+
 	@RequestMapping(value = "predictions", method = GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public PredictionVM getPredictions() {

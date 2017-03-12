@@ -9,6 +9,7 @@ import java.io.Serializable;
 
 /**
  * Created by low on 7/2/17 12:19 AM.
+ * Stores transactions offered by other parties in general. Also used as view model to view available tx
  */
 @Table(name = "tx_accepted")
 @Entity

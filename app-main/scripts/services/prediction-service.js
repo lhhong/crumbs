@@ -2,6 +2,20 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
 
     var baseUrl = 'http://localhost:8080/'
 
+    var getQuantity = function(successCallback, errorCallback) {
+        $http({
+            method: 'GET',
+            url: baseUrl + 'prediction_qty',
+        }).success(function(response) {
+            if (successCallback) {
+                successCallback(response);
+            }
+        }).error(function(response) {
+            console.log("server error, code = " + response.status);
+            errorCallback();
+        })
+    }
+
     var getPredictions = function(successCallback, errorCallback) {
         $http({
             method: 'GET',
@@ -57,6 +71,7 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
 
 
     return {
+        getQuantity: getQuantity,
         getPredictions: getPredictions,
         excessViewOffers: excessViewOffers,
         shortageViewOffers: shortageViewOffers,

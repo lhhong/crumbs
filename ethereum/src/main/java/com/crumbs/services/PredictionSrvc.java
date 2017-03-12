@@ -40,6 +40,20 @@ public class PredictionSrvc {
 	@Autowired
 	PredictionCacheSrvc predictionCache;
 
+	public PredictionQty getPredictionQty() {
+		PredictionQty qty = new PredictionQty();
+		if (predictionCache.needsFirstRun()) {
+			qty.setValid(false);
+		}
+		else {
+			qty.setValid(true);
+			qty.setExcess(predictionCache.getPredictionCache().getExcessShipments().size());
+			qty.setShortage(predictionCache.getPredictionCache().getStockShortages().size());
+		}
+
+		return qty;
+	}
+
 	public PredictionVM getAndRankPredictions() {
 		if (predictionCache.needsFirstRun()) {
 			List<Prediction> predictions = getAllPredictions();

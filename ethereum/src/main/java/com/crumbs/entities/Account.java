@@ -10,6 +10,7 @@ import java.io.Serializable;
 
 /**
  * Created by low on 3/2/17 10:38 PM.
+ * BlockChain account storage
  */
 
 @Entity

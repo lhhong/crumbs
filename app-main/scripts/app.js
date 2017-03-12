@@ -96,7 +96,8 @@ angular
 						'scripts/directives/notifications/notifications.js',
 						'scripts/directives/chat/chat.js',
 						'scripts/directives/dashboard/stats/stats.js',
-						'scripts/services/transaction-service.js'
+						'scripts/services/transaction-service.js',
+					    'scripts/services/prediction-service.js'
 					]
 				})
 			}
@@ -124,7 +125,8 @@ angular
 						'scripts/directives/chat/chat.js',
 						'scripts/directives/dashboard/stats/stats.js',
 						'scripts/services/transaction-service.js',
-						'scripts/controllers/chartContoller.js'
+						'scripts/controllers/chartContoller.js',
+					    'scripts/services/prediction-service.js'
 					]
 				})
 			}

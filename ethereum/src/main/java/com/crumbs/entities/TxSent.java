@@ -8,6 +8,7 @@ import java.io.Serializable;
 
 /**
  * Created by low on 2/2/17 11:34 PM.
+ * Stores transactions offered by user
  */
 @Table (name = "tx_sent")
 @Entity

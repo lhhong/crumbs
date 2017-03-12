@@ -7,8 +7,9 @@
     </div>
     <!-- /.row -->
     <div class="row">
-        <stats number="6" comments="New Shortage" colour="red" type="bar-chart-o"></stats>
-        <stats number="3" comments="New Excess" colour="green" type="bar-chart-o"></stats>
+        <stats ng-if="valid" number="{{ excess }}" comments="New Shortage" colour="red" type="bar-chart-o"></stats>
+        <stats ng-if="valid" number="{{ shortage }}" comments="New Excess" colour="green" type="bar-chart-o"></stats>
+        <div class="pull-left" ng-if="!valid">Predictions have not been run. Go to my predictions to run analysis.</div>
         <stats number="2" comments="New Transactions" colour="yellow" type="dollar"></stats>
     </div>
     <div class="row">

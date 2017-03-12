@@ -7,7 +7,7 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('MainCtrl', ['$scope', '$position', '$interval', 'txService', function($scope, $position, $interval, txService) {
+  .controller('MainCtrl', ['$scope', '$position', '$interval', 'txService', 'predictionService', function($scope, $position, $interval, txService, predictionService) {
     console.log("main controller loaded");
     $scope.balance = 0;
     $scope.donut = {
@@ -18,10 +18,25 @@ angular.module('sbAdminApp')
     var reloadData = function() {
         txService.getEther(function(balance) {
             $scope.balance = balance;
+        });
+
+        predictionService.getQuantity(function(predictQty) {
+            if (predictQty.valid) {
+                $scope.excess = predictQty.excess;
+                $scope.shortage = predictQty.shortage;
+            }
+            else {
+                $scope.valid = false;
+            }
+        }, function() {
+                $scope.excess = "4";
+                $scope.shortage = "1";
         })
     }
 
     $interval(function() {
         reloadData();
-    }, 5000)
+    }, 5000);
+
+    reloadData();
   }]);

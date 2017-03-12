@@ -7,6 +7,7 @@ import javax.persistence.*;
 
 /**
  * Created by low on 4/2/17 3:38 PM.
+ * Stores contract used
  */
 
 @Entity
