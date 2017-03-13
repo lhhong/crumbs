@@ -28,6 +28,9 @@
                           <th ng-click="sortData('storename')">
                             Store Name <div ng-class="getSortClass('storename')"></div>
                           </th>
+                          <th ng-click="sortData('location')">
+                              Location <div ng-class="getSortClass('location')"></div>
+                          </th>
                           <th ng-click="sortData('product')">
                             Product <div ng-class="getSortClass('product')"></div>
                           </th>
@@ -47,6 +50,7 @@
                   <tbody>
                       <tr ng-repeat="x in dairy | filter:searchText | orderBy:sortColumn:reverseSort">
                           <td>{{ x.storename }}</td>
+                          <td>{{ x.location }}</td>
                           <td>{{ x.product }}</td>
                           <td>{{ x.qty }}</td>
                           <td>{{ x.expiryDate | date }}</td>
@@ -75,6 +79,9 @@
                           <th ng-click="sortData('storename')">
                             Store Name <div ng-class="getSortClass('storename')"></div>
                           </th>
+                          <th ng-click="sortData('location')">
+                              Location <div ng-class="getSortClass('location')"></div>
+                          </th>
                           <th ng-click="sortData('product')">
                             Product <div ng-class="getSortClass('product')"></div>
                           </th>
@@ -94,6 +101,7 @@
                   <tbody>
                       <tr ng-repeat="x in vegetable | filter:searchText | orderBy:sortColumn:reverseSort">
                           <td>{{ x.storename }}</td>
+                          <td>{{ x.location }}</td>
                           <td>{{ x.product }}</td>
                           <td>{{ x.qty }}</td>
                           <td>{{ x.expiryDate | date }}</td>
@@ -122,6 +130,9 @@
                           <th ng-click="sortData('storename')">
                             Store Name <div ng-class="getSortClass('storename')"></div>
                           </th>
+                          <th ng-click="sortData('location')">
+                              Location <div ng-class="getSortClass('location')"></div>
+                          </th>
                           <th ng-click="sortData('product')">
                             Product <div ng-class="getSortClass('product')"></div>
                           </th>
@@ -141,6 +152,7 @@
                   <tbody>
                       <tr ng-repeat="x in fruit | filter:searchText | orderBy:sortColumn:reverseSort">
                           <td>{{ x.storename }}</td>
+                          <td>{{ x.location }}</td>
                           <td>{{ x.product }}</td>
                           <td>{{ x.qty }}</td>
                           <td>{{ x.expiryDate | date }}</td>

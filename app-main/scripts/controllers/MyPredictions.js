@@ -66,7 +66,7 @@ angular.module('sbAdminApp')
                 $scope.offers = response;
             }, function(response) {
                 console.log("server error");
-                $scope.offers = [{price: 567}, {price: 23452}];
+                $scope.offers = [{price: 567}, {price: 600}];
             });
     }
 

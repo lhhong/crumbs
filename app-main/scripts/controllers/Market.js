@@ -22,78 +22,87 @@ angular.module('sbAdminApp')
 
     $scope.dairy = [{
       'storename' : 'NTUC',
+      'location' : 'Bedok Mall',
       'product': 'Milk',
-      'qty': 12,
-      'expiryDate': 123145123,
-      'price': 120,
+      'qty': 100,
+      'expiryDate': 1492103145123,
+      'price': 150,
       'transportCost': 60
     },
     {
       'storename' : 'Giant',
-      'product': 'Goat Cheese',
-      'qty': 22,
-      'expiryDate': 993145123,
-      'price': 1200.08,
+      'location' : 'Katong V',
+      'product': 'Parmesan Cheese',
+      'qty': 120,
+      'expiryDate': 1492103145123,
+      'price': 600,
       'transportCost': 77
     },
     {
-      'storename' : 'NTUC',
+      'storename' : 'Cold Storage',
+      'location' : 'Tampines Mall',
       'product': 'Yoghurt',
-      'qty': 44,
-      'expiryDate': 1003145123,
-      'price': 28.99,
+      'qty': 200,
+      'expiryDate': 1492103145123,
+      'price': 350,
       'transportCost': 69
     }
     ],
 
     $scope.vegetable = [{
       'storename' : 'NTUC',
-      'product': 'Cabbage',
-      'qty': 12,
-      'expiryDate': 123145123,
+      'location' : 'Bedok Mall',
+      'product': 'Carrots',
+      'qty': 180,
+      'expiryDate': 1492103145123,
       'price': 120,
       'transportCost': 60
     },
     {
       'storename' : 'Giant',
+      'location' : 'Katong V',
       'product': 'Broccoli',
-      'qty': 22,
-      'expiryDate': 993145123,
-      'price': 1200.08,
+      'qty': 220,
+      'expiryDate': 1492103145123,
+      'price': 250,
       'transportCost': 77
     },
     {
       'storename' : 'NTUC',
+      'location' : 'Bedok Mall',
       'product': 'Carrots',
-      'qty': 44,
-      'expiryDate': 1003145123,
-      'price': 28.99,
+      'qty': 200,
+      'expiryDate': 1492103145123,
+      'price': 100,
       'transportCost': 69
     }
     ],
 
     $scope.fruit = [{
-      'storename' : 'NTUC',
+      'storename' : 'Cold Storage',
+      'location' : 'Tampines Mall',
       'product': 'Apples',
-      'qty': 12,
-      'expiryDate': 123145123,
+      'qty': 350,
+      'expiryDate': 1492103145123,
       'price': 120,
       'transportCost': 60
     },
     {
       'storename' : 'Giant',
+      'location' : 'Katong V',
       'product': 'Oranges',
-      'qty': 22,
-      'expiryDate': 993145123,
-      'price': 1200.08,
+      'qty': 250,
+      'expiryDate': 1492103145123,
+      'price': 125,
       'transportCost': 77
     },
     {
       'storename' : 'NTUC',
+      'location' : 'Bedok Mall',
       'product': 'Dragon Fruit',
-      'qty': 44,
-      'expiryDate': 1003145123,
-      'price': 28.99,
+      'qty': 130,
+      'expiryDate': 1492103145123,
+      'price': 90,
       'transportCost': 69
     }
     ];
