@@ -81,8 +81,9 @@ def create_dataset(dataset, look_back=1):
 # generate predictions for the next k days
 def predictNextK(seed,k,model):
     predictions = np.empty(k)
+    look_back = seed.shape[0]
     for i in range(k):
-        seed = np.reshape(seed,(1,1,k))
+        seed = np.reshape(seed,(1,1,look_back))
         nextPeriod = model.predict(seed)
         seed = np.append(seed,nextPeriod)
         seed = np.delete(seed, 0, axis=0)
