@@ -30,7 +30,7 @@
     <!-- /.row -->
     <div class="panel panel-default">
       <div class="panel-heading">
-        <strong>Shortages</strong>
+        <strong>Predicted Shortages</strong>
       </div>
       <!-- /.panel-heading -->
       <div class="panel-body">
@@ -40,9 +40,8 @@
                       <tr>
                           <th>Date of Shortage</th>
                           <th>Product</th>
-                          <th>Ending Inventory</th>
-                          <th>Percentage Excess</th>
-                          <th>Unit Price (ether)</th>
+                          <th>Quantity</th>
+                          <th>Unit Price</th>
                           <th>View</th>
                           <th>Market</th>
                       </tr>
@@ -52,7 +51,6 @@
                           <td>{{ x.requestDate | date}}</td>
                           <td>{{ x.name }}</td>
                           <td>{{ x.quantity }}</td>
-                          <td>{{ x.percentExtra }}%</td>
                           <td>{{ x.price }}</td>
                           <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#PredictionModal" ng-click="shortageViewPrediction($index)">View Chart</button></td>
                           <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarket" ng-click="shortageViewOffer($index)">View Market</button></td>
@@ -67,7 +65,7 @@
 
      <div class="panel panel-default">
       <div class="panel-heading">
-        <strong>Excess Stock</strong>
+        <strong>Predicted Excess</strong>
       </div>
       <!-- /.panel-heading -->
       <div class="panel-body">
@@ -75,11 +73,10 @@
               <table class="table table-striped">
                   <thead>
                       <tr>
-                          <th>Date of Disposal</th>
+                          <th>Date of Excess</th>
                           <th>Product</th>
-                          <th>Quantity To Dispose</th>
-                          <th>Percentage Disposal</th>
-                          <th>Unit Price (ether)</th>
+                          <th>Quantity</th>
+                          <th>Unit Price</th>
                           <th>View</th>
                           <th>Market</th>
                       </tr>
@@ -89,7 +86,6 @@
                           <td>{{ x.expiry | date}}</td>
                           <td>{{ x.name }}</td>
                           <td>{{ x.quantity }}</td>
-                          <td>{{ x.percentExtra }}%</td>
                           <td>{{ x.price }}</td>
                           <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#PredictionModal" ng-click="excessViewPrediction($index)">View Chart</button></td>
                           <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarket" ng-click="excessViewOffer($index)">View Market</button></td>
