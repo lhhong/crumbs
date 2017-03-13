@@ -199,6 +199,10 @@ angular
 			}
 		}
 	})
+	.state('dashboard.Profile',{
+        url:'/Profile',
+        templateUrl:'views/user_profile/Profile.html'
+    })
 	.state('dashboard.form',{
 		templateUrl:'views/form.html',
 		url:'/form'

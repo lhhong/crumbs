@@ -24,15 +24,15 @@ angular.module('sbAdminApp')
                     item: 'Apples',
                     quantity: 300,
                     price: 2,
-                    txDate: 12315234522,
-                    expiry: 143624624245
+                    txDate: 1492003145123,
+                    expiry: 1492503145123
                 },{
-                    accepter:{name:'GIANT'},
+                    accepter:{name:'Giant'},
                     item: 'Oranges',
                     quantity: 300,
                     price: 2,
-                    txDate: 12315234522,
-                    expiry: 143624624245
+                    txDate: 1491903145123,
+                    expiry: 1492503145123
                 }
             ];
         })
@@ -45,15 +45,15 @@ angular.module('sbAdminApp')
                     item: 'Apples',
                     quantity: 300,
                     price: 2,
-                    txDate: 12315234522,
-                    expiry: 143624624245
+                    txDate: 1491503145123,
+                    expiry: 1492303145123
                 },{
-                    accepter:{name:'GIANT'},
+                    accepter:{name:'Cold Storage'},
                     item: 'Oranges',
                     quantity: 300,
                     price: 2,
-                    txDate: 12315234522,
-                    expiry: 143624624245
+                    txDate: 1491503145123,
+                    expiry: 1492303145123
                 }
             ];
         })

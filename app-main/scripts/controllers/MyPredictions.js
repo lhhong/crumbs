@@ -19,27 +19,27 @@ angular.module('sbAdminApp')
             $scope.predictions = {
                 stockShortages:  [{
                   name : 'Apples',
-                  quantity: -3,
+                  quantity: -300,
                   percentExtra: -12,
-                  requestDate : 123145123,
-                  price : 123145123,
+                  requestDate : 1492503145123,
+                  price : 4,
                   urgencyLevel: "red"
                 },
                 {
-                  name : 'Orange',
-                  quantity: -3,
+                  name : 'Oranges',
+                  quantity: -200,
                   percentExtra: -12,
-                  requestDate : 123145123,
-                  price : 12323,
+                  requestDate : 1492403145123,
+                  price : 5,
                   urgencyLevel: "orange"
                 }
                 ],
                 excessShipments: [{
-                  name : 'Orange',
-                  quantity: 354,
+                  name : 'Oranges',
+                  quantity: 450,
                   percentExtra: 12,
-                  expiry : 23153145123,
-                  price : 1232,
+                  expiry : 1492603145123,
+                  price : 5,
                   urgencyLevel: "orange"
                 }]
             };
