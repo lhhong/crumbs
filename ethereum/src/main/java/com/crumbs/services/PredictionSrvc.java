@@ -100,8 +100,12 @@ public class PredictionSrvc {
 			Map<String, List<Integer>> map = new HashMap<>();
 			map.put("sales", buildArrayQuery(p.getName()));
 			logger.info("predicting for {}", p.getName());
+
+			// response contains the 7 days of sales predictions
 			ResponseEntity<PredictionReceipt> response = restTemplate.postForEntity("http://localhost:5000/predict", map, PredictionReceipt.class);
 			logger.info(JSON.toJSONString(response.getBody()));
+
+			// create prediction from sales
 			predictions.add(buildPrediction(response.getBody().getPredictions(), p.getName()));
 		});
 		return predictions;

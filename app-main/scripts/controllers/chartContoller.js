@@ -21,7 +21,7 @@ angular.module('sbAdminApp')
 	    }
     };
     $scope.lineMonth = {
-      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+      labels: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
 		  series: ['Sold', 'Redistributed', 'Wasted'],
       data: [
 		   [65, 59, 80, 81, 56, 55],
@@ -34,7 +34,7 @@ angular.module('sbAdminApp')
     };
 
     $scope.bar = {
-	    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+	    labels: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
 		  series: ['Sold', 'Redistributed', 'Wasted'],
       data: [
 		   [65, 59, 80, 81, 56, 55],

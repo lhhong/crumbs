@@ -54,7 +54,7 @@
                           <td>{{ x.quantity }}</td>
                           <td>{{ x.percentExtra }}%</td>
                           <td>{{ x.price }}</td>
-                          <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewPrediction">View Chart</button></td>
+                          <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewPrediction" ng-click="shortageViewPrediction($index)">View Chart</button></td>
                           <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarket" ng-click="shortageViewOffer($index)">View Market</button></td>
                       </tr>
                   </tbody>
@@ -91,7 +91,7 @@
                           <td>{{ x.quantity }}</td>
                           <td>{{ x.percentExtra }}%</td>
                           <td>{{ x.price }}</td>
-                          <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewPrediction">View Chart</button></td>
+                          <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewPrediction" ng-click="excessViewPrediction($index)">View Chart</button></td>
                           <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarket" ng-click="excessViewOffer($index)">View Market</button></td>
                       </tr>
                   </tbody>
@@ -151,19 +151,101 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Prediction Model</h4>
+                    <h4 class="modal-title">Prediction Model for {{ predictedItem.name }}</h4>
                 </div>
                 <div class="modal-body">
-                  <div class="col-lg-6 col-sm-12" id="line-chart" ng-controller="PredictCtrl">
-                      <div class="panel panel-default">
-                          <div class="panel-heading">Line Chart</div>
-                          <div class="panel-body">
-                              <canvas id="line" class="chart chart-line chart-xl" data="line.data" labels="line.labels" legend="true"
-                              click="line.onClick" series="line.series"></canvas>
-                          </div>
-                      </div>
-                  </div>
-                  <p class="text-muted text-center"><small>If none of the above offers are satisfactory, click button below to make new request on the market</small></p>
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><b>Sales Projection</b></div>
+                            <div class="panel-body">
+                                <div id="line-chart" ng-controller="PredictCtrl">
+                                    <canvas id="line" class="chart chart-line chart-xl" data="salesData.data" labels="salesData.labels" legend="true"
+                                            click="salesData.onClick" series="salesData.series"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="panel panel-default">
+                            <div class="panel-heading"><b>Prediction Summary</b></div>
+                            <div class="panel-body">
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <thead>
+                                    <tr>
+                                        <th>Day</th>
+                                        <th>1</th>
+                                        <th>2</th>
+                                        <th>3</th>
+                                        <th>4</th>
+                                        <th>5</th>
+                                        <th>6</th>
+                                        <th>7</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr class="odd gradeX">
+                                        <td class="center"><b>Starting Inventory</b></td>
+                                        <td class="center">100</td>
+                                        <td class="center">700</td>
+                                        <td class="center">300</td>
+                                        <td class="center">560</td>
+                                        <td class="center">10</td>
+                                        <td class="center">460</td>
+                                        <td class="center">(140)</td>
+                                    </tr>
+
+                                    <tr class="odd gradeX">
+                                        <td class="center">Add: Shipments</td>
+                                        <td class="center">1,000</td>
+                                        <td class="center">-</td>
+                                        <td class="center">1,000</td>
+                                        <td class="center">-</td>
+                                        <td class="center">1,000</td>
+                                        <td class="center">-</td>
+                                        <td class="center">1,000</td>
+                                    </tr>
+
+                                    <tr class="odd gradeX">
+                                        <td class="center">Less: Demand</td>
+                                        <td class="center">(400)</td>
+                                        <td class="center">(400)</td>
+                                        <td class="center">(440)</td>
+                                        <td class="center">(550)</td>
+                                        <td class="center">(550)</td>
+                                        <td class="center">(600)</td>
+                                        <td class="center">(500)</td>
+                                    </tr>
+
+                                    <tr class="odd gradeX">
+                                        <td class="center">Less: Disposal</td>
+                                        <td class="center">-</td>
+                                        <td class="center">-</td>
+                                        <td class="center">(300)</td>
+                                        <td class="center">-</td>
+                                        <td class="center">-</td>
+                                        <td class="center">-</td>
+                                        <td class="center">-</td>
+                                    </tr>
+
+                                    <tr class="odd gradeX">
+                                        <td class="center"><b>Ending Inventory</b></td>
+                                        <td class="center">700</td>
+                                        <td class="center">300</td>
+                                        <td class="center">560</td>
+                                        <td class="center">10</td>
+                                        <td class="center">460</td>
+                                        <td class="center">(140)</td>
+                                        <td class="center">360</td>
+                                    </tr>
+
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                  <p class="text-muted text-center"><small>Predictions are made over a horizon of 7 days</small></p>
                   <button type="button" class="btn btn-primary btn-lg btn-block">Make Request</button>
                 </div>
             </div>

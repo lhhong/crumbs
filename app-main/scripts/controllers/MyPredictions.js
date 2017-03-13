@@ -70,6 +70,13 @@ angular.module('sbAdminApp')
             });
     }
 
+    $scope.excessViewPrediction = function(index) {
+        $scope.predictedItem = $scope.predictions.excessShipments[index];
+    }
+    $scope.shortageViewPrediction = function(index) {
+        $scope.predictedItem = $scope.predictions.stockShortages[index];
+    }
+
     $scope.acceptOffer = function(index) {
         txService.accept($scope.offers[index], function(response) {});
     };
@@ -119,15 +126,15 @@ angular.module('sbAdminApp')
             console.log(data)
         })
     };
-    $scope.line = {
+    $scope.salesData = {
 	    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-	    series: ['Series A', 'Series B'],
+	    series: ['Series A'],
 	    data: [
-	      [65, 59, 80, 81, 56, 55, 40],
-	      [28, 48, 40, 19, 86, 27, 90]
+	      [65, 59, 80, 81, 56, 55, 40]
 	    ],
 	    onClick: function (points, evt) {
 	      console.log(points, evt);
 	    }
     };
+
   }]);

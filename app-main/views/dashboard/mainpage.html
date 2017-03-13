@@ -12,6 +12,7 @@
         <div class="pull-left" ng-if="!valid">Predictions have not been run. Go to my predictions to run analysis.</div>
         <stats number="2" comments="New Transactions" colour="yellow" type="dollar" goto="dashboard.InProgress"></stats>
     </div>
+
     <div class="row">
       <div class="col-lg-6 col-sm-12" id="doughnut-chart" ng-controller="ChartCtrl">
         <div class="panel panel-default">
@@ -26,6 +27,7 @@
             </div>
         </div>
       </div>
+
       <div class="col-lg-6 col-sm-12" id="radar-chart" ng-controller="ChartCtrl">
           <div class="panel panel-default">
               <div class="panel-heading">
@@ -40,6 +42,7 @@
           </div>
       </div>
     </div>
+
     <div class="row">
       <div class="col-lg-6 col-sm-12" id="bar-chart" ng-controller="ChartCtrl">
           <div class="panel panel-default">
@@ -54,6 +57,7 @@
               </div>
           </div>
       </div>
+
       <div class="col-lg-6 col-sm-12" id="line-chart" ng-controller="ChartCtrl">
           <div class="panel panel-default">
               <div class="panel-heading">
@@ -69,5 +73,6 @@
           </div>
       </div>
     </div>
+
 
 </div>
