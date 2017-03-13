@@ -35,13 +35,22 @@ angular.module('sbAdminApp')
                 }
                 ],
                 excessShipments: [{
-                  name : 'Oranges',
-                  quantity: 450,
-                  percentExtra: 12,
+                  name : 'Marigold Milk',
+                  quantity: 100,
+                  percentExtra: 8,
                   expiry : 1492603145123,
-                  price : 5,
+                  price : 10,
                   urgencyLevel: "orange"
-                }]
+                },
+                {
+                  name : 'Corn',
+                  quantity: 200,
+                  percentExtra: 10,
+                  expiry : 1492703145123,
+                  price : 5,
+                  urgencyLevel: "yellow"
+                }
+                ]
             };
         }
     );
@@ -146,7 +155,7 @@ angular.module('sbAdminApp')
         // Chart initialiser
         var ctx = canvas[0].getContext("2d");
         var chart = new Chart(ctx).Line({
-            labels: ["January", "February", "March", "April", "May"],
+            labels: ["Apr 12", "Apr 14", "Apr 16", "Apr 17", "Apr 19", "Apr 21"],
             datasets: [
                 {
                     fillColor: "rgba(190,144,212,0.2)",
@@ -155,7 +164,7 @@ angular.module('sbAdminApp')
                     pointStrokeColor: "#fff",
                     pointHighlightFill: "#fff",
                     pointHighlightStroke: "rgba(220,220,220,1)",
-                    data: [65, 59, 80, 81, 56]
+                    data: [65, 59, 80, 81, 56, 65, 59, 80, 81, 56, 67]
                 },
             ]
         }, {});
