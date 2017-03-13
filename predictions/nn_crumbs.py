@@ -57,11 +57,11 @@ def predict():
 	model.add(LSTM(4, input_dim=look_back))
 	model.add(Dense(1))
 	model.compile(loss='mean_squared_error', optimizer='adam')
-	model.fit(trainX, trainY, nb_epoch=40, batch_size=1, verbose=2)
+	model.fit(trainX, trainY, nb_epoch=10, batch_size=1, verbose=2)
 
 	# generate predictions for next k days
 	last_n = np.array(dataset_scaled[len(dataset_scaled)-look_back:])
-	pred_horizon = 7
+	pred_horizon = 8
 	predictions = predictNextK(last_n,pred_horizon,model)
 	predictions = np.exp(scaler.inverse_transform(predictions))
 	predictions = [int(i) for i in predictions]
