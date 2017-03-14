@@ -1,4 +1,4 @@
-class Record:
+class Record(object):
 	def __init__(self,dateStamp,quantity):
 		self.dateStamp = dateStamp
 		self.quantity = int(quantity)
@@ -7,7 +7,7 @@ class Record:
 		print self.dateStamp
 		print self.quantity
 
-class ShipmentRecord:
+class ShipmentRecord(object):
 	def __init__(self,dateStamp,quantity,doe):
 		self.dateStamp = dateStamp
 		self.quantity = int(quantity)

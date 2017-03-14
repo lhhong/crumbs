@@ -1,5 +1,5 @@
 from Record import *
-class Product:
+class Product(object):
 	def __init__(self,name,category,price):
 		self.name = name
 		self.category = category

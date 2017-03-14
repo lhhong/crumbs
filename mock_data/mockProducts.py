@@ -63,7 +63,7 @@ def main():
 		addSalesRecords(item)
 		addShipmentRecords(item)
 		#data = urllib.urlencode(item)
-		print jsonpickle.encode(item)
+		print(jsonpickle.encode(item))
 		urllib2.urlopen(urllib2.Request(url=url, data=jsonpickle.encode(item), headers={'Content-Type':'application/json'})).read()
 
 main()
