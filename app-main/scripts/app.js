@@ -171,6 +171,36 @@ angular
 			}
 		}
 	})
+	.state('dashboard.InProgressSelling',{
+		url:'/InProgressSelling',
+		templateUrl:'views/MyTransactions/InProgressSelling.html',
+		controller: 'InProgressCtrl',
+		resolve: {
+			loadMyFile:function($ocLazyLoad) {
+				return $ocLazyLoad.load({
+					name:'sbAdminApp',
+					files:[
+					    'scripts/services/transaction-service.js',
+					    'scripts/controllers/InProgress.js']
+				})
+			}
+		}
+	})
+	.state('dashboard.InProgressBuying',{
+		url:'/InProgressBuying',
+		templateUrl:'views/MyTransactions/InProgressBuying.html',
+		controller: 'InProgressCtrl',
+		resolve: {
+			loadMyFile:function($ocLazyLoad) {
+				return $ocLazyLoad.load({
+					name:'sbAdminApp',
+					files:[
+					    'scripts/services/transaction-service.js',
+					    'scripts/controllers/InProgress.js']
+				})
+			}
+		}
+	})
 	.state('dashboard.Completed',{
 		url:'/Completed',
 		templateUrl:'views/MyTransactions/Completed.html',
