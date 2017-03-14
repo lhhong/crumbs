@@ -18,6 +18,9 @@ import pandas as pd
 def predict():
 	# get sales
 	sales = request.json['sales']
+	# only use half of the data set
+	half_mark = int(0.5*len(sales))
+	sales = sales[half_mark:]
 	m = len(sales)
 	# instantiate random dates
 	dates = []
@@ -39,7 +42,7 @@ def predict():
 	dataset_scaled = scaler.fit_transform(dataset_scaled)
 
 	# split into train and test sets
-	train_size = int(len(dataset_scaled) * 0.67)
+	train_size = int(len(dataset_scaled) * 0.8)
 	test_size = len(dataset_scaled) - train_size
 	train, test = dataset_scaled[0:train_size], dataset_scaled[train_size:len(dataset_scaled)]
 
@@ -57,11 +60,11 @@ def predict():
 	model.add(LSTM(4, input_dim=look_back))
 	model.add(Dense(1))
 	model.compile(loss='mean_squared_error', optimizer='adam')
-	model.fit(trainX, trainY, nb_epoch=10, batch_size=1, verbose=2)
+	model.fit(trainX, trainY, nb_epoch=30, batch_size=1, verbose=2)
 
 	# generate predictions for next k days
 	last_n = np.array(dataset_scaled[len(dataset_scaled)-look_back:])
-	pred_horizon = 8
+	pred_horizon = 15
 	predictions = predictNextK(last_n,pred_horizon,model)
 	predictions = np.exp(scaler.inverse_transform(predictions))
 	predictions = [int(i) for i in predictions]

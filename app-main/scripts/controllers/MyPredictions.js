@@ -19,7 +19,7 @@ angular.module('sbAdminApp')
             $scope.predictions = {
                 stockShortages:  [{
                   name : 'Apples',
-                  quantity: -300,
+                  offerQuantity: 300,
                   percentExtra: -12,
                   requestDate : 1492503145123,
                   price : 4,
@@ -27,7 +27,7 @@ angular.module('sbAdminApp')
                 },
                 {
                   name : 'Oranges',
-                  quantity: -200,
+                  offerQuantity: 200,
                   percentExtra: -12,
                   requestDate : 1492403145123,
                   price : 5,
