@@ -47,7 +47,7 @@
                       </tr>
                   </thead>
                   <tbody>
-                      <tr ng-repeat="x in predictions.stockShortages track by $index" ng-style="getColour('stockShortages', $index)">
+                      <tr ng-repeat="x in predictions.stockShortages track by $index" ng-hide="x.hidden" ng-style="getColour('stockShortages', $index)">
                           <td>{{ x.requestDate | date}}</td>
                           <td>{{ x.name }}</td>
                           <td>{{ x.offerQuantity }}</td>
@@ -82,7 +82,7 @@
                       </tr>
                   </thead>
                   <tbody>
-                      <tr ng-repeat="x in predictions.excessShipments track by $index" ng-style="getColour('excessShipments', $index)">
+                      <tr ng-repeat="x in predictions.excessShipments track by $index" ng-hide="x.hidden" ng-style="getColour('excessShipments', $index)">
                           <td>{{ x.expiry | date}}</td>
                           <td>{{ x.name }}</td>
                           <td>{{ x.quantity }}</td>
