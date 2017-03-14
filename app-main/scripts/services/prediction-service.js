@@ -49,6 +49,41 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
             }
         })
     }
+
+    var getChart = function(product, callback, errorCallback) {
+        $http({
+            method: 'POST',
+            url: baseUrl + "product_table",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: product
+        }).success(function(response) {
+            if (callback) {
+                callback(collateChart(response))
+            }
+        }).error(function(response, status)  {
+            console.log("server error, code = " + status)
+            if (errorCallback) {
+                errorCallback();
+            }
+        })
+    }
+
+    var collateChart = function(productSeries) {
+        var chartInfo = [];
+        for (var i = 0; i < 14; i++) {
+            var oneDay;
+            oneDay.disposal = productSeries.disposal[i];
+            oneDay.stock = productSeries.stock[i];
+            oneDay.startingInventory = productSeries.startingInventory[i];
+            oneDay.demand = productSeries.demand[i];
+            oneDay.endingInventory = productSeries.endingInventory[i];
+            chartInfo.push(oneDay);
+        }
+        return chartInfo;
+    }
+
     var excessViewOffers = function(exceShipVM, callback, errorCallback) {
         $http({
             method: 'POST',
@@ -71,6 +106,7 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
 
 
     return {
+        viewChart: viewChart,
         getQuantity: getQuantity,
         getPredictions: getPredictions,
         excessViewOffers: excessViewOffers,
