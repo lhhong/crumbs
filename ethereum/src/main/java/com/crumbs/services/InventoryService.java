@@ -68,7 +68,7 @@ public class InventoryService {
 
 	public Map<LocalDate, StockUpdate> futureStock(String product) {
 		Map<LocalDate,StockUpdate> result = new HashMap<>();
-		for (int i = 1; i <= 7; i++) {
+		for (int i = 1; i <= 14; i++) {
 			result.put(DateUtil.todayLocalDate().plusDays(i), new StockUpdate());
 		}
 		Product p = new Product();
@@ -92,11 +92,11 @@ public class InventoryService {
 					}
 				}
 			}
-			else if (shipment.getDateStamp().isBefore(DateUtil.todayLocalDate().plusDays(8))) {
+			else if (shipment.getDateStamp().isBefore(DateUtil.todayLocalDate().plusDays(15))) {
 				LocalDate date = shipment.getDateStamp();
 				result.get(shipment.getDateStamp()).stockUp(shipment.getQuantity());
 				date = date.plusDays(1);
-				while (date.isBefore(DateUtil.todayLocalDate().plusDays(8))) {
+				while (date.isBefore(DateUtil.todayLocalDate().plusDays(15))) {
 					if (date.isEqual(shipment.getExpiry())) {
 						result.get(date).dispose(shipment.getQuantity());
 						break;

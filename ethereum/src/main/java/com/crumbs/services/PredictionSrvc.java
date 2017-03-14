@@ -124,7 +124,7 @@ public class PredictionSrvc {
 	}
 
 	public Prediction buildPrediction(List<Integer> demand, String product) {
-		if (demand.size() != 8) {
+		if (demand.size() != 15) {
 			logger.error("demand array not of size 8");
 			return null;
 		}
@@ -141,17 +141,17 @@ public class PredictionSrvc {
 		List<Integer> disposals = new ArrayList<>();
 		currentStock.forEach(stock -> disposals.add(stock.getDisposed()));
 
-		//NB: currentStocks and disposal start from day 1 (index 0) containing 7 values while demand starts from day 0 containing 8 values
+		//NB: currentStocks and disposal start from day 1 (index 0) containing 14 values while demand starts from day 0 containing 15 values
 
 		//get starting inventory quantity for day 0
 		int carryOver = currentStock.get(0).getCurrentQuantity() - currentStock.get(0).getStock() + currentStock.get(0).getDisposed();
 
-		for (int i = 0; i < 7; i++) {
+		for (int i = 0; i < 14; i++) {
 			startingInventory.add(carryOver);
 
 			//Reduce subsequent disposal by the number of goods sold
 			int toDeduct = demand.get(i);
-			for (int j = i; j < 7; j++) {
+			for (int j = i; j < 14; j++) {
 				int initialDispose = disposals.get(j);
 				disposals.set((j), Integer.max(0, initialDispose - toDeduct));
 				toDeduct = toDeduct - initialDispose;
@@ -175,10 +175,10 @@ public class PredictionSrvc {
 		}
 		//Finish up for the last day
 		startingInventory.add(carryOver);
-		int predictedStock = carryOver - demand.get(7);
+		int predictedStock = carryOver - demand.get(14);
 		endingInventory.add(predictedStock);
-		int toOffer = (int) (demand.get(7) * (UrgencyUtil.getPerfectExcess())) - predictedStock;
-		prediction.addToStockList(new RemainingStock(demand.get(7), predictedStock, 7, toOffer));
+		int toOffer = (int) (demand.get(14) * (UrgencyUtil.getPerfectExcess())) - predictedStock;
+		prediction.addToStockList(new RemainingStock(demand.get(14), predictedStock, 14, toOffer));
 
 		//pad with -1 for front-end chart visualization
 		disposals.add(0, -1);
@@ -194,7 +194,7 @@ public class PredictionSrvc {
 		List<Integer> predictedStock = new ArrayList<>();
 		List<StockUpdate> currentStock = inventoryService.futureStockInArray(product);
 
-		//NB: current stocks start from day 1 (index 0) containing 7 values while demand starts from day 0 containing 8 values
+		//NB: current stocks start from day 1 (index 0) containing 7 values while demand starts from day 0 containing 15 values
 		int carryOver = currentStock.get(0).getCurrentQuantity() - currentStock.get(0).getStock() + currentStock.get(0).getDisposed();
 		for (int i = 0; i < 7; i++) {
 			predictedStock.add(carryOver - demand.get(i));
