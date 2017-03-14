@@ -8,6 +8,7 @@ import com.crumbs.entities.Member;
 import com.crumbs.entities.TxAccepted;
 import com.crumbs.models.*;
 import com.crumbs.services.Optimize;
+import com.crumbs.services.PredictionCacheSrvc;
 import com.crumbs.services.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,9 @@ public class TransactionController {
 
 	@Autowired
 	private Optimize optimize;
+
+	@Autowired
+	private PredictionCacheSrvc predictionCache;
 
 	@RequestMapping(value = "/all_tx", method = GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -66,13 +70,14 @@ public class TransactionController {
 	@RequestMapping(value = "/offer_excess", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public boolean postOfferExcess(@RequestBody ExceShipVM exceShip) {
-		logger.info(JSON.toJSONString(exceShip));
+		predictionCache.hideExcess(exceShip.getName(), exceShip.getExpiry());
 		return postOffer(exceShip);
 	}
 
 	@RequestMapping(value = "/offer_shortage", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public boolean postOfferShort(@RequestBody RemStockVM remStock) {
+		predictionCache.hideShortage(remStock.getName(), remStock.getRequestDate());
 		return postOffer(remStock);
 	}
 
@@ -111,6 +116,12 @@ public class TransactionController {
 	@ResponseBody
 	public void accept(@RequestBody TransactionVM tx) {
 		transactionService.accept(tx.getUuid(), tx.getTransportPrice(), tx.getExpiry(), tx.getTxDate());
+		if (tx.isSell()) {
+			predictionCache.hideShortage(tx.getItem(), tx.getTxDate());
+		}
+		else {
+			predictionCache.hideExcess(tx.getItem(), tx.getExpiry());
+		}
 	}
 
 	@RequestMapping(value = "/agree", method = POST, produces = APPLICATION_JSON_VALUE)

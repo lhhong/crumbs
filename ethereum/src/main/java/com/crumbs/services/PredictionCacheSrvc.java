@@ -7,6 +7,7 @@ import com.crumbs.models.RemStockVM;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -67,5 +68,21 @@ public class PredictionCacheSrvc {
 		predictionVM.setExcessShipments(excessCache);
 		predictionVM.setStockShortages(shortageCache);
 		return predictionVM;
+	}
+
+	public void hideShortage(String product, Date txDate) {
+		shortageCache.forEach(remStockVM -> {
+			if (remStockVM.getName().equals(product) && remStockVM.getRequestDate().equals(txDate)) {
+				remStockVM.hide();
+			}
+		});
+	}
+
+	public void hideExcess(String product, Date expiry) {
+		excessCache.forEach(exceShipVM -> {
+			if (exceShipVM.getName().equals(product) && exceShipVM.getExpiry().equals(expiry)) {
+				exceShipVM.hide();
+			}
+		});
 	}
 }

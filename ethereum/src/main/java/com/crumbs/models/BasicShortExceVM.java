@@ -21,5 +21,13 @@ public class BasicShortExceVM implements Serializable {
 	private String category;
 	private long price;
 	private int offerQuantity;
+	private boolean hidden = false;
 
+	public void hide() {
+		hidden = true;
+	}
+
+	public void show() {
+		hidden = false;
+	}
 }
