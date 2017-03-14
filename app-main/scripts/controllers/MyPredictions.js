@@ -186,7 +186,7 @@ angular.module('sbAdminApp')
         // Chart initialiser
         var ctx = canvas[0].getContext("2d");
         var chart = new Chart(ctx).Line({
-            labels: ["Apr 12", "Apr 14", "Apr 16", "Apr 17", "Apr 19", "Apr 21", "Apr 12", "Apr 12", "Apr 12", "Apr 12", "Apr 12", "Apr 12", "Apr 12", "Apr 12", "Apr 12"],
+            labels: ["Apr 12", "Apr 14", "Apr 16", "Apr 17", "Apr 19", "Apr 21", "Apr 22", "Apr 24", "Apr 26", "Apr 28", "Apr 30", "May 1", "May 3", "May 5", "May 6"],
             datasets: [
                 {
                     fillColor: "rgba(190,144,212,0.2)",
