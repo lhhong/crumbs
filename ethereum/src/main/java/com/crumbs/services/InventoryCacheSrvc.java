@@ -3,6 +3,7 @@ package com.crumbs.services;
 import com.crumbs.models.ProductSeries;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -12,7 +13,7 @@ import java.util.Map;
  */
 @Service
 public class InventoryCacheSrvc {
-	private Map<String, ProductSeries> inventoryCache;
+	private Map<String, ProductSeries> inventoryCache = new HashMap<>();
 
 	public ProductSeries getProductSeries(String product) {
 		return inventoryCache.get(product);

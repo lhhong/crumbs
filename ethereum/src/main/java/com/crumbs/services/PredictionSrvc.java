@@ -173,11 +173,10 @@ public class PredictionSrvc {
 			//new starting inventory
 			carryOver = Integer.max(0, carryOver - demand.get(i) - disposals.get(i)) + currentStock.get(i).getStock();
 		}
+		//Finish up for the last day
 		startingInventory.add(carryOver);
-
 		int predictedStock = carryOver - demand.get(7);
 		endingInventory.add(predictedStock);
-
 		int toOffer = (int) (demand.get(7) * (UrgencyUtil.getPerfectExcess())) - predictedStock;
 		prediction.addToStockList(new RemainingStock(demand.get(7), predictedStock, 7, toOffer));
 

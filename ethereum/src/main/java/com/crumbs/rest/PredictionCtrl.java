@@ -1,6 +1,7 @@
 package com.crumbs.rest;
 
 import com.crumbs.models.*;
+import com.crumbs.services.InventoryCacheSrvc;
 import com.crumbs.services.MatchMakingSrvc;
 import com.crumbs.services.PredictionSrvc;
 import org.slf4j.Logger;
@@ -32,6 +33,9 @@ public class PredictionCtrl {
 	@Autowired
 	MatchMakingSrvc matchMakingSrvc;
 
+	@Autowired
+	InventoryCacheSrvc inventoryCache;
+
 	@RequestMapping(value = "prediction_qty", method = GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public PredictionQty getPredictionQty() {
@@ -42,6 +46,12 @@ public class PredictionCtrl {
 	@ResponseBody
 	public PredictionVM getPredictions() {
 		return predictionSrvc.getAndRankPredictions();
+	}
+
+	@RequestMapping(value = "product_table", method = GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ProductSeries getProductTableeries(@RequestBody String product) {
+		return inventoryCache.getProductSeries(product);
 	}
 
 	@RequestMapping(value = "matchingTxForShortage", method = POST, produces = APPLICATION_JSON_VALUE)
