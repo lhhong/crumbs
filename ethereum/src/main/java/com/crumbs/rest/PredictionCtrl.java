@@ -48,9 +48,10 @@ public class PredictionCtrl {
 		return predictionSrvc.getAndRankPredictions();
 	}
 
-	@RequestMapping(value = "product_table", method = GET, produces = APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "product_table", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ProductSeries getProductTableeries(@RequestBody String product) {
+		logger.info("get product series for {}", product);
 		return inventoryCache.getProductSeries(product);
 	}
 

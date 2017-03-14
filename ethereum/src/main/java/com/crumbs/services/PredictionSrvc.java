@@ -148,6 +148,7 @@ public class PredictionSrvc {
 
 		for (int i = 0; i < 14; i++) {
 			startingInventory.add(carryOver);
+			stockUp.add(currentStock.get(i).getStock());
 
 			//Reduce subsequent disposal by the number of goods sold
 			int toDeduct = demand.get(i);

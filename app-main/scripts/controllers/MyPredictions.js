@@ -133,8 +133,9 @@ angular.module('sbAdminApp')
 
     $scope.viewChart = function(productName) {
         console.log(productName);
-        predictionService.getChart(productName, function(chart) {
+        predictionService.getChart(productName, function(chart, demand) {
             $scope.chart = chart;
+            $scope.demand = demand;
         })
     };
 
@@ -158,7 +159,7 @@ angular.module('sbAdminApp')
         // Chart initialiser
         var ctx = canvas[0].getContext("2d");
         var chart = new Chart(ctx).Line({
-            labels: ["Apr 12", "Apr 14", "Apr 16", "Apr 17", "Apr 19", "Apr 21"],
+            labels: ["Apr 12", "Apr 14", "Apr 16", "Apr 17", "Apr 19", "Apr 21", "Apr 12", "Apr 12", "Apr 12", "Apr 12", "Apr 12", "Apr 12", "Apr 12", "Apr 12", "Apr 12"],
             datasets: [
                 {
                     fillColor: "rgba(190,144,212,0.2)",
@@ -167,7 +168,7 @@ angular.module('sbAdminApp')
                     pointStrokeColor: "#fff",
                     pointHighlightFill: "#fff",
                     pointHighlightStroke: "rgba(220,220,220,1)",
-                    data: [65, 59, 80, 81, 56, 65, 59, 80, 81, 56, 67]
+                    data: $scope.demand
                 },
             ]
         }, {});
