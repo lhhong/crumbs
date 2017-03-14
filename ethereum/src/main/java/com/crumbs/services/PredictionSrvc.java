@@ -125,7 +125,7 @@ public class PredictionSrvc {
 
 	public Prediction buildPrediction(List<Integer> demand, String product) {
 		if (demand.size() != 15) {
-			logger.error("demand array not of size 8");
+			logger.error("demand array not of size 15");
 			return null;
 		}
 		ProductVM productVM = inventoryService.getProduct(product);

@@ -129,12 +129,15 @@ angular.module('sbAdminApp')
     }, 5000);
     reloadData();
 
+    $scope.chart = [];
+
     $scope.viewChart = function(productName) {
         console.log(productName);
-        txService.getEther(function (data) {
-            console.log(data)
+        predictionService.getChart(productName, function(chart) {
+            $scope.chart = chart;
         })
     };
+
     $scope.salesData = {
 	    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
 	    series: ['Series A'],

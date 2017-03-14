@@ -72,7 +72,7 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
 
     var collateChart = function(productSeries) {
         var chartInfo = [];
-        for (var i = 0; i < 14; i++) {
+        for (var i = 0; i < productSeries.demand.length; i++) {
             var oneDay;
             oneDay.disposal = productSeries.disposal[i];
             oneDay.stock = productSeries.stock[i];
@@ -106,7 +106,7 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
 
 
     return {
-        viewChart: viewChart,
+        getChart: getChart,
         getQuantity: getQuantity,
         getPredictions: getPredictions,
         excessViewOffers: excessViewOffers,
