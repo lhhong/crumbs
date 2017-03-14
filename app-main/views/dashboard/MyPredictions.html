@@ -24,7 +24,7 @@
         </div>
     </div>
     <div class="alert alert-success">
-        Current Ether Balance: <em>{{ balance }}</em>
+        Current Balance: <em>{{ balance| currency }}</em>
     </div>
     <!-- /.col-lg-12 -->
     <!-- /.row -->
@@ -41,7 +41,7 @@
                           <th>Date of Shortage</th>
                           <th>Product</th>
                           <th>Quantity</th>
-                          <th>Unit Price</th>
+                          <th>Estimated Price</th>
                           <th>View</th>
                           <th>Market</th>
                       </tr>
@@ -51,7 +51,7 @@
                           <td>{{ x.requestDate | date}}</td>
                           <td>{{ x.name }}</td>
                           <td>{{ x.offerQuantity }}</td>
-                          <td>{{ x.price }}</td>
+                          <td>{{ x.price*x.offerQuantity| currency }}</td>
                           <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#PredictionModal" ng-click="viewChart(x.name)">View Chart</button></td>
                           <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarket" ng-click="shortageViewOffer($index)">View Market</button></td>
                       </tr>
@@ -76,7 +76,7 @@
                           <th>Date of Excess</th>
                           <th>Product</th>
                           <th>Quantity</th>
-                          <th>Unit Price</th>
+                          <th>Estimated Price</th>
                           <th>View</th>
                           <th>Market</th>
                       </tr>
@@ -86,7 +86,7 @@
                           <td>{{ x.expiry | date}}</td>
                           <td>{{ x.name }}</td>
                           <td>{{ x.quantity }}</td>
-                          <td>{{ x.price }}</td>
+                          <td>{{ x.price*x.quantity| currency }}</td>
                           <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#PredictionModal" ng-click="viewChart(x.name)">View Chart</button></td>
                           <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarket" ng-click="excessViewOffer($index)">View Market</button></td>
                       </tr>
@@ -136,8 +136,8 @@
                       </tbody>
                   </table>
                   <p class="text-muted text-center"><small>If none of the above offers are satisfactory, click button below to make new request on the market</small></p>
-                  <button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessOffer(offering)" ui-sref="dashboard.InProgressSelling">Make Request</button>
-                  <button type="button" class="btn btn-primary btn-lg btn-block" ng-if="!forExcess" ng-click="shortageOffer(offering)" ui-sref="dashboard.InProgressBuying">Make Request</button>
+                  <button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessOffer(offering)" ui-sref="dashboard.InProgressSelling">Make Sales Offer</button>
+                  <button type="button" class="btn btn-primary btn-lg btn-block" ng-if="!forExcess" ng-click="shortageOffer(offering)" ui-sref="dashboard.InProgressBuying">Make Purchase Request</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -152,7 +152,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Prediction Model for {{ predictedItem.name }}</h4>
+                    <h4 class="modal-title">Prediction Model for {{ predictedName }}</h4>
                 </div>
                 <div class="modal-body">
                     <!-- /.Graph showing sales projection -->
@@ -181,28 +181,29 @@
                                 <tbody>
 
                                 <tr class="odd gradeX">
+                                    <td class="center"><b>Starting Inventory</b></td>
+                                    <td ng-repeat="x in chart" class="center">{{ x.startingInventory-x.stock+x.disposal }}</td>
+                                </tr>
+
+                                <tr class="odd gradeX">
                                     <td class="center">Add: Shipments</td>
-                                    <td ng-repeat="x in chart" class="center">{{ x.stock }}</td>
+                                    <td ng-repeat="x in chart" class="center">{{ replaceWithDashes(x.stock).newItem }}</td>
                                 </tr>
 
                                 <tr class="odd gradeX">
                                     <td class="center">Less: Disposal</td>
-                                    <td ng-repeat="x in chart" class="center">{{ x.disposal }}</td>
-                                </tr>
+                                    <td ng-repeat="x in chart" class="center">{{ replaceWithDashes(x.disposal).newItem }}</td>
 
-                                <tr class="odd gradeX">
-                                    <td class="center"><b>Starting Inventory</b></td>
-                                    <td ng-repeat="x in chart" class="center">{{ x.startingInventory }}</td>
                                 </tr>
 
                                 <tr class="odd gradeX">
                                     <td class="center">Less: Demand</td>
-                                    <td ng-repeat="x in chart" class="center">{{ x.demand }}</td>
+                                    <td ng-repeat="x in chart" class="center">({{ x.demand }})</td>
                                 </tr>
 
                                 <tr class="odd gradeX">
                                     <td class="center"><b>Ending Inventory</b></td>
-                                    <td ng-repeat="x in chart" class="center">{{ x.endingInventory }}</td>
+                                    <td ng-repeat="x in chart" ng-style="getCellColour(x.endingInventory)" class="center">{{ x.endingInventory }}</td>
                                 </tr>
                                 </tbody>
                             </table>

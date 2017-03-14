@@ -118,6 +118,28 @@ angular.module('sbAdminApp')
         }
     };
 
+    $scope.getCellColour = function(number) {
+        var colour;
+        if (number < 0) {
+            colour = '#ff8888'
+        }
+
+        return {
+            background: colour
+        }
+    };
+
+    $scope.replaceWithDashes = function(number) {
+        var newItem;
+        newItem = number;
+        if (number == 0) {
+            newItem = '-'
+        }
+        return {
+            newItem
+        }
+     };
+
     var reloadData = function() {
         txService.getEther(function(balance) {
             $scope.balance = balance;
@@ -133,6 +155,7 @@ angular.module('sbAdminApp')
 
     $scope.viewChart = function(productName) {
         console.log(productName);
+        $scope.predictedName = productName;
         predictionService.getChart(productName, function(chart, demand) {
             $scope.chart = chart;
             $scope.demand = demand;
@@ -150,9 +173,13 @@ angular.module('sbAdminApp')
 	    }
     };
 
-    $('#PredictionModal').on('shown.bs.modal', function (event) {
+    $('#PredictionModal').on('show.bs.modal', function (event) {
+            $(this).find('.modal-dialog').css({width:'85%',
+                                       height:'60%',
+                                      'max-height':'100%'});
+    });
 
-        var button = $(event.relatedTarget);
+    $('#PredictionModal').on('shown.bs.modal', function (event) {
         var modal = $(this);
         var canvas = modal.find('.modal-body canvas');
 

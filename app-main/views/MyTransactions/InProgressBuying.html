@@ -20,12 +20,12 @@
 <div>
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header"><i class="fa fa-clock-o fa-fw"></i><em>In Progress <strong>Buying</strong></em></h1>
+            <h1 class="page-header"><i class="fa fa-clock-o fa-fw"></i><em><strong>Purchases</strong> (In progress)</em></h1>
         </div>
         <!-- /.col-lg-12 -->
     </div>
     <div class="alert alert-success">
-          Current Balance: <em>{{ balance }}</em>
+        Current Balance: <em>{{ balance| currency }}</em>
     </div>
     <div class="panel panel-default">
       <div class="panel-heading">
@@ -46,6 +46,9 @@
                           <th ng-click="sortData('price')">
                             Price <div ng-class="getSortClass('price')"></div>
                           </th>
+                          <th ng-click="sortData('buydate')">
+                              Buying On <div ng-class="getSortClass('buydate')"></div>
+                          </th>
                           <th></th>
                       </tr>
                   </thead>
@@ -54,6 +57,7 @@
                           <td>{{ x.item }}</td>
                           <td>{{ x.quantity }}</td>
                           <td>{{ x.price | currency }}</td>
+                          <td>{{ x.txDate | date }}</td>
                           <td><button type="button" class="btn btn-success btn-xs" ng-if="!x.pending" data-toggle="modal" data-target="#ViewOffer">View Offers</button></td>
                       </tr>
                   </tbody>
@@ -74,43 +78,27 @@
               <table class="table table-striped">
                   <thead>
                       <tr>
-                          <th ng-click="sortData('sender.name')">
-                              Store Name <div ng-class="getSortClass('sender.name')"></div>
-                          </th>
                           <th ng-click="sortData('item')">
-                            Product <div ng-class="getSortClass('item')"></div>
+                              Product <div ng-class="getSortClass('item')"></div>
                           </th>
                           <th ng-click="sortData('quantity')">
-                            Quantity <div ng-class="getSortClass('quantity')"></div>
-                          </th>
-                          <th ng-click="sortData('txDate')">
-                            Transaction Date <div ng-class="getSortClass('txDate')"></div>
+                              Quantity <div ng-class="getSortClass('quantity')"></div>
                           </th>
                           <th ng-click="sortData('price')">
-                            Price <div ng-class="getSortClass('price')"></div>
+                              Price <div ng-class="getSortClass('price')"></div>
                           </th>
-                          <th>
-                            Transport Cost
-                          </th>
-                          <th>
-                            Total Cost
-                          </th>
-                          <th ng-click="sortData('pending')">
-                              Confirmed <div ng-class="getSortClass('pending')"></div>
+                          <th ng-click="sortData('txDate')">
+                              Buying On <div ng-class="getSortClass('txDate')"></div>
                           </th>
                       </tr>
                   </thead>
                   <tbody>
                       <tr ng-repeat="x in accepts track by $index | filter:searchText | orderBy:sortColumn:reverseSort" ng-style="getBackground(x.pending)">
-                          <td>{{ x.sender.name }}</td>
                           <td>{{ x.item }}</td>
                           <td>{{ x.quantity }}</td>
-                          <td>{{ x.txDate | date }}</td>
                           <td>{{ x.price | currency }}</td>
-                          <td>{{ x.transportCost | currency }}</td>
-                          <td>{{ x.price + x.transportCost | currency }}</td>
-                          <td ng-if="x.pending">NO</td>
-                          <td ng-if="!x.pending">YES</td>
+                          <td>{{ x.txDate | date }}</td>
+                          <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewDetails">View Details</button></td>
                       </tr>
                   </tbody>
               </table>
@@ -133,8 +121,7 @@
                       <thead>
                           <tr>
                               <th>Store Name</th>
-                              <th>Quantity</th>
-                              <th>Price</th>
+                              <th>Location</th>
                               <th>Transport Date</th>
                               <th>Transport Cost</th>
                               <th>Total Cost</th>
@@ -145,7 +132,6 @@
                           <tr ng-repeat="x in agrees">
                               <td>{{ x.accepter.name }}</td>
                               <td>{{ x.quantity }}</td>
-                              <td>{{ x.price | currency }}</td>
                               <td>Transport Date</td>
                               <td>{{ x.transportCost | currency }}</td>
                               <td>{{ x.price + x.transportCost | currency }}</td>
@@ -153,6 +139,44 @@
 
                       </tbody>
                   </table>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <!-- Modal for View Details -->
+    <div class="modal fade" id="ViewDetails" tabindex="-1" role="dialog" aria-labelledby="ViewDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">View Details for {{ x.item }}</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Store Name</th>
+                            <th>Location</th>
+                            <th>Transport Date</th>
+                            <th>Transport Cost</th>
+                            <th>Total Cost</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="x in accepts track by $index">
+                            <td>{{ x.sender.name }}</td>
+                            <td>{{ x.quantity }}</td>
+                            <td>Transport Date</td>
+                            <td>{{ x.transportCost | currency }}</td>
+                            <td>{{ x.price + x.transportCost | currency }}</td>
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <!-- /.modal-content -->
