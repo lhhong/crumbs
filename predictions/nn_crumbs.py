@@ -2,17 +2,12 @@ from flask import Flask, jsonify, request #import objects from the Flask model
 app = Flask(__name__) #define app using Flask
 
 import numpy as np
-import pandas as pd
-import datetime
 
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.layers import LSTM
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
-
-import numpy as np
-import pandas as pd
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -21,18 +16,7 @@ def predict():
 	# only use half of the data set
 	half_mark = int(0.5*len(sales))
 	sales = sales[half_mark:]
-	m = len(sales)
-	# instantiate random dates
-	dates = []
-	dummy_date = datetime.datetime(2015,12,26)
-	for i in range(m):
-		dummy_date += datetime.timedelta(days=1)
-		dates.append(dummy_date)
-
-	# arrange data in a dataframe
-	data = pd.DataFrame(data=sales,index=dates)
-	data.columns = ['Sales']
-	dataset = data["Sales"] 
+	dataset = np.array(sales)
 
 	# log transformation
 	dataset_scaled = np.log(dataset)
@@ -57,10 +41,10 @@ def predict():
 
 	# create and fit the LSTM network
 	model = Sequential()
-	model.add(LSTM(4, input_dim=look_back))
+	model.add(LSTM(7, input_dim=look_back))
 	model.add(Dense(1))
-	model.compile(loss='mean_squared_error', optimizer='adam')
-	model.fit(trainX, trainY, nb_epoch=30, batch_size=1, verbose=2)
+	model.compile(loss='mean_squared_error', optimizer='rmsprop')
+	model.fit(trainX, trainY, nb_epoch=40, batch_size=5, verbose=2)
 
 	# generate predictions for next k days
 	last_n = np.array(dataset_scaled[len(dataset_scaled)-look_back:])
