@@ -10,9 +10,9 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
                 'Content-Type': 'application/json'
             },
             data: tx
-        }).success(function(response) {
+        }).then(function(response) {
             if (callback) {
-                callback(response)
+                callback(response.data)
             }
         })
     }
@@ -25,12 +25,13 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
                 'Content-Type': 'application/json'
             },
             data: offer
-        }).success(function(response) {
+        }).then(function(response) {
             if (callback) {
-                if (response) console.log("offer included in blockchain");
+                if (response.data) console.log("offer included in blockchain");
                 else console.log("check again later")
-                callback(response)
+                callback(response.data)
             }
+        },function(response) {
         })
     }
 
@@ -42,11 +43,11 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
                 'Content-Type': 'application/json'
             },
             data: offer
-        }).success(function(response) {
+        }).then(function(response) {
             if (callback) {
-                if (response) console.log("offer included in blockchain");
+                if (response.data) console.log("offer included in blockchain");
                 else console.log("check again later")
-                callback(response)
+                callback(response.data)
             }
         })
     }
@@ -63,9 +64,9 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
                 x: x,
                 y: y
             }
-        }).success(function(response) {
+        }).then(function(response) {
             console.log("registration request sent")
-        }).error(function(response) {
+        },function(response) {
             //console.log("server error, code = " + response.status)
         })
     }
@@ -74,12 +75,12 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
         $http({
             method: 'GET',
             url: baseUrl + 'getBalance',
-        }).success(function(response) {
+        }).then(function(response) {
             if (callback) {
-                callback(response)
+                callback(response.data)
             }
-        }).error(function(response) {
-            //console.log("server error, code = " + response.status)
+        },function(response) {
+            console.log("server error, code = " + response.status)
         })
     }
 
@@ -87,12 +88,12 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
         $http({
             method: 'GET',
             url: baseUrl + "sold_tx"
-        }).success(function(response) {
+        }).then(function(response) {
             if (callback) {
-                callback(response);
+                callback(response.data);
             }
-        }).error(function(response, status)  {
-            //console.log("server error, code = " + status)
+        },function(response)  {
+            console.log("server error, code = " + response.status)
             if (failureCallback) {
                 failureCallback();
             }
@@ -103,12 +104,12 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
         $http({
             method: 'GET',
             url: baseUrl + "bought_tx"
-        }).success(function(response) {
+        }).then(function(response) {
             if (callback) {
-                callback(response);
+                callback(response.data);
             }
-        }).error(function(response, status)  {
-            //console.log("server error, code = " + status)
+        },function(response)  {
+            console.log("server error, code = " + response.status)
             if (failureCallback) {
                 failureCallback();
             }
@@ -119,11 +120,11 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
         $http({
             method: 'GET',
             url: baseUrl + "all_tx"
-        }).success(function(response) {
+        }).then(function(response) {
             if (callback) {
-                callback(response);
+                callback(response.data);
             }
-        }).error(function(response, status)  {
+        },function(response)  {
             //console.log("server error, code = " + status)
             if (failureCallback) {
                 failureCallback();
@@ -139,9 +140,9 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
                 'Content-Type': 'application/json'
             },
             data: uuid
-        }).success(function(response) {
+        }).then(function(response) {
             if (callback) {
-                callback(response)
+                callback(response.data)
             }
         })
     }

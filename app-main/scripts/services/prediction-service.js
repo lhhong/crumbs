@@ -6,12 +6,12 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
         $http({
             method: 'GET',
             url: baseUrl + 'prediction_qty',
-        }).success(function(response) {
+        }).then(function(response) {
             if (successCallback) {
-                successCallback(response);
+                successCallback(response.data);
             }
-        }).error(function(response) {
-            //console.log("server error, code = " + response.status);
+        },function(response) {
+            console.log("server error, code = " + response.status);
             errorCallback();
         })
     }
@@ -20,12 +20,12 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
         $http({
             method: 'GET',
             url: baseUrl + 'predictions',
-        }).success(function(response) {
+        }).then(function(response) {
             if (successCallback) {
-                successCallback(response);
+                successCallback(response.data);
             }
-        }).error(function(response) {
-            //console.log("server error, code = " + response.status);
+        },function(response) {
+            console.log("server error, code = " + response.status);
             errorCallback();
         })
     }
@@ -38,11 +38,11 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
                 'Content-Type': 'application/json'
             },
             data: remStockVM
-        }).success(function(response) {
+        }).then(function(response) {
             if (callback) {
-                callback(response)
+                callback(response.data)
             }
-        }).error(function(response, status)  {
+        },function(response)  {
             //console.log("server error, code = " + status)
             if (errorCallback) {
                 errorCallback();
@@ -58,12 +58,12 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
                 'Content-Type': 'application/json'
             },
             data: product
-        }).success(function(response) {
+        }).then(function(response) {
             if (callback) {
-                console.log(response);
-                callback(collateChart(response), response.demand)
+                console.log(response.data);
+                callback(collateChart(response.data), response.data.demand)
             }
-        }).error(function(response, status)  {
+        },function(response)  {
             //console.log("server error, code = " + status)
             if (errorCallback) {
                 errorCallback();
@@ -99,11 +99,11 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
                 'Content-Type': 'application/json'
             },
             data: exceShipVM
-        }).success(function(response) {
+        }).then(function(response) {
             if (callback) {
-                callback(response)
+                callback(response.data)
             }
-        }).error(function(response, status)  {
+        },function(response)  {
             //console.log("server error, code = " + status)
             if (errorCallback) {
                 errorCallback();

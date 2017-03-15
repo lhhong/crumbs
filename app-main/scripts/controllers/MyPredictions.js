@@ -88,16 +88,19 @@ angular.module('sbAdminApp')
 
     $scope.acceptOffer = function(index) {
         txService.accept($scope.offers[index], function(response) {});
+        $('.modal-backdrop').remove();
     };
 
     $scope.shortageOffer = function(stockShortage) {
         txService.shortageOffer(stockShortage, function(response) {})
+        $('.modal-backdrop').remove();
     };
 
     $scope.excessOffer = function(excessShipment) {
         console.log("printing offer");
         console.log(excessShipment);
         txService.excessOffer(excessShipment, function(response) {})
+        $('.modal-backdrop').remove();
     };
 
     $scope.getColour = function(shortOrExce, index) {

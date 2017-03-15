@@ -143,7 +143,7 @@
                               <td>{{ txView.date }}</td>
                               <td>{{ txView.transportPrice | currency }}</td>
                               <td>{{ txView.price * txView.quantity + txView.transportCost | currency }}</td>
-                              <td><button ng-click="agree(x.uuid)" type="button" class="btn btn-success btn-xs">Purchase</button></td>
+                              <td><button ng-click="agree(x.uuid)" type="button" data-dismiss="modal" class="btn btn-success btn-xs">Purchase</button></td>
                           </tr>
 
                       </tbody>
