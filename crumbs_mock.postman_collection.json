@@ -88,6 +88,26 @@
 				"description": ""
 			},
 			"response": []
+		},
+		{
+			"name": "localhost:8080/mock_agree/2",
+			"request": {
+				"url": "localhost:8080/mock_agree/2",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "   {\n      \"uuid\": \"32eiya58w4jne22vr1kj1w6tsa\",\n      \"price\": 1446,\n      \"item\": \"Parmesan Cheese\",\n      \"quantity\": 241,\n      \"expiry\": 1487635200000,\n      \"txDate\": 1472537800000,\n      \"sell\": true,\n      \"sender\": null,\n      \"accepter\": null,\n      \"transportPrice\": 3\n    }"
+				},
+				"description": ""
+			},
+			"response": []
 		}
 	]
 }
