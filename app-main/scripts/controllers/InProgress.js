@@ -71,6 +71,12 @@ angular.module('sbAdminApp')
         })
     }
 
+    $scope.txView = {};
+
+    $scope.viewTx = function(tx) {
+        $scope.txView = tx;
+    }
+
     $interval(function() {
         reloadData();
     }, 5000)

@@ -58,7 +58,7 @@
                           <td>{{ x.quantity }}</td>
                           <td>{{ (x.price * x.quantity) | currency }}</td>
                           <td>{{ x.expiry | date }}</td>
-                          <td><button type="button" class="btn btn-success btn-xs" ng-if="x.agreeing" data-toggle="modal" data-target="#ViewRequest">View Requests</button></td>
+                          <td><button type="button" class="btn btn-success btn-xs" ng-if="x.agreeing" data-toggle="modal" data-target="#ViewRequest" ng-click="viewTx(x)">View Requests</button></td>
                       </tr>
                   </tbody>
               </table>
@@ -98,7 +98,7 @@
                           <td>{{ x.quantity }}</td>
                           <td>{{ (x.price * x.quantity) | currency }}</td>
                           <td>{{ x.txDate | date }}</td>
-                          <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewDetails">View Details</button></td>
+                          <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewDetails" ng-click="viewTx(x)">View Details</button></td>
                       </tr>
                   </tbody>
               </table>
@@ -129,14 +129,14 @@
                       </tr>
                       </thead>
                       <tbody>
-                      <tr ng-repeat="x in agrees">
-                          <td>{{ x.accepter.name }}</td>
-                          <td>{{ x.quantity }}</td>
+                      <tr>
+                          <td>{{ txView.accepter.name }}</td>
+                          <td>{{ txView.quantity }}</td>
                           <td>Transport Date</td>
-                          <td>{{ x.transportCost | currency }}</td>
-                          <td>{{ x.price + x.transportCost | currency }}</td>
-                          <td><button ng-click="agree(x.uuid)" type="button" class="btn btn-success btn-xs">Purchase</button></td>
-
+                          <td>{{ txView.transportCost | currency }}</td>
+                          <td>{{ txView.price + txView.transportCost | currency }}</td>
+                          <td><button ng-click="agree(txView.uuid)" type="button" class="btn btn-success btn-txViews">Purchase</button></td>
+                      </tr>
                       </tbody>
                   </table>
                 </div>
