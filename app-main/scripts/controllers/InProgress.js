@@ -30,6 +30,7 @@ angular.module('sbAdminApp')
                 txs.pendingAgrees[i].agreeing = true;
             }
             $scope.agrees = txs.pendingAgrees.concat(txs.offersAccepted);
+            $scope.offers = $scope.offers.concat($scope.agrees);
             $scope.reloaded = true;
         }, function() {
             //add mock data here when server not running

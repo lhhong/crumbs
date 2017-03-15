@@ -46,19 +46,19 @@
                           <th ng-click="sortData('price')">
                             Price <div ng-class="getSortClass('price')"></div>
                           </th>
-                          <th ng-click="sortData('buydate')">
-                              Selling On <div ng-class="getSortClass('buydate')"></div>
+                          <th ng-click="sortData('expiry')">
+                              Disposal On <div ng-class="getSortClass('expiry')"></div>
                           </th>
                           <th></th>
                       </tr>
                   </thead>
                   <tbody>
-                      <tr ng-repeat="x in offers | filter:searchText | orderBy:sortColumn:reverseSort" ng-style="getBackground(x.pending)">
+                      <tr ng-repeat="x in offers | filter:searchText | orderBy:sortColumn:reverseSort" ng-if="x.sell" ng-style="getBackground(x.pending)">
                           <td>{{ x.item }}</td>
                           <td>{{ x.quantity }}</td>
                           <td>{{ x.price | currency }}</td>
-                          <td>{{ x.txDate | date }}</td>
-                          <td><button type="button" class="btn btn-success btn-xs" ng-if="!x.pending" data-toggle="modal" data-target="#ViewRequest">View Requests</button></td>
+                          <td>{{ x.expiry | date }}</td>
+                          <td><button type="button" class="btn btn-success btn-xs" ng-if="x.agreeing" data-toggle="modal" data-target="#ViewRequest">View Requests</button></td>
                       </tr>
                   </tbody>
               </table>
@@ -93,7 +93,7 @@
                       </tr>
                   </thead>
                   <tbody>
-                      <tr ng-repeat="x in accepts track by $index | filter:searchText | orderBy:sortColumn:reverseSort" ng-style="getBackground(x.pending)">
+                      <tr ng-repeat="x in accepts track by $index | filter:searchText | orderBy:sortColumn:reverseSort" ng-if="!x.sell" ng-style="getBackground(x.pending)">
                           <td>{{ x.item }}</td>
                           <td>{{ x.quantity }}</td>
                           <td>{{ x.price | currency }}</td>
