@@ -130,14 +130,14 @@
                               <td>{{ x.price | currency }}</td>
                               <td>{{ x.transportCost | currency }}</td>
                               <td>
-                                  <button ng-if="forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index)" ui-sref="dashboard.InProgressSelling">Purchase</button>
-                                  <button ng-if="!forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index)" ui-sref="dashboard.InProgressBuying">Purchase</button>
+                                  <button ng-if="forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index)" ui-sref="dashboard.InProgressSelling" data-dismiss="modal">Purchase</button>
+                                  <button ng-if="!forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index)" ui-sref="dashboard.InProgressBuying" data-dismiss="modal">Purchase</button>
                               </td>
                       </tbody>
                   </table>
                   <p class="text-muted text-center"><small>If none of the above offers are satisfactory, click button below to make new request on the market</small></p>
-                  <button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessOffer(offering)" ui-sref="dashboard.InProgressSelling">Make Sales Offer</button>
-                  <button type="button" class="btn btn-primary btn-lg btn-block" ng-if="!forExcess" ng-click="shortageOffer(offering)" ui-sref="dashboard.InProgressBuying">Make Purchase Request</button>
+                  <button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessOffer(offering)" ui-sref="dashboard.InProgressSelling" data-dismiss="modal">Make Sales Offer</button>
+                  <button type="button" class="btn btn-primary btn-lg btn-block" ng-if="!forExcess" ng-click="shortageOffer(offering)" ui-sref="dashboard.InProgressBuying" data-dismiss="modal">Make Purchase Request</button>
                 </div>
             </div>
             <!-- /.modal-content -->

@@ -29,6 +29,9 @@ angular.module('sbAdminApp')
             for (var i = 0; i<txs.pendingAgrees.length; i++) {
                 txs.pendingAgrees[i].agreeing = true;
             }
+            for (var i = 0; i<txs.offersAccepted.length; i++) {
+                txs.offersAccepted[i].agreeing = true;
+            }
             $scope.agrees = txs.pendingAgrees.concat(txs.offersAccepted);
             $scope.offers = $scope.offers.concat($scope.agrees);
             $scope.reloaded = true;
@@ -67,8 +70,9 @@ angular.module('sbAdminApp')
             }]; //Offers you made
             $scope.accepts = []; //Offers that you accepted and waiting for other party to agree
             $scope.agrees = []; //Offers accepted waiting for you to agree, or agreed but not included in block chain
-            $scope.reloaded = true;
+
         })
+        $scope.reloaded = true;
     }
 
     $scope.txView = {};
