@@ -12,7 +12,7 @@
             <li ng-class="{active: collapseVar==1}">{{dropDown}}
                 <a href="" ng-click="check(1)"><i class="fa fa-bitcoin fa-fw"></i> MyTransactions<span
                         class="fa arrow"></span></a>
-                <ul class="nav nav-second-level" collapse="collapseVar!=1">
+                <ul class="nav nav-second-level" uib-collapse="collapseVar!=1">
                     <li ui-sref-active="active">
                         <a ui-sref="dashboard.InProgressBuying">Purchases (In progress)</a>
                     </li>
@@ -47,7 +47,7 @@
             <li ng-class="{active: collapseVar==3}">{{dropDown}}
                 <a href="" ng-click="check(3)"><i class="fa fa-wrench fa-fw"></i> UI Elements<span
                         class="fa arrow"></span></a>
-                <ul class="nav nav-second-level" collapse="collapseVar!=3">
+                <ul class="nav nav-second-level" uib-collapse="collapseVar!=3">
                     <li ui-sref-active="active">
                         <a ui-sref="dashboard.panels-wells">Panels and Wells</a>
                     </li>
@@ -72,7 +72,7 @@
             <li ng-class="{active: collapseVar==4}">
                 <a href="" ng-click="check(4)"><i class="fa fa-sitemap fa-fw"></i> Multi-Level Dropdown<span
                         class="fa arrow"></span></a>
-                <ul class="nav nav-second-level" collapse="collapseVar!=4">
+                <ul class="nav nav-second-level" uib-collapse="collapseVar!=4">
                     <li>
                         <a href="">Second Level Item</a>
                     </li>
@@ -81,7 +81,7 @@
                     </li>
                     <li ng-init="third=!third" ng-class="{active: multiCollapseVar==3}">
                         <a href="" ng-click="multiCheck(3)">Third Level <span class="fa arrow"></span></a>
-                        <ul class="nav nav-third-level" collapse="multiCollapseVar!=3">
+                        <ul class="nav nav-third-level" uib-collapse="multiCollapseVar!=3">
                             <li>
                                 <a href="">Third Level Item</a>
                             </li>
@@ -104,7 +104,7 @@
             <li ng-class="{active:collapseVar==4}">
                 <a href="" ng-click="check(4)"><i class="fa fa-files-o fa-fw"></i> Sample Pages<span
                         class="fa arrow"></span></a>
-                <ul class="nav nav-second-level" collapse="collapseVar!=4">
+                <ul class="nav nav-second-level" uib-collapse="collapseVar!=4">
                     <li>
                         <a ui-sref="login">Login Page</a>
                     </li>
