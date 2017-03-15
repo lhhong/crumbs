@@ -87,8 +87,14 @@
                           <th ng-click="sortData('price')">
                               Price <div ng-class="getSortClass('price')"></div>
                           </th>
+                          <th ng-click="sortData('transportCost')">
+                              Transport Cost <div ng-class="getSortClass('transportCost')"></div>
+                          </th>
                           <th ng-click="sortData('txDate')">
                               Buying On <div ng-class="getSortClass('txDate')"></div>
+                          </th>
+                          <th ng-click="sortData('expiry')">
+                              Disposal On <div ng-class="getSortClass('expiry')"></div>
                           </th>
                       </tr>
                   </thead>
@@ -96,8 +102,10 @@
                       <tr ng-repeat="x in accepts track by $index | filter:searchText | orderBy:sortColumn:reverseSort" ng-if="x.sell" ng-style="getBackground(x.pending)">
                           <td>{{ x.item }}</td>
                           <td>{{ x.quantity }}</td>
-                          <td>{{ x.price | currency }}</td>
+                          <td>{{ (x.price * x.quantity) | currency }}</td>
+                          <td>{{ x.transportCost | currency }}</td>
                           <td>{{ x.txDate | date }}</td>
+                          <td>{{ x.expiry | date }}</td>
                           <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewDetails">View Details</button></td>
                       </tr>
                   </tbody>
@@ -134,7 +142,7 @@
                               <td>{{ x.quantity }}</td>
                               <td>Transport Date</td>
                               <td>{{ x.transportCost | currency }}</td>
-                              <td>{{ x.price + x.transportCost | currency }}</td>
+                              <td>{{ x.price * x.quantity + x.transportCost | currency }}</td>
                               <td><button ng-click="agree(x.uuid)" type="button" class="btn btn-success btn-xs">Purchase</button></td>
 
                       </tbody>
@@ -173,7 +181,7 @@
                             <td>{{ x.quantity }}</td>
                             <td>Transport Date</td>
                             <td>{{ x.transportCost | currency }}</td>
-                            <td>{{ x.price + x.transportCost | currency }}</td>
+                            <td>{{ x.price * x.quantity + x.transportCost | currency }}</td>
 
                         </tbody>
                     </table>

@@ -34,7 +34,37 @@ angular.module('sbAdminApp')
             $scope.reloaded = true;
         }, function() {
             //add mock data here when server not running
-            $scope.offers = []; //Offers you made
+            $scope.offers = [{
+                sell: true,
+                item: "Orange",
+                quantity: 100,
+                price: 2,
+                accepter: {
+                    name: "ShengSiong"
+                },
+                agreeing: true,
+                transportCost: 123
+            },{
+                sell: true,
+                item: "Mango",
+                quantity: 120,
+                price: 2,
+            },{
+                sell: false,
+                item: "Mango",
+                quantity: 110,
+                price: 3,
+            },{
+                sell: false,
+                item: "Apple",
+                quantity: 100,
+                price: 2,
+                accepter: {
+                    name: "ShengSiong"
+                },
+                agreeing: true,
+                transportCost: 123
+            }]; //Offers you made
             $scope.accepts = []; //Offers that you accepted and waiting for other party to agree
             $scope.agrees = []; //Offers accepted waiting for you to agree, or agreed but not included in block chain
             $scope.reloaded = true;
