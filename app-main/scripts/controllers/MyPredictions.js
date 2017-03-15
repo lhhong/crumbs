@@ -313,9 +313,9 @@ angular.module('sbAdminApp')
     };
 
     $('#PredictionModal').on('show.bs.modal', function (event) {
-            $(this).find('.modal-dialog').css({width:'85%',
-                                       height:'60%',
-                                      'max-height':'100%'});
+            $(this).find('.modal-dialog').css({width:'80%',
+                                       height:'50%',
+                                      'max-height':'80%'});
     });
 
     $('#PredictionModal').on('shown.bs.modal', function (event) {
@@ -324,6 +324,8 @@ angular.module('sbAdminApp')
 
         // Chart initialiser
         var ctx = canvas[0].getContext("2d");
+        ctx.canvas.width = 300;
+        ctx.canvas.height = 80;
         var chart = new Chart(ctx).Line({
             labels: ["Apr 12", "Apr 14", "Apr 16", "Apr 17", "Apr 19", "Apr 21", "Apr 22", "Apr 24", "Apr 26", "Apr 28", "Apr 30", "May 1", "May 3", "May 5", "May 6"],
             datasets: [
