@@ -5,7 +5,7 @@ import numpy as np
 
 from keras.models import Sequential
 from keras.layers import Dense
-from keras.layers import LSTM
+from keras.layers import SimpleRNN
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
 
@@ -13,9 +13,6 @@ from sklearn.metrics import mean_squared_error
 def predict():
 	# get sales
 	sales = request.json['sales']
-	# only use half of the data set
-	half_mark = int(0.5*len(sales))
-	sales = sales[half_mark:]
 	dataset = np.array(sales)
 
 	# log transformation
@@ -25,26 +22,21 @@ def predict():
 	scaler = MinMaxScaler(feature_range=(0, 1))
 	dataset_scaled = scaler.fit_transform(dataset_scaled)
 
-	# split into train and test sets
-	train_size = int(len(dataset_scaled) * 0.8)
-	test_size = len(dataset_scaled) - train_size
-	train, test = dataset_scaled[0:train_size], dataset_scaled[train_size:len(dataset_scaled)]
+	train = dataset_scaled
 
 	# create dataset by the amount of lookback
 	look_back = 7
 	trainX, trainY = create_dataset(train, look_back)
-	testX, testY = create_dataset(test, look_back)
 
 	# reshape input to be [samples, time steps, features]
 	trainX = np.reshape(trainX, (trainX.shape[0], 1, trainX.shape[1]))
-	testX = np.reshape(testX, (testX.shape[0], 1, testX.shape[1]))
 
 	# create and fit the LSTM network
 	model = Sequential()
-	model.add(LSTM(7, input_dim=look_back))
+	model.add(SimpleRNN(7, input_dim=look_back))
 	model.add(Dense(1))
 	model.compile(loss='mean_squared_error', optimizer='rmsprop')
-	model.fit(trainX, trainY, nb_epoch=40, batch_size=5, verbose=2)
+	model.fit(trainX, trainY, nb_epoch=30, batch_size=5, verbose=2)
 
 	# generate predictions for next k days
 	last_n = np.array(dataset_scaled[len(dataset_scaled)-look_back:])

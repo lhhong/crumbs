@@ -42,7 +42,7 @@ public class UrgencyUtil {
 
 	private static double shortageUrgencyFunction(double x) {
 		x = (x - PERFECT_PERCENTAGE) * MULTIPLIER;
-		return ((x* x) * (1- sigmoid(x, 4)));
+		return ((x* x/4) * (1- sigmoid(x, 4)));
 	}
 
 	public static String getUrgencyLevel(double urgency) {
