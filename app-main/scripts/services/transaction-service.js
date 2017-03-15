@@ -66,7 +66,7 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
         }).success(function(response) {
             console.log("registration request sent")
         }).error(function(response) {
-            console.log("server error, code = " + response.status)
+            //console.log("server error, code = " + response.status)
         })
     }
 
@@ -79,7 +79,7 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
                 callback(response)
             }
         }).error(function(response) {
-            console.log("server error, code = " + response.status)
+            //console.log("server error, code = " + response.status)
         })
     }
 
@@ -92,7 +92,7 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
                 callback(response);
             }
         }).error(function(response, status)  {
-            console.log("server error, code = " + status)
+            //console.log("server error, code = " + status)
             if (failureCallback) {
                 failureCallback();
             }
@@ -108,7 +108,7 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
                 callback(response);
             }
         }).error(function(response, status)  {
-            console.log("server error, code = " + status)
+            //console.log("server error, code = " + status)
             if (failureCallback) {
                 failureCallback();
             }
@@ -124,7 +124,7 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
                 callback(response);
             }
         }).error(function(response, status)  {
-            console.log("server error, code = " + status)
+            //console.log("server error, code = " + status)
             if (failureCallback) {
                 failureCallback();
             }

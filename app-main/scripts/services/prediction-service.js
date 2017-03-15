@@ -11,7 +11,7 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
                 successCallback(response);
             }
         }).error(function(response) {
-            console.log("server error, code = " + response.status);
+            //console.log("server error, code = " + response.status);
             errorCallback();
         })
     }
@@ -25,7 +25,7 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
                 successCallback(response);
             }
         }).error(function(response) {
-            console.log("server error, code = " + response.status);
+            //console.log("server error, code = " + response.status);
             errorCallback();
         })
     }
@@ -43,7 +43,7 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
                 callback(response)
             }
         }).error(function(response, status)  {
-            console.log("server error, code = " + status)
+            //console.log("server error, code = " + status)
             if (errorCallback) {
                 errorCallback();
             }
@@ -64,7 +64,7 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
                 callback(collateChart(response), response.demand)
             }
         }).error(function(response, status)  {
-            console.log("server error, code = " + status)
+            //console.log("server error, code = " + status)
             if (errorCallback) {
                 errorCallback();
             }
@@ -104,7 +104,7 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
                 callback(response)
             }
         }).error(function(response, status)  {
-            console.log("server error, code = " + status)
+            //console.log("server error, code = " + status)
             if (errorCallback) {
                 errorCallback();
             }

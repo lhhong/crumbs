@@ -21,6 +21,7 @@ angular
 		events:true,
 	});
 
+    //$modalProvider.options.animation = false;
 	$urlRouterProvider.otherwise('/dashboard/mainpage');
 
 	/*

@@ -7,7 +7,7 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('MainCtrl', ['$scope', '$position', '$interval', 'txService', 'predictionService', function($scope, $position, $interval, txService, predictionService) {
+  .controller('MainCtrl', ['$scope', '$interval', 'txService', 'predictionService', function($scope, $interval, txService, predictionService) {
     console.log("main controller loaded");
     $scope.balance = 0;
     $scope.donut = {
