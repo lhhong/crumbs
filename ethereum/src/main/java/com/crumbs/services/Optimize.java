@@ -20,7 +20,6 @@ public class Optimize {
 	@Autowired
 	MemberRepo memberRepo;
 
-	//TODO work out these algos
 	public long calcTransportCost(TransactionVM tx) {
 		Member own = memberRepo.findByOwn(true).get(0);
 		Member seller = tx.getSender();
@@ -44,7 +43,6 @@ public class Optimize {
 		return (long)totalCost;
 	}
 
-	//TODO to pass in calculated transport cost into it as well
 	public List<TransactionVM> rankOffers(List<TxAccepted> offers) {
 		List<TransactionVM> lists = new ArrayList<>();
 		for (TxAccepted tx : offers) {

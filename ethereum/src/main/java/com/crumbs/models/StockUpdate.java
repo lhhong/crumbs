@@ -6,6 +6,7 @@ import lombok.Setter;
 /**
  * Created by low on 17/2/17 10:25 PM.
  * Shipment records will be aggregated to this model which tracks by day
+ * Includes tracking of the quantity of products in a day (without purchases)
  */
 @Getter
 @Setter
