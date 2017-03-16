@@ -83,15 +83,19 @@ public class InventoryService {
 	 * @return map of StockUpdate objects
 	 */
 	private Map<LocalDate, StockUpdate> stockUpdateMap(String product, int begin, int end) {
-				Map<LocalDate,StockUpdate> result = new HashMap<>();
+
+		Map<LocalDate,StockUpdate> result = new HashMap<>();
 		for (int i = begin; i <= end; i++) {
 			result.put(DateUtil.todayLocalDate().plusDays(i), new StockUpdate());
 		}
+
 		Product p = new Product();
 		p.setName(product);
 		List<Shipment> shipments = shipmentRepo.findByProductAndQuantityNotAndExpiryAfter(p, 0, DateUtil.daysFromToday(begin-1));
+
 		List<ShipmentVM> shipmentVMS = new ArrayList<>();
 		shipments.forEach((shipment) -> shipmentVMS.add(new ShipmentVM(shipment)));
+
 		for (ShipmentVM shipment : shipmentVMS) {
 			if (shipment.getDateStamp().isBefore(DateUtil.todayLocalDate().plusDays(begin))) {
 				if (result.keySet().contains(shipment.getExpiry())) {
