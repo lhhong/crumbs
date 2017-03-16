@@ -29,14 +29,14 @@ def predict():
 	trainX, trainY = create_dataset(train, look_back)
 
 	# reshape input to be [samples, time steps, features]
-	trainX = np.reshape(trainX, (trainX.shape[0], 1, trainX.shape[1]))
+	trainX = np.reshape(trainX, (trainX.shape[0], trainX.shape[1], 1))
 
-	# create and fit the LSTM network
+	# create and fit the neural network
 	model = Sequential()
-	model.add(SimpleRNN(7, input_dim=look_back))
+	model.add(SimpleRNN(7, input_dim=1))
 	model.add(Dense(1))
 	model.compile(loss='mean_squared_error', optimizer='rmsprop')
-	model.fit(trainX, trainY, nb_epoch=30, batch_size=5, verbose=2)
+	model.fit(trainX, trainY, nb_epoch=40, batch_size=5, verbose=2)
 
 	# generate predictions for next k days
 	last_n = np.array(dataset_scaled[len(dataset_scaled)-look_back:])
@@ -62,7 +62,7 @@ def predictNextK(seed,k,model):
     predictions = np.empty(k)
     look_back = seed.shape[0]
     for i in range(k):
-        seed = np.reshape(seed,(1,1,look_back))
+        seed = np.reshape(seed,(1,look_back,1))
         nextPeriod = model.predict(seed)
         seed = np.append(seed,nextPeriod)
         seed = np.delete(seed, 0, axis=0)

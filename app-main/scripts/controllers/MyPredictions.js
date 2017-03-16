@@ -257,12 +257,21 @@ angular.module('sbAdminApp')
         }
     };
 
-    $scope.getCellColour = function(number) {
+    $scope.getDisposalCellColour = function(number) {
+        var colour;
+        if (number > 100) {
+            colour = '#ff8888'
+        }
+        return {
+            background: colour
+        }
+    };
+
+    $scope.getInventoryCellColour = function(number) {
         var colour;
         if (number < 0) {
             colour = '#ff8888'
         }
-
         return {
             background: colour
         }

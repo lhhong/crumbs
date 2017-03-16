@@ -37,7 +37,7 @@ public class UrgencyUtil {
 
 	private static double excessUrgencyFunction(double x) {
 		x = (x - PERFECT_PERCENTAGE) * MULTIPLIER;
-		return ((x*x/4) * sigmoid(x, 6));
+		return ((x*x/2.5) * sigmoid(x, 6));
 	}
 
 	private static double shortageUrgencyFunction(double x) {
