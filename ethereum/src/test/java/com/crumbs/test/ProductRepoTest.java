@@ -121,8 +121,6 @@ public class ProductRepoTest {
 		inventoryService.storeProduct(p);
 		ProductVM outcome = inventoryService.getProduct("test");
 		logger.info(JSON.toJSONString(outcome));
-		logger.info(JSON.toJSONString(inventoryService.productToDateQuantityArray(p)));
-		logger.info(JSON.toJSONString(inventoryService.productToShipmentQuantityArray(p)));
 	}
 
 	@Test

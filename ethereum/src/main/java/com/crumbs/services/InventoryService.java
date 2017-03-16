@@ -21,6 +21,7 @@ import java.util.*;
 
 /**
  * Created by low on 16/2/17 10:34 PM.
+ * Deals with shipment datas
  */
 @Service
 public class InventoryService {
@@ -39,20 +40,6 @@ public class InventoryService {
 	@Autowired
 	ShipmentRepo shipmentRepo;
 
-	public Map<LocalDate,Integer> productToShipmentQuantityArray(Product product) {
-		Map<LocalDate,Integer> result = new HashMap<>();
-		List<Shipment> shipments = shipmentRepo.findByProductAndQuantityNotAndExpiryAfter(product,0, DateUtil.today());
-		for (Shipment record : shipments) {
-			if (result.containsKey(DateUtil.toLocalDate(record.getDateStamp()))) {
-				result.merge(DateUtil.toLocalDate(record.getDateStamp()), record.getQuantity(), (current, addition) -> (current + addition));
-			}
-			else {
-				result.put(DateUtil.toLocalDate(record.getDateStamp()), record.getQuantity());
-			}
-		}
-		return result;
-	}
-
 	public List<StockUpdate> futureStockInArray(String product) {
 		Map<LocalDate, StockUpdate> map = futureStock(product);
 		logger.info("stock updates: {}", JSON.toJSONString(map));
@@ -66,6 +53,13 @@ public class InventoryService {
 		return list;
 	}
 
+	/**
+	 * Creates a list of StockUpdate objects given start and end dates
+	 * @param product product to get list for
+	 * @param start number of days from today to start collating the list (can be negative)
+	 * @param end to collate the list until this number of days from today (can be negative)
+	 * @return list of StockUpdates
+	 */
 	public List<StockUpdate> stockUpdateList(String product, int start, int end) {
 		Map<LocalDate, StockUpdate> map = stockUpdateMap(product, start, end);
 		logger.info("stock updates: {}", JSON.toJSONString(map));
@@ -80,7 +74,9 @@ public class InventoryService {
 	}
 
 	/**
-	 * Creates a Map of Date and StockUpdate object calculated form shipments
+	 * Creates a Map of Date and StockUpdate object calculated from shipments
+	 * StockUpdate condense shipment data into a daily sequence
+	 * @see com.crumbs.models.StockUpdate
 	 * @param product name of product to get stock update for
 	 * @param begin days from today to start getting the stock update
 	 * @param end days from today to get stock for
@@ -131,15 +127,6 @@ public class InventoryService {
 
 	public Map<LocalDate, StockUpdate> futureStock(String product) {
 		return stockUpdateMap(product, 1, 14);
-	}
-
-	public List<Integer> productToDateQuantityArray(Product product) {
-		List<Integer> result = new ArrayList<>();
-		List<SalesRecord> records = salesRecordRepo.findByProductOrderByDateStampAsc(product);
-		for (SalesRecord record : records) {
-			result.add(record.getQuantity());
-		}
-		return result;
 	}
 
 	public ProductVM getProduct(String product) {
