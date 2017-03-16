@@ -27,6 +27,8 @@
     <div class="alert alert-success">
         Current Balance: <em>{{ balance| currency }}</em>
     </div>
+
+    <!-- Table for Offers Made -->
     <div class="panel panel-default">
       <div class="panel-heading">
         <strong>Offers Made</strong>
@@ -52,7 +54,6 @@
                           <th class="col-md-2">
                               Details
                           </th>
-                          <th></th>
                       </tr>
                   </thead>
                   <tbody>
@@ -71,6 +72,7 @@
       <!-- /.panel-body -->
     </div>
 
+    <!-- Table for Pending Confirmation -->
     <div class="panel panel-default">
       <div class="panel-heading">
         <strong>Pending Confirmation</strong>
@@ -145,6 +147,44 @@
                       </tr>
                       </tbody>
                   </table>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <!-- Modal for View Details -->
+    <div class="modal fade" id="ViewDetails" tabindex="-1" role="dialog" aria-labelledby="ViewDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">View Details for {{ txView.item }}</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Store Name</th>
+                            <th>Location</th>
+                            <th>Transport Date</th>
+                            <th>Transport Cost</th>
+                            <th>Total Cost</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{ txView.sender.name }}</td>
+                            <td>----</td>
+                            <td>{{ txView.date }}</td>
+                            <td>{{ txView.transportPrice | currency }}</td>
+                            <td>{{ txView.price * txView.quantity + txView.transportCost | currency }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <!-- /.modal-content -->
