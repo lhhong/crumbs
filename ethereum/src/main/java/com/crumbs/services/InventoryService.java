@@ -66,18 +66,38 @@ public class InventoryService {
 		return list;
 	}
 
-	public Map<LocalDate, StockUpdate> futureStock(String product) {
-		Map<LocalDate,StockUpdate> result = new HashMap<>();
-		for (int i = 1; i <= 14; i++) {
+	public List<StockUpdate> stockUpdateList(String product, int start, int end) {
+		Map<LocalDate, StockUpdate> map = stockUpdateMap(product, start, end);
+		logger.info("stock updates: {}", JSON.toJSONString(map));
+		List<StockUpdate> list = new ArrayList<>();
+		List<LocalDate> dates = new ArrayList<>();
+		dates.addAll(map.keySet());
+		Collections.sort(dates);
+		for (LocalDate date : dates) {
+			list.add(map.get(date));
+		}
+		return list;
+	}
+
+	/**
+	 * Creates a Map of Date and StockUpdate object calculated form shipments
+	 * @param product name of product to get stock update for
+	 * @param begin days from today to start getting the stock update
+	 * @param end days from today to get stock for
+	 * @return map of StockUpdate objects
+	 */
+	private Map<LocalDate, StockUpdate> stockUpdateMap(String product, int begin, int end) {
+				Map<LocalDate,StockUpdate> result = new HashMap<>();
+		for (int i = begin; i <= end; i++) {
 			result.put(DateUtil.todayLocalDate().plusDays(i), new StockUpdate());
 		}
 		Product p = new Product();
 		p.setName(product);
-		List<Shipment> shipments = shipmentRepo.findByProductAndQuantityNotAndExpiryAfter(p, 0, DateUtil.today());
+		List<Shipment> shipments = shipmentRepo.findByProductAndQuantityNotAndExpiryAfter(p, 0, DateUtil.daysFromToday(begin-1));
 		List<ShipmentVM> shipmentVMS = new ArrayList<>();
 		shipments.forEach((shipment) -> shipmentVMS.add(new ShipmentVM(shipment)));
 		for (ShipmentVM shipment : shipmentVMS) {
-			if (shipment.getDateStamp().isBefore(DateUtil.todayLocalDate().plusDays(1))) {
+			if (shipment.getDateStamp().isBefore(DateUtil.todayLocalDate().plusDays(begin))) {
 				if (result.keySet().contains(shipment.getExpiry())) {
 					result.get(shipment.getExpiry()).dispose(shipment.getQuantity());
 					LocalDate date = shipment.getExpiry().minusDays(1);
@@ -92,11 +112,11 @@ public class InventoryService {
 					}
 				}
 			}
-			else if (shipment.getDateStamp().isBefore(DateUtil.todayLocalDate().plusDays(15))) {
+			else if (shipment.getDateStamp().isBefore(DateUtil.todayLocalDate().plusDays(end+1))) {
 				LocalDate date = shipment.getDateStamp();
 				result.get(shipment.getDateStamp()).stockUp(shipment.getQuantity());
 				date = date.plusDays(1);
-				while (date.isBefore(DateUtil.todayLocalDate().plusDays(15))) {
+				while (date.isBefore(DateUtil.todayLocalDate().plusDays(end+1))) {
 					if (date.isEqual(shipment.getExpiry())) {
 						result.get(date).dispose(shipment.getQuantity());
 						break;
@@ -107,6 +127,10 @@ public class InventoryService {
 			}
 		}
 		return result;
+	}
+
+	public Map<LocalDate, StockUpdate> futureStock(String product) {
+		return stockUpdateMap(product, 1, 14);
 	}
 
 	public List<Integer> productToDateQuantityArray(Product product) {

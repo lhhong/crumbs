@@ -24,6 +24,7 @@ angular.module('sbAdminApp')
             if (predictQty.valid) {
                 $scope.excess = predictQty.excess;
                 $scope.shortage = predictQty.shortage;
+                $scope.valid = true;
             }
             else {
                 $scope.valid = false;

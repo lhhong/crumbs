@@ -123,13 +123,21 @@ public class PredictionSrvc {
 		return query;
 	}
 
-	public Prediction buildPrediction(List<Integer> demand, String product) {
-		if (demand.size() != 15) {
+	public Prediction buildPrediction(List<Integer> predictedDemand, String product) {
+		if (predictedDemand.size() != 15) {
 			logger.error("demand array not of size 15");
 			return null;
 		}
 		ProductVM productVM = inventoryService.getProduct(product);
-		List<StockUpdate> currentStock = inventoryService.futureStockInArray(product);
+		List<StockUpdate> currentStock = inventoryService.stockUpdateList(product, -6, 14);
+
+		//Collects past 7 days of demand together with predicted demand
+		Product p = new Product();
+		p.setName(product);
+		List<SalesRecord> pastRecords = salesRecordRepo.findByProductAndDateStampBeforeAndDateStampAfterOrderByDateStampAsc(p, DateUtil.today(), DateUtil.daysFromToday(-8));
+		List<Integer> demand = new ArrayList<>();
+		pastRecords.forEach(r -> demand.add(r.getQuantity()));
+		demand.addAll(predictedDemand);
 
 		Prediction prediction = new Prediction();
 		prediction.setProduct(productVM);
@@ -141,45 +149,48 @@ public class PredictionSrvc {
 		List<Integer> disposals = new ArrayList<>();
 		currentStock.forEach(stock -> disposals.add(stock.getDisposed()));
 
-		//NB: currentStocks and disposal start from day 1 (index 0) containing 14 values while demand starts from day 0 containing 15 values
+		//NB: currentStocks and disposal start from day -6 (index 0) containing 21 values while demand starts from day -7 containing 22 values
 
 		//get starting inventory quantity for day 0
 		int carryOver = currentStock.get(0).getCurrentQuantity() - currentStock.get(0).getStock() + currentStock.get(0).getDisposed();
 
-		for (int i = 0; i < 14; i++) {
+		for (int i = 0; i < currentStock.size(); i++) {
 			startingInventory.add(carryOver);
 			stockUp.add(currentStock.get(i).getStock());
 
 			//Reduce subsequent disposal by the number of goods sold
 			int toDeduct = demand.get(i);
-			for (int j = i; j < 14; j++) {
+			for (int j = i; j < currentStock.size(); j++) {
 				int initialDispose = disposals.get(j);
 				disposals.set((j), Integer.max(0, initialDispose - toDeduct));
 				toDeduct = toDeduct - initialDispose;
 				if (toDeduct < 0) break;
 			}
 
-			//ending inventory
-			int predictedStock = carryOver - demand.get(i);
-			endingInventory.add(predictedStock);
+			//Adds to prediction for the predicted values
+				//ending inventory
+				int predictedStock = carryOver - demand.get(i);
+				endingInventory.add(predictedStock);
 
-			//ideal value to be put up to offer for shortages
-			int toOffer = (int) (demand.get(i) * (UrgencyUtil.getPerfectExcess())) - predictedStock;
-			prediction.addToStockList(new RemainingStock(demand.get(i), predictedStock, i, toOffer));
+			if (i > 6) {
+				//ideal value to be put up to offer for shortages
+				int toOffer = (int) (demand.get(i) * (UrgencyUtil.getPerfectExcess())) - predictedStock;
+				prediction.addToStockList(new RemainingStock(demand.get(i), predictedStock, i-7, toOffer));
 
-			//ideal value to be put up to offer for excess
-			toOffer = disposals.get(i) - (int) (currentStock.get(i).getDisposed() * UrgencyUtil.getPerfectExcess());
-			prediction.addToShipmentList(new ExcessShipment(currentStock.get(i).getDisposed(), disposals.get(i), i, toOffer));
+				//ideal value to be put up to offer for excess
+				toOffer = disposals.get(i) - (int) (currentStock.get(i).getDisposed() * UrgencyUtil.getPerfectExcess());
+				prediction.addToShipmentList(new ExcessShipment(currentStock.get(i).getDisposed(), disposals.get(i), i-7, toOffer));
+			}
 
 			//new starting inventory
 			carryOver = Integer.max(0, carryOver - demand.get(i) - disposals.get(i)) + currentStock.get(i).getStock();
 		}
 		//Finish up for the last day
 		startingInventory.add(carryOver);
-		int predictedStock = carryOver - demand.get(14);
+		int predictedStock = carryOver - demand.get(21);
 		endingInventory.add(predictedStock);
-		int toOffer = (int) (demand.get(14) * (UrgencyUtil.getPerfectExcess())) - predictedStock;
-		prediction.addToStockList(new RemainingStock(demand.get(14), predictedStock, 14, toOffer));
+		int toOffer = (int) (demand.get(21) * (UrgencyUtil.getPerfectExcess())) - predictedStock;
+		prediction.addToStockList(new RemainingStock(demand.get(21), predictedStock, 14, toOffer));
 
 		//pad with -1 for front-end chart visualization
 		disposals.add(0, -1);

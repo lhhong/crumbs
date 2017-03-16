@@ -217,7 +217,7 @@ angular.module('sbAdminApp')
         ctx.canvas.width = 300;
         ctx.canvas.height = 80;
         var chart = new Chart(ctx).Line({
-            labels: ["Apr 12", "Apr 14", "Apr 16", "Apr 17", "Apr 19", "Apr 21", "Apr 22", "Apr 24", "Apr 26", "Apr 28", "Apr 30", "May 1", "May 3", "May 5", "May 6"],
+            labels: ["Apr 12", "Apr 14", "Apr 16", "Apr 17", "Apr 19", "Apr 21", "Apr 22", "Apr 24", "Apr 26", "Apr 28", "Apr 30", "May 1", "May 3", "May 5", "May 6", "May 6", "May 6", "May 6", "May 6", "May 6", "May 6", "May 6"],
             datasets: [
                 {
                     fillColor: "rgba(190,144,212,0.2)",
