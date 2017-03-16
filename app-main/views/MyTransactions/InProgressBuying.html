@@ -27,6 +27,8 @@
     <div class="alert alert-success">
         Current Balance: <em>{{ balance| currency }}</em>
     </div>
+
+    <!-- Table for Requests Made -->
     <div class="panel panel-default">
       <div class="panel-heading">
         <strong>Requests Made</strong>
@@ -37,7 +39,7 @@
               <table class="table table-striped" width="100%">
                   <thead>
                       <tr>
-                          <th ng-click="sortData('item')" class="col-md-3">
+                          <th ng-click="sortData('item')" class="col-md-4">
                             Product <div ng-class="getSortClass('item')"></div>
                           </th>
                           <th ng-click="sortData('quantity')" class="col-md-2">
@@ -49,7 +51,9 @@
                           <th ng-click="sortData('txDate')" class="col-md-2">
                               Buying On <div ng-class="getSortClass('txDate')"></div>
                           </th>
-                          <th></th>
+                          <th class="col-md-2">
+                              Details
+                          </th>
                       </tr>
                   </thead>
                   <tbody>
@@ -68,6 +72,7 @@
       <!-- /.panel-body -->
     </div>
 
+    <!-- Table for Pending Confirmation -->
     <div class="panel panel-default">
       <div class="panel-heading">
         <strong>Pending Confirmation</strong>
@@ -78,23 +83,20 @@
               <table class="table table-striped" width="100%">
                   <thead>
                       <tr>
-                          <th ng-click="sortData('item')">
+                          <th ng-click="sortData('item')" class="col-md-4">
                               Product <div ng-class="getSortClass('item')"></div>
                           </th>
-                          <th ng-click="sortData('quantity')">
+                          <th ng-click="sortData('quantity')" class="col-md-2">
                               Quantity <div ng-class="getSortClass('quantity')"></div>
                           </th>
-                          <th ng-click="sortData('price')">
+                          <th ng-click="sortData('price')" class="col-md-2">
                               Price <div ng-class="getSortClass('price')"></div>
                           </th>
-                          <th ng-click="sortData('transportCost')">
-                              Transport Cost <div ng-class="getSortClass('transportCost')"></div>
-                          </th>
-                          <th ng-click="sortData('txDate')">
+                          <th ng-click="sortData('txDate')" class="col-md-2">
                               Buying On <div ng-class="getSortClass('txDate')"></div>
                           </th>
-                          <th ng-click="sortData('expiry')">
-                              Disposal On <div ng-class="getSortClass('expiry')"></div>
+                          <th class="col-md-2">
+                              Details
                           </th>
                       </tr>
                   </thead>
@@ -103,9 +105,7 @@
                           <td>{{ x.item }}</td>
                           <td>{{ x.quantity }}</td>
                           <td>{{ (x.price * x.quantity) | currency }}</td>
-                          <td>{{ x.transportCost | currency }}</td>
                           <td>{{ x.txDate | date }}</td>
-                          <td>{{ x.expiry | date }}</td>
                           <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewDetails" ng-click="viewTx(x)">View Details</button></td>
                       </tr>
                   </tbody>
