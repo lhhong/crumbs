@@ -34,20 +34,23 @@
       <!-- /.panel-heading -->
       <div class="panel-body">
           <div class="table-responsive">
-              <table class="table table-striped">
+              <table class="table table-striped" width="100%">
                   <thead>
                       <tr>
-                          <th ng-click="sortData('item')">
+                          <th ng-click="sortData('item')" class="col-md-4">
                             Product <div ng-class="getSortClass('item')"></div>
                           </th>
-                          <th ng-click="sortData('quantity')">
+                          <th ng-click="sortData('quantity')" class="col-md-2">
                             Quantity <div ng-class="getSortClass('quantity')"></div>
                           </th>
-                          <th ng-click="sortData('price')">
+                          <th ng-click="sortData('price')" class="col-md-2">
                             Price <div ng-class="getSortClass('price')"></div>
                           </th>
-                          <th ng-click="sortData('expiry')">
+                          <th ng-click="sortData('expiry')" class="col-md-2">
                               Disposal On <div ng-class="getSortClass('expiry')"></div>
+                          </th>
+                          <th class="col-md-2">
+                              Details
                           </th>
                           <th></th>
                       </tr>
@@ -75,20 +78,23 @@
       <!-- /.panel-heading -->
       <div class="panel-body">
           <div class="table-responsive">
-              <table class="table table-striped">
+              <table class="table table-striped" width="100%">
                   <thead>
                       <tr>
-                          <th ng-click="sortData('item')">
+                          <th ng-click="sortData('item')" class="col-md-4">
                               Product <div ng-class="getSortClass('item')"></div>
                           </th>
-                          <th ng-click="sortData('quantity')">
+                          <th ng-click="sortData('quantity')" class="col-md-2">
                               Quantity <div ng-class="getSortClass('quantity')"></div>
                           </th>
-                          <th ng-click="sortData('price')">
+                          <th ng-click="sortData('price')" class="col-md-2">
                               Price <div ng-class="getSortClass('price')"></div>
                           </th>
-                          <th ng-click="sortData('txDate')">
+                          <th ng-click="sortData('txDate')" class="col-md-2">
                               Selling On <div ng-class="getSortClass('txDate')"></div>
+                          </th>
+                          <th class="col-md-2">
+                              Details
                           </th>
                       </tr>
                   </thead>
