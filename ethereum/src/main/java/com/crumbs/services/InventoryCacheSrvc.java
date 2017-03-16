@@ -12,7 +12,7 @@ import java.util.Map;
 
 /**
  * Created by low on 13/3/17 8:53 PM.
- * Use to present chart of a product to user
+ * Use to present chart and table of a product to user
  */
 @Service
 public class InventoryCacheSrvc {

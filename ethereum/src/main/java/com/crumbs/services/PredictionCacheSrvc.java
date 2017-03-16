@@ -29,6 +29,14 @@ public class PredictionCacheSrvc {
 		return needsFirstRun;
 	}
 
+	public int countShortage() {
+		return (int) shortageCache.stream().filter((shortage) -> !shortage.isHidden()).count();
+	}
+
+	public int countExcess() {
+		return (int) excessCache.stream().filter((excess) -> !excess.isHidden()).count();
+	}
+
 	public void setPredictionCache(PredictionVM predictionCache) {
 		excessCache = predictionCache.getExcessShipments();
 		shortageCache = predictionCache.getStockShortages();

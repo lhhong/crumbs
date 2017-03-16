@@ -44,6 +44,9 @@ public class TransactionService {
 	@Autowired
 	ShipmentRepo shipmentRepo;
 
+	@Autowired
+	PredictionCacheSrvc predictionCache;
+
 	private List<CheckIncludedListener> checkIncludedListeners = new ArrayList<>();
 
 	public void addListener(CheckIncludedListener listener) {
@@ -139,6 +142,7 @@ public class TransactionService {
 			}
 			if ((boolean) result[0]) {
 				logger.info("transaction {} agreed", tx.getUuid());
+				predictionCache.removeCache(tx.getItem());
 				tx.setDone(true);
 				txAcceptedRepo.save(tx);
 				Shipment shipment = new Shipment();
@@ -333,6 +337,7 @@ public class TransactionService {
 					Object[] result = contractService.constFunction("checkDoneStatus", uuid);
 					if ((boolean) result[0]) {
 						logger.info("Agreeing transaction {} included!", uuid);
+						predictionCache.removeCache(tx.getItem());
 						tx.setIncluded(true);
 						txSentRepo.save(tx);
 						Shipment shipment = new Shipment();

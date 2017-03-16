@@ -50,8 +50,8 @@ public class PredictionSrvc {
 		}
 		else {
 			qty.setValid(true);
-			qty.setExcess(predictionCache.getPredictionCache().getExcessShipments().size());
-			qty.setShortage(predictionCache.getPredictionCache().getStockShortages().size());
+			qty.setExcess(predictionCache.countExcess());
+			qty.setShortage(predictionCache.countShortage());
 		}
 
 		return qty;

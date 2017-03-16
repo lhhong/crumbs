@@ -23,6 +23,7 @@ import java.util.Scanner;
 
 /**
  * Created by low on 4/2/17 2:38 PM.
+ * For storing and loading of contracts
  */
 @Service
 public class ContractService {
@@ -40,6 +41,11 @@ public class ContractService {
 	@Autowired
 	private AccountBean accountBean;
 
+	/**
+	 * Stores a known contract address to database with contract template read from file
+	 * @param addr address of contract
+	 * @throws IOException if getAbi or getBin from file fails
+	 */
 	public void saveContractAddr(String addr) throws IOException {
 
 		CrumbsContract crumbsContract = new CrumbsContract();
@@ -52,6 +58,11 @@ public class ContractService {
 
 	}
 
+	/**
+	 * gets contract binary read from file
+	 * @return binary code of contract
+	 * @throws IOException file error
+	 */
 	private String getBin() throws IOException {
 		StringBuilder bin = new StringBuilder("");
 		ClassLoader loader = getClass().getClassLoader();
@@ -64,6 +75,11 @@ public class ContractService {
 		return bin.toString();
 	}
 
+	/**
+	 * gets contract interface read from file
+	 * @return binary code of contract
+	 * @throws IOException file error
+	 */
 	private String getAbi() throws IOException {
 		ClassLoader loader = getClass().getClassLoader();
 		StringBuilder abi = new StringBuilder("");
@@ -93,6 +109,12 @@ public class ContractService {
 		sendContract(getBin(), getAbi(), "crumbs_tx");
 	}
 
+	/**
+	 * Sends contract to blockchain
+	 * @param compiledContract binary string of contract byte code
+	 * @param abi interface of contract
+	 * @param name name of contract, default to crumbs_tx
+	 */
 	public void sendContract(String compiledContract, String abi, String name) {
 
 		SendingTxListener listener = new SendingTxListener() {
@@ -117,6 +139,13 @@ public class ContractService {
 		ethereumBean.sendTransaction(Hex.decode(compiledContract), listener);
 	}
 
+	/**
+	 * Sends goods transaction (register/offer/accept/agree) to contract from a third party. Used for mocking transactions used in testing and set-up
+	 * @param senderPrivKey private key of sender which is mocking the transaction
+	 * @param functionName register/offer/accept/agree as used in contract interface
+	 * @param payment payment to send with transaction if any
+	 * @param args args of contract function
+	 */
 	public void sendToTxContract(byte[] senderPrivKey, String functionName, long payment, Object... args) {
 		CrumbsContract contractDef = crumbsContractRepo.findOne("crumbs_tx");
 		if (contractDef == null) {
@@ -129,6 +158,12 @@ public class ContractService {
 		logger.info("transaction to crumbs_tx sent");
 	}
 
+	/**
+	 * Sends goods transaction from yourself
+	 * @param functionName register/offer/accept/agree
+	 * @param payment payment if any
+	 * @param args args of contract function
+	 */
 	public void sendToTxContract(String functionName, long payment, Object... args) {
 		CrumbsContract contractDef = crumbsContractRepo.findOne("crumbs_tx");
 		if (contractDef == null) {
@@ -141,6 +176,12 @@ public class ContractService {
 		logger.info("transaction to crumbs_tx sent");
 	}
 
+	/**
+	 * perform constant function on contract without having to send ethereum tx to mine
+	 * @param functionName name of constant functions as in interface
+	 * @param args args of the function
+	 * @return Object array
+	 */
 	public Object[] constFunction(String functionName, Object... args) {
 		CrumbsContract contractDef = crumbsContractRepo.findOne("crumbs_tx");
 		if (contractDef == null) {
@@ -166,6 +207,7 @@ public class ContractService {
 	/*************** OBSOLETE FUNCTIONS NO LONGER USED ****************************/
 	/******************************************************************************/
 
+	//EthereumJ compiler seems to be faulty after contract reached a certain complexity
 	public void compileAndSend(String contract, String name) throws IOException {
 		logger.info("Compiling contract...");
 		SolidityCompiler.Result result = compiler.compileSrc(contract.getBytes(), true, true,
