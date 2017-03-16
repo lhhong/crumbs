@@ -50,10 +50,10 @@
                     <tr ng-repeat="x in predictions.excessShipments track by $index" ng-hide="x.hidden" ng-style="getColour('excessShipments', $index)">
                         <td>{{ x.expiry | date}}</td>
                         <td>{{ x.name }}</td>
-                        <td>{{ x.quantity }}</td>
-                        <td>{{ x.price*x.quantity| currency }}</td>
+                        <td>{{ x.offerQuantity }}</td>
+                        <td>{{ x.price*x.offerQuantity| currency }}</td>
                         <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#PredictionModal" ng-click="viewChart(x.name)">View Chart</button></td>
-                        <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarket" ng-click="excessViewOffer($index)">View Market</button></td>
+                        <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarketModal" ng-click="excessViewOffer($index)">View Market</button></td>
                     </tr>
                     </tbody>
                 </table>
@@ -89,7 +89,7 @@
                           <td>{{ x.offerQuantity }}</td>
                           <td>{{ x.price*x.offerQuantity| currency }}</td>
                           <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#PredictionModal" ng-click="viewChart(x.name)">View Chart</button></td>
-                          <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarket" ng-click="shortageViewOffer($index)">View Market</button></td>
+                          <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarketModal" ng-click="shortageViewOffer($index)">View Market</button></td>
                       </tr>
                   </tbody>
               </table>
@@ -100,7 +100,7 @@
     </div>
 
     <!-- Modal for View Market -->
-    <div class="modal fade" id="ViewMarket" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="ViewMarketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -176,35 +176,35 @@
                                 <thead>
                                 <tr>
                                     <th>Day</th>
-                                    <th ng-repeat="x in chart track by $index" ng-if="$index>6">{{ $index-7 }}</th>
+                                    <th ng-repeat="x in chart track by $index" ng-if="$index>6" class="text-center">{{ $index-7 }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
                                 <tr class="odd gradeX">
                                     <td class="center"><b>Starting Inventory</b></td>
-                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" class="center">{{ x.startingInventory-x.stock+x.disposal }}</td>
+                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" class="text-center">{{ replaceWithDashes(x.startingInventory-x.stock+x.disposal).newString }}</td>
                                 </tr>
 
                                 <tr class="odd gradeX">
                                     <td class="center">Add: Shipments</td>
-                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" class="center">{{ replaceWithDashes(x.stock).newItem }}</td>
+                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" class="text-center">{{ replaceWithDashes(x.stock).newString }}</td>
                                 </tr>
 
                                 <tr class="odd gradeX">
                                     <td class="center">Less: Disposal</td>
-                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="getDisposalCellColour(x.disposal)" class="center">{{ replaceWithDashes(x.disposal).newItem }}</td>
+                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="getDisposalCellColour(x.disposal)" class="text-center">{{ formatDisposal(x.disposal).newString }}</td>
 
                                 </tr>
 
                                 <tr class="odd gradeX">
                                     <td class="center">Less: Demand</td>
-                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" class="center">({{ x.demand }})</td>
+                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" class="text-center">({{ x.demand }})</td>
                                 </tr>
 
                                 <tr class="odd gradeX">
                                     <td class="center"><b>Ending Inventory</b></td>
-                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="getInventoryCellColour(x.endingInventory)" class="center">{{ x.endingInventory }}</td>
+                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="getInventoryCellColour(x.endingInventory)" class="text-center">{{ x.endingInventory }}</td>
                                 </tr>
                                 </tbody>
                             </table>

@@ -22,7 +22,7 @@ angular.module('sbAdminApp')
     };
     $scope.lineMonth = {
       labels: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
-		  series: ['Sold', 'Redistributed', 'Wasted'],
+		  series: ['Sold', 'Redistributed', 'Disposed'],
       data: [
 		   [65, 59, 80, 81, 56, 55],
 		   [28, 48, 40, 19, 86, 27],
@@ -35,7 +35,7 @@ angular.module('sbAdminApp')
 
     $scope.bar = {
 	    labels: ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar'],
-		  series: ['Sold', 'Redistributed', 'Wasted'],
+		  series: ['Sold', 'Redistributed', 'Disposed'],
       data: [
 		   [65, 59, 80, 81, 56, 55],
 		   [28, 48, 40, 19, 86, 27],
@@ -44,13 +44,13 @@ angular.module('sbAdminApp')
     };
 
     $scope.donut = {
-    	labels: ["Percentage Sold", "Percentage Redistributed", "Percentage Wasted"],
-    	data: [50, 5, 45]
+    	labels: ["Sold", "Redistributed", "Disposed"],
+    	data: [70, 20, 10]
     };
 
     $scope.radar = {
     	labels:["Grains", "Dairy", "Fruit", "Vegetables", "Meat/Poultry", "Sweets", "Oils"],
-      series: ["Redistributed", "Wasted"],
+      series: ["Redistributed", "Disposed"],
     	data:[
     	    [65, 59, 90, 81, 56, 55, 40],
     	    [28, 48, 40, 19, 96, 27, 100]

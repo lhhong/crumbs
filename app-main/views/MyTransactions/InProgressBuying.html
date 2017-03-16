@@ -104,7 +104,7 @@
                       <tr ng-repeat="x in accepts track by $index | filter:searchText | orderBy:sortColumn:reverseSort" ng-if="x.sell" ng-style="getBackground(x.pending)">
                           <td>{{ x.item }}</td>
                           <td>{{ x.quantity }}</td>
-                          <td>{{ (x.price * x.quantity) | currency }}</td>
+                          <td>{{ x.price | currency }}</td>
                           <td>{{ x.txDate | date }}</td>
                           <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewDetails" ng-click="viewTx(x)">View Details</button></td>
                       </tr>

@@ -50,15 +50,6 @@ angular.module('sbAdminApp')
                   price : 5,
                   urgencyLevel: "yellow"
                 },
-
-                {
-                  name : 'Corn',
-                  quantity: 200,
-                  percentExtra: 10,
-                  expiry : 1492703145123,
-                  price : 5,
-                  urgencyLevel: "yellow"
-                },
                 {
                   name : 'Corn',
                   quantity: 200,
@@ -159,14 +150,21 @@ angular.module('sbAdminApp')
     };
 
     $scope.replaceWithDashes = function(number) {
-        var newItem;
-        newItem = number;
+        var newString;
+        newString = number;
+        if (number == 0) { newString = '-' }
+        return { newString }
+     };
+
+    $scope.formatDisposal = function(number) {
+        var newString;
         if (number == 0) {
-            newItem = '-'
+            newString = '-';
         }
-        return {
-            newItem
+        else {
+            newString = '(' + number + ')';
         }
+        return { newString }
      };
 
     var reloadData = function() {
@@ -202,6 +200,12 @@ angular.module('sbAdminApp')
 	    }
     };
 
+    $('#ViewMarketModal').on('show.bs.modal', function (event) {
+            $(this).find('.modal-dialog').css({width:'60%',
+                                       height:'40%',
+                                      'max-height':'80%'});
+    });
+
     $('#PredictionModal').on('show.bs.modal', function (event) {
             $(this).find('.modal-dialog').css({width:'80%',
                                        height:'50%',
@@ -212,24 +216,38 @@ angular.module('sbAdminApp')
         var modal = $(this);
         var canvas = modal.find('.modal-body canvas');
 
-        // Chart initialiser
+        // Prediction Chart
         var ctx = canvas[0].getContext("2d");
         ctx.canvas.width = 300;
         ctx.canvas.height = 80;
-        var chart = new Chart(ctx).Line({
-            labels: ["Apr 12", "Apr 14", "Apr 16", "Apr 17", "Apr 19", "Apr 21", "Apr 22", "Apr 24", "Apr 26", "Apr 28", "Apr 30", "May 1", "May 3", "May 5", "May 6", "May 6", "May 6", "May 6", "May 6", "May 6", "May 6", "May 6"],
+        var predictions = $scope.demand;
+        var paddingLeft = [null,null,null,null,null,null,null];
+        var predictionChart = new Chart(ctx).Line({
+            labels: ["Apr 10", "", "Apr 12", "", "Apr 14", "", "Apr 16", "", "Apr 18", "", "Apr 20", "", "Apr 24", "", "Apr 26", "", "Apr 28", "", "Apr 30", "", "May 1"],
             datasets: [
                 {
+                // plotting past demand
                     fillColor: "rgba(190,144,212,0.2)",
                     strokeColor: "rgba(190,144,212,1)",
                     pointColor: "rgba(190,144,212,1)",
                     pointStrokeColor: "#fff",
                     pointHighlightFill: "#fff",
                     pointHighlightStroke: "rgba(220,220,220,1)",
-                    data: $scope.demand
+                    data: (predictions.slice(0, 8))
                 },
+                {
+                // plotting future demand
+                    fillColor: "rgba(10,144,212,0.2)",
+                    strokeColor: "rgba(10,144,212,1)",
+                    pointColor: "rgba(10,144,212,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    data: paddingLeft.concat(predictions.slice(7))
+                }
             ]
-        }, {});
+        });
+
     });
 
   }]);

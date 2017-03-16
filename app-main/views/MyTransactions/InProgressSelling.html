@@ -60,7 +60,7 @@
                       <tr ng-repeat="x in offers | filter:searchText | orderBy:sortColumn:reverseSort" ng-if="x.sell" ng-style="getBackground(x.pending)">
                           <td>{{ x.item }}</td>
                           <td>{{ x.quantity }}</td>
-                          <td>{{ (x.price * x.quantity) | currency }}</td>
+                          <td>{{ (x.price) | currency }}</td>
                           <td>{{ x.expiry | date }}</td>
                           <td><button type="button" class="btn btn-success btn-xs" ng-if="x.agreeing" data-toggle="modal" data-target="#ViewRequestModal" ng-click="viewTx(x)">View Requests</button></td>
                       </tr>
@@ -104,7 +104,7 @@
                       <tr ng-repeat="x in accepts track by $index | filter:searchText | orderBy:sortColumn:reverseSort" ng-if="!x.sell" ng-style="getBackground(x.pending)">
                           <td>{{ x.item }}</td>
                           <td>{{ x.quantity }}</td>
-                          <td>{{ (x.price * x.quantity) | currency }}</td>
+                          <td>{{ (x.price) | currency }}</td>
                           <td>{{ x.txDate | date }}</td>
                           <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewDetails" ng-click="viewTx(x)">View Details</button></td>
                       </tr>
@@ -122,7 +122,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">View Requests for {{ x.item }}</h4>
+                    <h4 class="modal-title">View Requests for {{ txView.item }}</h4>
                 </div>
                 <div class="modal-body">
                   <table class="table table-hover">
