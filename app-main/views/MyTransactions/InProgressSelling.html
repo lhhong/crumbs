@@ -58,7 +58,7 @@
                           <td>{{ x.quantity }}</td>
                           <td>{{ (x.price * x.quantity) | currency }}</td>
                           <td>{{ x.expiry | date }}</td>
-                          <td><button type="button" class="btn btn-success btn-xs" ng-if="x.agreeing" data-toggle="modal" data-target="#ViewRequest" ng-click="viewTx(x)">View Requests</button></td>
+                          <td><button type="button" class="btn btn-success btn-xs" ng-if="x.agreeing" data-toggle="modal" data-target="#ViewRequestModal" ng-click="viewTx(x)">View Requests</button></td>
                       </tr>
                   </tbody>
               </table>
@@ -109,7 +109,7 @@
     </div>
 
     <!-- Modal for View Requests -->
-    <div class="modal fade" id="ViewRequest" tabindex="-1" role="dialog" aria-labelledby="ViewRequestModalLabel" aria-hidden="true">
+    <div class="modal fade" id="ViewRequestModal" tabindex="-1" role="dialog" aria-labelledby="ViewRequestModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

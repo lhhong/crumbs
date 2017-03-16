@@ -53,6 +53,11 @@ angular.module('sbAdminApp')
                 quantity: 120,
                 price: 2,
             },{
+                sell: true,
+                item: "Banana",
+                quantity: 200,
+                price: 2,
+            },{
                 sell: false,
                 item: "Mango",
                 quantity: 110,
@@ -68,18 +73,25 @@ angular.module('sbAdminApp')
                 agreeing: true,
                 transportCost: 123
             }]; //Offers you made
-            $scope.accepts = []; //Offers that you accepted and waiting for other party to agree
+
+            $scope.accepts = [{
+                sell: true,
+                item: "Mango",
+                quantity: 120,
+                price: 2,
+            }
+            ]; //Offers that you accepted and waiting for other party to agree
             $scope.agrees = []; //Offers accepted waiting for you to agree, or agreed but not included in block chain
 
         })
         $scope.reloaded = true;
-    }
+    };
 
     $scope.txView = {};
 
     $scope.viewTx = function(tx) {
         $scope.txView = tx;
-    }
+    };
 
     $interval(function() {
         reloadData();
@@ -92,12 +104,17 @@ angular.module('sbAdminApp')
                 background: '#ffb888'
             }
         }
-    }
+    };
 
     $scope.agree = function(uuid) {
         txService.agree(uuid, function(response) {
             console.log("Agree sent");
         })
         $scope.reloaded = false;
-    }
+    };
+    $('#ViewRequestModal').on('show.bs.modal', function (event) {
+            $(this).find('.modal-dialog').css({width:'60%',
+                                       height:'40%',
+                                      'max-height':'80%'});
+    });
   }]);
