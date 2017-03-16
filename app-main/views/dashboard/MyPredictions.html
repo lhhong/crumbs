@@ -176,35 +176,35 @@
                                 <thead>
                                 <tr>
                                     <th>Day</th>
-                                    <th ng-repeat="x in chart track by $index">{{ $index-7 }}</th>
+                                    <th ng-repeat="x in chart track by $index" ng-if="$index>6">{{ $index-7 }}</th>
                                 </tr>
                                 </thead>
                                 <tbody>
 
                                 <tr class="odd gradeX">
                                     <td class="center"><b>Starting Inventory</b></td>
-                                    <td ng-repeat="x in chart" class="center">{{ x.startingInventory-x.stock+x.disposal }}</td>
+                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" class="center">{{ x.startingInventory-x.stock+x.disposal }}</td>
                                 </tr>
 
                                 <tr class="odd gradeX">
                                     <td class="center">Add: Shipments</td>
-                                    <td ng-repeat="x in chart" class="center">{{ replaceWithDashes(x.stock).newItem }}</td>
+                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" class="center">{{ replaceWithDashes(x.stock).newItem }}</td>
                                 </tr>
 
                                 <tr class="odd gradeX">
                                     <td class="center">Less: Disposal</td>
-                                    <td ng-repeat="x in chart" ng-style="getDisposalCellColour(x.disposal)" class="center">{{ replaceWithDashes(x.disposal).newItem }}</td>
+                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="getDisposalCellColour(x.disposal)" class="center">{{ replaceWithDashes(x.disposal).newItem }}</td>
 
                                 </tr>
 
                                 <tr class="odd gradeX">
                                     <td class="center">Less: Demand</td>
-                                    <td ng-repeat="x in chart" class="center">({{ x.demand }})</td>
+                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" class="center">({{ x.demand }})</td>
                                 </tr>
 
                                 <tr class="odd gradeX">
                                     <td class="center"><b>Ending Inventory</b></td>
-                                    <td ng-repeat="x in chart" ng-style="getInventoryCellColour(x.endingInventory)" class="center">{{ x.endingInventory }}</td>
+                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="getInventoryCellColour(x.endingInventory)" class="center">{{ x.endingInventory }}</td>
                                 </tr>
                                 </tbody>
                             </table>
