@@ -97,7 +97,10 @@ public class InventoryService {
 		shipments.forEach((shipment) -> shipmentVMS.add(new ShipmentVM(shipment)));
 
 		for (ShipmentVM shipment : shipmentVMS) {
+			//The case if shipment date is earlier than begin date, shipment should be included in all quantities before the expiry
 			if (shipment.getDateStamp().isBefore(DateUtil.todayLocalDate().plusDays(begin))) {
+
+				//Expiry is within time frame
 				if (result.keySet().contains(shipment.getExpiry())) {
 					result.get(shipment.getExpiry()).dispose(shipment.getQuantity());
 					LocalDate date = shipment.getExpiry().minusDays(1);
@@ -106,12 +109,15 @@ public class InventoryService {
 						date = date.minusDays(1);
 					}
 				}
+				//Shipment date before start, expiry before end. shipment included in all quantities
 				else {
 					for (StockUpdate stockUpdate : result.values()) {
 						stockUpdate.addQuantity(shipment.getQuantity());
 					}
 				}
 			}
+
+			//Shipment before end, add quantities between shipment date and expiry
 			else if (shipment.getDateStamp().isBefore(DateUtil.todayLocalDate().plusDays(end+1))) {
 				LocalDate date = shipment.getDateStamp();
 				result.get(shipment.getDateStamp()).stockUp(shipment.getQuantity());

@@ -14,6 +14,7 @@ import java.util.function.Predicate;
 
 /**
  * Created by low on 11/3/17 4:51 PM.
+ * Cache predictions and handles flag for re-running of prediction after a transaction is completed
  */
 @Service
 public class PredictionCacheSrvc {
@@ -78,6 +79,8 @@ public class PredictionCacheSrvc {
 		return predictionVM;
 	}
 
+	//Hides the prediction after an offer has been made based on that
+	//Unwise to remove completely as transaction not completed and have missing data
 	public void hideShortage(String product, Date txDate) {
 		shortageCache.forEach(remStockVM -> {
 			if (remStockVM.getName().equals(product) && remStockVM.getRequestDate().equals(txDate)) {
