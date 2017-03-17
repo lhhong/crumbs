@@ -10,8 +10,8 @@
         <stats ng-if="valid" number="{{ excess }}" comments="New Shortage" colour="red" type="bar-chart-o" goto="dashboard.MyPredictions"></stats>
         <stats ng-if="valid" number="{{ shortage }}" comments="New Excess" colour="green" type="bar-chart-o" goto="dashboard.MyPredictions"></stats>
         <div class="pull-left" ng-if="!valid">Predictions have not been run. Go to my predictions to run analysis.</div>
-        <stats number="{{ numOfSalesToApprove }}" comments="New Offers" colour="yellow" type="dollar" goto="dashboard.InProgressSelling"></stats>
-        <stats number="{{ numOfPurchasesToApprove }}" comments="New Requests" colour="primary" type="dollar" goto="dashboard.InProgressBuying"></stats>
+        <stats number="{{ numOfSalesToApprove }}" comments="Sales to Approve" colour="yellow" type="dollar" goto="dashboard.InProgressSelling"></stats>
+        <stats number="{{ numOfPurchasesToApprove }}" comments="Purchases to Approve" colour="primary" type="dollar" goto="dashboard.InProgressBuying"></stats>
 
     </div>
 
