@@ -100,11 +100,17 @@ angular.module('sbAdminApp')
     };
 
     $scope.shortageOffer = function(stockShortage) {
+        var lv_input = document.getElementById("recPrice").value;
+        stockShortage.price = lv_input/stockShortage.offerQuantity;
+        console.log("printing offer");
+        console.log(stockShortage);
         txService.shortageOffer(stockShortage, function(response) {})
         $('.modal-backdrop').remove();
     };
 
     $scope.excessOffer = function(excessShipment) {
+        var lv_input = document.getElementById("recPrice").value;
+        excessShipment.price = lv_input/excessShipment.offerQuantity;
         console.log("printing offer");
         console.log(excessShipment);
         txService.excessOffer(excessShipment, function(response) {})
@@ -226,10 +232,11 @@ angular.module('sbAdminApp')
         var predictions = $scope.demand;
         var paddingLeft = [null,null,null,null,null,null,null];
         var predictionChart = new Chart(ctx).Line({
-            labels: ["Apr 10", "", "Apr 12", "", "Apr 14", "", "Apr 16", "", "Apr 18", "", "Apr 20", "", "Apr 24", "", "Apr 26", "", "Apr 28", "", "Apr 30", "", "May 1"],
+            labels: ["Apr 8", "", "Apr 10", "", "Apr 12", "", "Apr 14", "", "Apr 16", "", "Apr 18", "", "Apr 20", "", "Apr 24", "", "Apr 26", "", "Apr 28", "", "Apr 30"],
             datasets: [
                 {
                 // plotting past demand
+                    label: "Past sales",
                     fillColor: "rgba(190,144,212,0.2)",
                     strokeColor: "rgba(190,144,212,1)",
                     pointColor: "rgba(190,144,212,1)",
@@ -240,6 +247,7 @@ angular.module('sbAdminApp')
                 },
                 {
                 // plotting future demand
+                    label: "Predicted sales",
                     fillColor: "rgba(10,144,212,0.2)",
                     strokeColor: "rgba(10,144,212,1)",
                     pointColor: "rgba(10,144,212,1)",

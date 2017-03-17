@@ -41,9 +41,9 @@
                         <th class="col-md-2">Date of Excess</th>
                         <th class="col-md-3">Product</th>
                         <th class="col-md-2">Quantity</th>
-                        <th class="col-md-2">Estimated Price</th>
-                        <th>View</th>
-                        <th>Market</th>
+                        <th class="col-md-2"> Price</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
@@ -51,7 +51,7 @@
                         <td>{{ x.expiry | date}}</td>
                         <td>{{ x.name }}</td>
                         <td>{{ x.offerQuantity }}</td>
-                        <td>{{ x.price*x.offerQuantity| currency }}</td>
+                        <td>{{ x.price * x.offerQuantity| currency }}</td>
                         <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#PredictionModal" ng-click="viewChart(x.name)">View Chart</button></td>
                         <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarketModal" ng-click="excessViewOffer($index)">View Market</button></td>
                     </tr>
@@ -77,9 +77,9 @@
                           <th class="col-md-2">Date of Shortage</th>
                           <th class="col-md-3">Product</th>
                           <th class="col-md-2">Quantity</th>
-                          <th class="col-md-2">Estimated Price</th>
-                          <th>View</th>
-                          <th>Market</th>
+                          <th class="col-md-2">Price</th>
+                          <th></th>
+                          <th></th>
                       </tr>
                   </thead>
                   <tbody>
@@ -105,10 +105,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Recommended Offers for {{ offering.name }}</h4>
+                    <h4 class="modal-title">Recommended Matches for {{ offering.name }}</h4>
                 </div>
                 <div class="modal-body">
-                  <table class="table table-hover">
+                    <!-- Matches Table -->
+                  <table id = "ViewMatchesTable" ng-if="offers.length" class="table table-hover">
                       <thead>
                           <tr>
                               <th>Store Name</th>
@@ -116,7 +117,7 @@
                               <th>Quantity</th>
                               <th ng-if="forExcess">Disposal Date</th>
                               <th ng-if="!forExcess">Transaction Date</th>
-                              <th>Price</th>
+                              <th>Recommended Price</th>
                               <th>Suggested Transport Cost</th>
                               <th></th>
                           </tr>
@@ -127,18 +128,62 @@
                               <td>{{ x.item }}</td>
                               <td>{{ x.quantity }}</td>
                               <td ng-if="forExcess">{{ x.expiry | date }}</td>
-                              <td ng-if="!forExcess">{{ x.txDate | date }}</td>
+                              <td ng-if="!forExcess">{{ x.requestDate | date }}</td>
                               <td>{{ x.price | currency }}</td>
                               <td>{{ x.transportCost | currency }}</td>
                               <td>
-                                  <button ng-if="forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index)" ui-sref="dashboard.InProgressSelling" data-dismiss="modal">Purchase</button>
-                                  <button ng-if="!forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index)" ui-sref="dashboard.InProgressBuying" data-dismiss="modal">Purchase</button>
+                                  <button ng-if="forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index)" ui-sref="dashboard.InProgressSelling" data-dismiss="modal">Make Offer</button>
+                                  <button ng-if="!forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index)" ui-sref="dashboard.InProgressBuying" data-dismiss="modal">Make Request</button>
                               </td>
+                        </tr>
                       </tbody>
+
                   </table>
-                  <p class="text-muted text-center"><small>If none of the above offers are satisfactory, click button below to make new request on the market</small></p>
-                  <button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessOffer(offering)" ui-sref="dashboard.InProgressSelling" data-dismiss="modal">Make Sales Offer</button>
-                  <button type="button" class="btn btn-primary btn-lg btn-block" ng-if="!forExcess" ng-click="shortageOffer(offering)" ui-sref="dashboard.InProgressBuying" data-dismiss="modal">Make Purchase Request</button>
+                    <p ng-if="offers.length" class="text-muted text-center"><small>If none of the above offers are satisfactory, click button below to make new request on the market</small></p>
+
+                    <p ng-if="!offers.length" class="text-center"> <strong> Sorry, no matches found. </strong></p>
+
+
+                    <!-- Table for Predicted Shortages -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading" ng-if="forExcess">
+                            <strong>Offer Summary</strong>
+                        </div>
+                        <div class="panel-heading" ng-if="!forExcess">
+                            <strong>Request Summary</strong>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <!-- Summary Table-->
+                            <table id = "ViewSummaryTable" class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th ng-if="forExcess">Disposal Date</th>
+                                    <th ng-if="!forExcess">Request Date</th>
+                                    <th>Recommended Price ($)</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                <tr >
+                                    <td>{{ offering.name }}</td>
+                                    <td>{{ offering.offerQuantity }}</td>
+                                    <td ng-if="forExcess">{{ offering.expiry | date }}</td>
+                                    <td ng-if="!forExcess">{{ offering.requestDate | date }}</td>
+                                    <td><input class="tbl_input" id = "recPrice" type="Text" value="{{offering.price * offering.offerQuantity}}"></td>
+
+                                </tr>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+
+                  <button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessOffer(offering)" ui-sref="dashboard.InProgressSelling" data-dismiss="modal">Make A Sales Offer</button>
+                  <button type="button" class="btn btn-primary btn-lg btn-block" ng-if="!forExcess" ng-click="shortageOffer(offering)" ui-sref="dashboard.InProgressBuying" data-dismiss="modal">Make A Purchase Request</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -198,7 +243,7 @@
                                 </tr>
 
                                 <tr class="odd gradeX">
-                                    <td class="center">Less: Demand</td>
+                                    <td class="center">Less: Sales</td>
                                     <td ng-repeat="x in chart track by $index" ng-if="$index>6" class="text-center">({{ x.demand }})</td>
                                 </tr>
 
