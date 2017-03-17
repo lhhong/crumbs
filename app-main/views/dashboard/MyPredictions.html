@@ -115,8 +115,8 @@
                               <th>Store Name</th>
                               <th>Product</th>
                               <th>Quantity</th>
-                              <th ng-if="forExcess">Disposal Date</th>
-                              <th ng-if="!forExcess">Transaction Date</th>
+                              <th ng-if="forExcess">Request Date</th>
+                              <th ng-if="!forExcess">Offer Date</th>
                               <th>Recommended Price</th>
                               <th>Suggested Transport Cost</th>
                               <th></th>
@@ -127,8 +127,8 @@
                               <td>{{ x.sender.name }}</td>
                               <td>{{ x.item }}</td>
                               <td>{{ x.quantity }}</td>
-                              <td ng-if="forExcess">{{ x.expiry | date }}</td>
-                              <td ng-if="!forExcess">{{ x.requestDate | date }}</td>
+                              <td ng-if="forExcess">{{ x.requestDate | date }}</td>
+                              <td ng-if="!forExcess">{{ x.expiry | date }}</td>
                               <td>{{ x.price | currency }}</td>
                               <td>{{ x.transportCost | currency }}</td>
                               <td>
@@ -158,12 +158,11 @@
                             <table id = "ViewSummaryTable" class="table table-hover">
                                 <thead>
                                 <tr>
-                                    <th>Product</th>
-                                    <th>Quantity</th>
-                                    <th ng-if="forExcess">Disposal Date</th>
-                                    <th ng-if="!forExcess">Request Date</th>
-                                    <th>Recommended Price ($)</th>
-                                    <th></th>
+                                    <th class="col-md-3">Product</th>
+                                    <th class="col-md-2">Quantity</th>
+                                    <th class="col-md-2" ng-if="forExcess">Disposal Date</th>
+                                    <th class="col-md-2" ng-if="!forExcess">Request Date</th>
+                                    <th class="col-md-2">Price ($)</th>
                                 </tr>
                                 </thead>
 
@@ -173,12 +172,13 @@
                                     <td>{{ offering.offerQuantity }}</td>
                                     <td ng-if="forExcess">{{ offering.expiry | date }}</td>
                                     <td ng-if="!forExcess">{{ offering.requestDate | date }}</td>
-                                    <td><input class="tbl_input" id = "recPrice" type="Text" value="{{offering.price * offering.offerQuantity}}"></td>
+                                    <td><input class="tbl_input" id = "inputPrice" type="Text" value="{{offering.price * offering.offerQuantity}}"></td>
 
                                 </tr>
                                 </tbody>
-
                             </table>
+                            <p class="text-muted"><small>Recommended unit price = {{offering.price|currency}} </small></p>
+
                         </div>
                     </div>
 

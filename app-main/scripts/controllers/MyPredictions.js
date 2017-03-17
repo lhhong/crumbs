@@ -100,8 +100,9 @@ angular.module('sbAdminApp')
     };
 
     $scope.shortageOffer = function(stockShortage) {
-        var lv_input = document.getElementById("recPrice").value;
-        stockShortage.price = lv_input/stockShortage.offerQuantity;
+        var inputPrice = document.getElementById("inputPrice").value;
+        // CHANGE this eventually
+        stockShortage.price = inputPrice/stockShortage.offerQuantity;
         console.log("printing offer");
         console.log(stockShortage);
         txService.shortageOffer(stockShortage, function(response) {})
@@ -109,8 +110,9 @@ angular.module('sbAdminApp')
     };
 
     $scope.excessOffer = function(excessShipment) {
-        var lv_input = document.getElementById("recPrice").value;
-        excessShipment.price = lv_input/excessShipment.offerQuantity;
+        var inputPrice = document.getElementById("inputPrice").value;
+        // CHANGE this eventually
+        excessShipment.price = inputPrice/excessShipment.offerQuantity;
         console.log("printing offer");
         console.log(excessShipment);
         txService.excessOffer(excessShipment, function(response) {})

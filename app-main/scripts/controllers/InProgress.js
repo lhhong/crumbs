@@ -117,4 +117,19 @@ angular.module('sbAdminApp')
                                        height:'40%',
                                       'max-height':'80%'});
     });
+    $('#ViewOfferModal').on('show.bs.modal', function (event) {
+            $(this).find('.modal-dialog').css({width:'60%',
+                                       height:'40%',
+                                      'max-height':'80%'});
+    });
+    $('#ViewDetailsModal1').on('show.bs.modal', function (event) {
+            $(this).find('.modal-dialog').css({width:'60%',
+                                       height:'40%',
+                                      'max-height':'80%'});
+    });
+    $('#ViewDetailsModal2').on('show.bs.modal', function (event) {
+            $(this).find('.modal-dialog').css({width:'60%',
+                                       height:'40%',
+                                      'max-height':'80%'});
+    });
   }]);

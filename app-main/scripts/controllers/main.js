@@ -19,7 +19,18 @@ angular.module('sbAdminApp')
         txService.getEther(function(balance) {
             $scope.balance = balance;
         });
-
+        txService.getTransactions(function(txs) {
+            $scope.txs = txs;
+            //count selling and buying
+            var count = 0;
+            for (var i = 0; i<txs.pendingAgrees.length; i++) {
+                if (txs.pendingAgrees[i].sell){
+                    count++;
+                }
+            }
+            $scope.numOfSalesToApprove = count;
+            $scope.numOfPurchasesToApprove = txs.pendingAgrees.length-count;
+        });
         predictionService.getQuantity(function(predictQty) {
             if (predictQty.valid) {
                 $scope.excess = predictQty.excess;

@@ -101,12 +101,12 @@
                       </tr>
                   </thead>
                   <tbody>
-                      <tr ng-repeat="x in accepts track by $index | filter:searchText | orderBy:sortColumn:reverseSort" ng-if="!x.sell" ng-style="getBackground(x.pending)">
+                      <tr ng-repeat="x in accepts | filter:searchText | orderBy:sortColumn:reverseSort" ng-if="!x.sell" ng-style="getBackground(x.pending)">
                           <td>{{ x.item }}</td>
                           <td>{{ x.quantity }}</td>
                           <td>{{ (x.price) | currency }}</td>
                           <td>{{ x.txDate | date }}</td>
-                          <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewDetails" ng-click="viewTx(x)">View Details</button></td>
+                          <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewDetailsModal1" ng-click="viewTx(x)">View Details</button></td>
                       </tr>
                   </tbody>
               </table>
@@ -143,7 +143,7 @@
                           <td>Transport Date</td>
                           <td>{{ txView.transportCost | currency }}</td>
                           <td>{{ txView.price + txView.transportCost | currency }}</td>
-                          <td><button ng-click="agree(txView.uuid)" type="button" class="btn btn-success btn-txViews">Purchase</button></td>
+                          <td><button ng-click="agree(txView.uuid)" type="button" class="btn btn-success btn-txViews">Sell</button></td>
                       </tr>
                       </tbody>
                   </table>
@@ -156,7 +156,7 @@
     <!-- /.modal -->
 
     <!-- Modal for View Details -->
-    <div class="modal fade" id="ViewDetails" tabindex="-1" role="dialog" aria-labelledby="ViewDetailsModalLabel" aria-hidden="true">
+    <div class="modal fade" id="ViewDetailsModal1" tabindex="-1" role="dialog" aria-labelledby="ViewDetailsModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">

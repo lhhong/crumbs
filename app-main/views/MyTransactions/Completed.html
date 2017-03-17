@@ -19,22 +19,24 @@
               <table class="table table-striped">
                   <thead>
                       <tr>
-                          <th>Store Name</th>
-                          <th>Product</th>
-                          <th>Quantity</th>
-                          <th>Price</th>
-                          <th>Transaction Date</th>
-                          <th>Disposal Date</th>
+                          <th class="col-md-2">Product</th>
+                          <th class="col-md-1">Quantity</th>
+                          <th class="col-md-1">Total Price</th>
+                          <th class="col-md-2">Store Name</th>
+                          <th class="col-md-2">Location</th>
+                          <th class="col-md-2">Transaction Date</th>
+                          <th class="col-md-2">Transport Date</th>
                       </tr>
                   </thead>
                   <tbody>
                       <tr ng-repeat="x in bought">
-                          <td>{{ x.accepter.name }}{{ x.sender.name }}</td>
                           <td>{{ x.item }}</td>
                           <td>{{ x.quantity }}</td>
                           <td>{{ x.price | currency }}</td>
+                          <td>{{ x.accepter.name }}{{ x.sender.name }}</td>
+                          <td>---</td>
                           <td>{{ x.txDate | date }}</td>
-                          <td>{{ x.expiry | date }}</td>
+                          <td>---</td>
                       </tr>
                   </tbody>
               </table>
@@ -53,22 +55,24 @@
               <table class="table table-striped">
                   <thead>
                       <tr>
-                          <th>Store Name</th>
-                          <th>Product</th>
-                          <th>Quantity</th>
-                          <th>Price</th>
-                          <th>Transaction Date</th>
-                          <th>Disposal Date</th>
+                          <th class="col-md-2">Product</th>
+                          <th class="col-md-1">Quantity</th>
+                          <th class="col-md-1">Total Price</th>
+                          <th class="col-md-2">Store Name</th>
+                          <th class="col-md-2">Location</th>
+                          <th class="col-md-2">Transaction Date</th>
+                          <th class="col-md-2">Transport Date</th>
                       </tr>
                   </thead>
                   <tbody>
                       <tr ng-repeat="x in sold">
-                          <td>{{ x.accepter.name }}{{ x.sender.name }}</td>
                           <td>{{ x.item }}</td>
                           <td>{{ x.quantity }}</td>
                           <td>{{ x.price | currency }}</td>
+                          <td>{{ x.accepter.name }}{{ x.sender.name }}</td>
+                          <td>---</td>
                           <td>{{ x.txDate | date }}</td>
-                          <td>{{ x.expiry | date }}</td>
+                          <td>---</td>
                       </tr>
                   </tbody>
               </table>

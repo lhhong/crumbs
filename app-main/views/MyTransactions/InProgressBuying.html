@@ -62,7 +62,7 @@
                           <td>{{ x.quantity }}</td>
                           <td>{{ x.price | currency }}</td>
                           <td>{{ x.txDate | date }}</td>
-                          <td><button type="button" class="btn btn-success btn-xs" ng-if="x.agreeing" data-toggle="modal" data-target="#ViewOffer" ng-click="viewTx(x)">View Offers</button></td>
+                          <td><button type="button" class="btn btn-success btn-xs" ng-if="x.agreeing" data-toggle="modal" data-target="#ViewOfferModal" ng-click="viewTx(x)">View Offers</button></td>
                       </tr>
                   </tbody>
               </table>
@@ -101,12 +101,12 @@
                       </tr>
                   </thead>
                   <tbody>
-                      <tr ng-repeat="x in accepts track by $index | filter:searchText | orderBy:sortColumn:reverseSort" ng-if="x.sell" ng-style="getBackground(x.pending)">
+                      <tr ng-repeat="x in accepts | filter:searchText | orderBy:sortColumn:reverseSort" ng-if="x.sell" ng-style="getBackground(x.pending)">
                           <td>{{ x.item }}</td>
                           <td>{{ x.quantity }}</td>
                           <td>{{ x.price | currency }}</td>
                           <td>{{ x.txDate | date }}</td>
-                          <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewDetails" ng-click="viewTx(x)">View Details</button></td>
+                          <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewDetailsModal2" ng-click="viewTx(x)">View Details</button></td>
                       </tr>
                   </tbody>
               </table>
@@ -117,7 +117,7 @@
     </div>
 
     <!-- Modal for View Requests -->
-    <div class="modal fade" id="ViewOffer" tabindex="-1" role="dialog" aria-labelledby="ViewOfferModalLabel" aria-hidden="true">
+    <div class="modal fade" id="ViewOfferModal" tabindex="-1" role="dialog" aria-labelledby="ViewOfferModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -157,7 +157,7 @@
     <!-- /.modal -->
 
     <!-- Modal for View Details -->
-    <div class="modal fade" id="ViewDetails" tabindex="-1" role="dialog" aria-labelledby="ViewDetailsModalLabel" aria-hidden="true">
+    <div class="modal fade" id="ViewDetailsModal2" tabindex="-1" role="dialog" aria-labelledby="ViewDetailsModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
