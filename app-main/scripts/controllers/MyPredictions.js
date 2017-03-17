@@ -85,14 +85,7 @@ angular.module('sbAdminApp')
                 console.log("server error");
                 $scope.offers = [{price: 567}, {price: 600}];
             });
-    }
-
-    $scope.excessViewPrediction = function(index) {
-        $scope.predictedItem = $scope.predictions.excessShipments[index];
-    }
-    $scope.shortageViewPrediction = function(index) {
-        $scope.predictedItem = $scope.predictions.stockShortages[index];
-    }
+    };
 
     $scope.acceptOffer = function(index) {
         txService.accept($scope.offers[index], function(response) {});
@@ -137,10 +130,10 @@ angular.module('sbAdminApp')
         }
     };
 
-    $scope.getDisposalCellColour = function(number) {
+    $scope.getDisposalCellColour = function(colNumber,columnNumberToHighlight) {
         var colour;
-        if (number > 100) {
-            colour = '#ff8888'
+        if (colNumber == columnNumberToHighlight) {
+            colour = '#FF9191'
         }
         else {
             colour = '#ffffff'
@@ -150,11 +143,8 @@ angular.module('sbAdminApp')
         }
     };
 
-    $scope.getInventoryCellColour = function(number) {
-        var colour;
-        if (number < 0) {
-            colour = '#ff8888'
-        }
+    $scope.getMonthCellColour = function(n){
+        var colour = '#ECECEE';
         return {
             background: colour
         }
@@ -178,6 +168,16 @@ angular.module('sbAdminApp')
         return { newString }
      };
 
+    $scope.formatColumn = function(colNumber,columnNumberToHighlight) {
+        var colour;
+        if (colNumber == columnNumberToHighlight) {
+            colour = '#FF9191'
+        }
+        return {
+            background: colour
+        }
+     };
+
     var reloadData = function() {
         txService.getEther(function(balance) {
             $scope.balance = balance;
@@ -191,9 +191,13 @@ angular.module('sbAdminApp')
 
     $scope.chart = [];
 
-    $scope.viewChart = function(productName) {
-        console.log(productName);
-        $scope.predictedName = productName;
+    $scope.viewChart = function(predictedItem,isSell) {
+        $scope.predictedItem = predictedItem;
+        if (isSell){ var day = new Date(predictedItem.expiry); }
+        else { var day = new Date(predictedItem.requestDate); }
+        $scope.columnNumberToHighlight = day.getDate()-7;
+        console.log(predictedItem.name);
+        var productName = predictedItem.name;
         predictionService.getChart(productName, function(chart, demand) {
             $scope.chart = chart;
             $scope.demand = demand;
@@ -234,7 +238,7 @@ angular.module('sbAdminApp')
         var predictions = $scope.demand;
         var paddingLeft = [null,null,null,null,null,null,null];
         var predictionChart = new Chart(ctx).Line({
-            labels: ["Apr 8", "", "Apr 10", "", "Apr 12", "", "Apr 14", "", "Apr 16", "", "Apr 18", "", "Apr 20", "", "Apr 24", "", "Apr 26", "", "Apr 28", "", "Apr 30"],
+            labels: ["Apr 7", "", "Apr 9", "", "Apr 11", "", "Apr 13", "", "Apr 15", "", "Apr 17", "", "Apr 19", "", "Apr 21", "", "Apr 23", "", "Apr 25", "", "Apr 27"],
             datasets: [
                 {
                 // plotting past demand
