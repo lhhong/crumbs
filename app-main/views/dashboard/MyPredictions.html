@@ -172,7 +172,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading"><b>Prediction Summary</b></div>
                         <div class="panel-body">
-                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <table class="table table-striped table-bordered table-hover" style="border-collapse: collapse" id="dataTables-example" >
                                 <thead>
                                 <tr>
                                     <th>Day</th>
@@ -181,8 +181,8 @@
                                 </thead>
                                 <tbody>
 
-                                <tr class="odd gradeX">
-                                    <td class="center"><b>Starting Inventory</b></td>
+                                <tr class="odd gradeX" style="border-bottom:2px solid #010000;">
+                                    <td class="center" ><b>Starting Inventory</b></td>
                                     <td ng-repeat="x in chart track by $index" ng-if="$index>6" class="text-center">{{ replaceWithDashes(x.startingInventory-x.stock+x.disposal).newString }}</td>
                                 </tr>
 
@@ -192,7 +192,7 @@
                                 </tr>
 
                                 <tr class="odd gradeX">
-                                    <td class="center">Less: Disposal</td>
+                                    <td class="center" ng-style= "{'background-color': '#ffffff'}" >Less: Disposal</td>
                                     <td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="getDisposalCellColour(x.disposal)" class="text-center">{{ formatDisposal(x.disposal).newString }}</td>
 
                                 </tr>
@@ -202,7 +202,7 @@
                                     <td ng-repeat="x in chart track by $index" ng-if="$index>6" class="text-center">({{ x.demand }})</td>
                                 </tr>
 
-                                <tr class="odd gradeX">
+                                <tr class="odd gradeX" style="border-top:2px solid #010000;">
                                     <td class="center"><b>Ending Inventory</b></td>
                                     <td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="getInventoryCellColour(x.endingInventory)" class="text-center">{{ x.endingInventory }}</td>
                                 </tr>

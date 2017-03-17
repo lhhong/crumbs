@@ -134,6 +134,9 @@ angular.module('sbAdminApp')
         if (number > 100) {
             colour = '#ff8888'
         }
+        else {
+            colour = '#ffffff'
+        }
         return {
             background: colour
         }
