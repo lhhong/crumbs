@@ -98,10 +98,10 @@ public class TransactionController {
 		try {
 			Thread.sleep(60000);
 		} catch (InterruptedException e) {
-			transactionService.dropListener(listener);
 			return true;
+		} finally {
+			transactionService.dropListener(listener);
 		}
-		transactionService.dropListener(listener);
 		return false;
 	}
 

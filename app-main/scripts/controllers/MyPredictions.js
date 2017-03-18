@@ -100,8 +100,7 @@ angular.module('sbAdminApp')
 
     $scope.shortageOffer = function(stockShortage) {
         var inputPrice = document.getElementById("inputPrice").value;
-        // CHANGE this eventually
-        stockShortage.price = inputPrice/stockShortage.offerQuantity;
+        stockShortage.price = inputPrice;
         console.log("printing offer");
         console.log(stockShortage);
         txService.shortageOffer(stockShortage, function(response) {})
@@ -110,8 +109,7 @@ angular.module('sbAdminApp')
 
     $scope.excessOffer = function(excessShipment) {
         var inputPrice = document.getElementById("inputPrice").value;
-        // CHANGE this eventually
-        excessShipment.price = inputPrice/excessShipment.offerQuantity;
+        excessShipment.price = inputPrice;
         console.log("printing offer");
         console.log(excessShipment);
         txService.excessOffer(excessShipment, function(response) {})

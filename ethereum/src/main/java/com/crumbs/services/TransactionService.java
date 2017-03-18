@@ -241,7 +241,7 @@ public class TransactionService {
 		tx.setUuid(uuid);
 		tx.setQuantity(shortExce.getOfferQuantity());
 		tx.setItem(shortExce.getName());
-		tx.setPrice(shortExce.getPrice() * shortExce.getOfferQuantity());
+		tx.setPrice(shortExce.getPrice());
 		long date = 0;
 		if (shortExce instanceof ExceShipVM) {
 			tx.setSell(true);

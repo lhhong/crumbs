@@ -41,8 +41,10 @@ angular.module('sbAdminApp')
                 $scope.valid = false;
             }
         }, function() {
-                $scope.excess = "4";
-                $scope.shortage = "1";
+            $scope.numOfSalesToApprove = "0";
+            $scope.numOfPurchasesToApprove = "0";
+            $scope.excess = "4";
+            $scope.shortage = "1";
         })
     }
 
