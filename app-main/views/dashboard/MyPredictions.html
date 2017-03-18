@@ -168,15 +168,15 @@
 									<tbody>
 										<tr >
 											<td>{{ offering.name }}</td>
-											<td>{{ offering.offerQuantity }}</td>
+											<td><input class="tbl_input" type="number" value="{{ offering.offerQuantity }}" ng-model="inputQuantity"></td>
 											<td ng-if="forExcess">{{ offering.expiry | date }}</td>
 											<td ng-if="!forExcess">{{ offering.requestDate | date }}</td>
-											<td><input class="tbl_input" id = "inputPrice" type="Text" value="{{offering.price * offering.offerQuantity}}"></td>
+											<td>$<input class="tbl_input" type="number" value="{{offering.price * offering.offerQuantity}}" ng-model="inputPrice"></td>
 
 										</tr>
 									</tbody>
 								</table>
-								<p class="text-muted"><small>Recommended unit price = {{offering.price|currency}} </small></p>
+								<p class="text-muted"><small>Recommended unit price = {{offering.price|currency}} Recommended total price = {{offering.price*inputQuantity|currency}}</small></p>
 
 								<button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessOffer(offering)" ui-sref="dashboard.InProgressSelling" data-dismiss="modal">Make A Sales Offer</button>
 								<button type="button" class="btn btn-primary btn-lg btn-block" ng-if="!forExcess" ng-click="shortageOffer(offering)" ui-sref="dashboard.InProgressBuying" data-dismiss="modal">Make A Purchase Request</button>

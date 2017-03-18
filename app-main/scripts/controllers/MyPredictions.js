@@ -71,6 +71,8 @@ angular.module('sbAdminApp')
         $scope.collapsed = true;
         $scope.forExcess = true;
         $scope.offering = $scope.predictions.excessShipments[index];
+        $scope.inputQuantity = $scope.offering.offerQuantity;
+        $scope.inputPrice = $scope.offering.price * $scope.offering.offerQuantity;
         predictionService.excessViewOffers($scope.predictions.excessShipments[index],
             function(response) {
                 $scope.offers = response;
@@ -84,6 +86,8 @@ angular.module('sbAdminApp')
         $scope.collapsed = true;
         $scope.forExcess = false;
         $scope.offering = $scope.predictions.stockShortages[index];
+        $scope.inputQuantity = $scope.offering.offerQuantity;
+        $scope.inputPrice = $scope.offering.price * $scope.offering.offerQuantity;
         predictionService.shortageViewOffers($scope.predictions.stockShortages[index],
             function(response) {
                 $scope.offers = response;
@@ -99,8 +103,8 @@ angular.module('sbAdminApp')
     };
 
     $scope.shortageOffer = function(stockShortage) {
-        var inputPrice = document.getElementById("inputPrice").value;
-        stockShortage.price = inputPrice;
+        stockShortage.price = $scope.inputPrice;
+        stockShortage.offerQuantity = $scope.inputQuantity;
         console.log("printing offer");
         console.log(stockShortage);
         txService.shortageOffer(stockShortage, function(response) {})
@@ -108,8 +112,8 @@ angular.module('sbAdminApp')
     };
 
     $scope.excessOffer = function(excessShipment) {
-        var inputPrice = document.getElementById("inputPrice").value;
-        excessShipment.price = inputPrice;
+        excessShipment.price = $scope.inputPrice;
+        excessShipment.offerQuantity = $scope.inputQuantity;
         console.log("printing offer");
         console.log(excessShipment);
         txService.excessOffer(excessShipment, function(response) {})
