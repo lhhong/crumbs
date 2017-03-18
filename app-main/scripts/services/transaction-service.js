@@ -2,7 +2,7 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
 
     var baseUrl = 'http://localhost:8080/'
 
-    var accept = function(tx, callback) {
+    var accept = function(tx, callback, errorCallback) {
         $http({
             method: 'POST',
             url: baseUrl + 'accept',
@@ -14,10 +14,19 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
             if (callback) {
                 callback(response.data)
             }
+        },function(response) {
+            if (response.status == 422) {
+                if (errorCallback) errorCallback();
+            }
+            else {
+                if (callback) {
+                    callback(response.data)
+                }
+            }
         })
     }
 
-    var excessOffer = function(offer, callback) {
+    var excessOffer = function(offer, callback, errorCallback) {
         $http({
             method: 'POST',
             url: baseUrl + 'offer_excess',
@@ -32,10 +41,18 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
                 callback(response.data)
             }
         },function(response) {
+            if (response.status == 422) {
+                if (errorCallback) errorCallback();
+            }
+            else {
+                if (callback) {
+                    callback(response.data)
+                }
+            }
         })
     }
 
-    var shortageOffer = function(offer, callback) {
+    var shortageOffer = function(offer, callback, errorCallback) {
         $http({
             method: 'POST',
             url: baseUrl + 'offer_shortage',
@@ -49,10 +66,19 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
                 else console.log("check again later")
                 callback(response.data)
             }
+        },function(response) {
+            if (response.status == 422) {
+                if (errorCallback) errorCallback();
+            }
+            else {
+                if (callback) {
+                    callback(response.data)
+                }
+            }
         })
     }
 
-    var register = function(name, x, y) {
+    var register = function(name, x, y, errorCallback) {
         $http({
             method: 'POST',
             url: baseUrl + 'register',
@@ -67,7 +93,9 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
         }).then(function(response) {
             console.log("registration request sent")
         },function(response) {
-            //console.log("server error, code = " + response.status)
+            if (response.status == 422) {
+                if (errorCallback) errorCallback();
+            }
         })
     }
 
@@ -132,7 +160,7 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
         })
     }
 
-    var agree = function(uuid, callback) {
+    var agree = function(uuid, callback, errorCallback) {
         $http({
             method: 'POST',
             url: baseUrl + "agree",
@@ -143,6 +171,15 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
         }).then(function(response) {
             if (callback) {
                 callback(response.data)
+            }
+        },function(response) {
+            if (response.status == 422) {
+                if (errorCallback) errorCallback();
+            }
+            else {
+                if (callback) {
+                    callback(response.data)
+                }
             }
         })
     }

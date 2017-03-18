@@ -7,8 +7,12 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('PredictCtrl', ['$interval', '$timeout', '$scope', 'txService', 'predictionService', function($interval, $timeout, $scope, txService, predictionService) {
+  .controller('PredictCtrl', ['$state', '$interval', '$timeout', '$scope', 'txService', 'predictionService', function($state, $interval, $timeout, $scope, txService, predictionService) {
 
+    $scope.testError = function() {
+        console.log("testing Error");
+        errorService.displayError();
+    }
     $scope.collapsed=true;
     $scope.toggleCollapsed = function() {
         $scope.collapsed = !$scope.collapsed;
@@ -97,18 +101,38 @@ angular.module('sbAdminApp')
             });
     };
 
-    $scope.acceptOffer = function(index) {
-        txService.accept($scope.offers[index], function(response) {});
+    $scope.acceptOffer = function(index, selling) {
+        txService.accept($scope.offers[index], function(response) {
+            $('.modal-backdrop').remove();
+            if (selling) {
+                $state.go('dashboard.InProgressSelling');
+            }
+            else {
+                $state.go('dashboard.InProgressBuying');
+            }
+        }, function () {
+            $scope.alert = true;
+        })
         $('.modal-backdrop').remove();
     };
+
+    $scope.alert = false;
+
+    $scope.closeAlert = function(index) {
+        $scope.alert = false;
+    }
 
     $scope.shortageOffer = function(stockShortage) {
         stockShortage.price = $scope.inputPrice;
         stockShortage.offerQuantity = $scope.inputQuantity;
         console.log("printing offer");
         console.log(stockShortage);
-        txService.shortageOffer(stockShortage, function(response) {})
-        $('.modal-backdrop').remove();
+        txService.shortageOffer(stockShortage, function(response) {
+            $('.modal-backdrop').remove();
+            $state.go('dashboard.InProgressBuying');
+        }, function () {
+            $scope.alert = true;
+        })
     };
 
     $scope.excessOffer = function(excessShipment) {
@@ -116,8 +140,12 @@ angular.module('sbAdminApp')
         excessShipment.offerQuantity = $scope.inputQuantity;
         console.log("printing offer");
         console.log(excessShipment);
-        txService.excessOffer(excessShipment, function(response) {})
-        $('.modal-backdrop').remove();
+        txService.excessOffer(excessShipment, function(response) {
+            $('.modal-backdrop').remove();
+            $state.go('dashboard.InProgressBuying');
+        }, function () {
+            $scope.alert = true;
+        })
     };
 
     $scope.getColour = function(shortOrExce, index) {

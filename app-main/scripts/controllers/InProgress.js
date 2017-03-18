@@ -106,9 +106,17 @@ angular.module('sbAdminApp')
         }
     };
 
+    $scope.alert = false;
+
+    $scope.closeAlert = function(index) {
+        $scope.alert = false;
+    }
+
     $scope.agree = function(uuid) {
         txService.agree(uuid, function(response) {
             console.log("Agree sent");
+        }, function() {
+            $scope.alert = true;
         })
         $scope.reloaded = false;
     };

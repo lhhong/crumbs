@@ -24,6 +24,7 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
+    <div uib-alert ng-if="alert" class="alert-danger" close="closeAlert()" dismiss-on-timeout="3000">Error: please wait for previous action to be mined before continuing</div>
     <div class="alert alert-success">
         Current Balance: <em>{{ balance| currency }}</em>
     </div>

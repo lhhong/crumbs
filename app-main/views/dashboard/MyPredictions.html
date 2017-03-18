@@ -18,6 +18,7 @@
 	<h1 class="page-header">Running Predictions...</h1>
 </div>
 <div>
+	<button ng-click="testError()">Test Error</button>
 	<div class="row">
 		<div class="col-lg-12">
 			<h1 class="page-header"><i class="fa fa-bar-chart-o fa-fw"></i><em> MyPredictions</em></h1>
@@ -108,6 +109,7 @@
 					<h4 class="modal-title">Recommended Matches for {{ offering.name }}</h4>
 				</div>
 				<div class="modal-body">
+					<div uib-alert ng-if="alert" class="alert-danger" close="closeAlert()" dismiss-on-timeout="3000">Error: please wait for previous action to be mined before continuing</div>
 					<!-- Matches Table -->
 					<table id = "ViewMatchesTable" ng-if="offers.length" class="table table-hover">
 						<thead>
@@ -132,8 +134,8 @@
 								<td>{{ x.price | currency }}</td>
 								<td>{{ x.transportCost | currency }}</td>
 								<td>
-									<button ng-if="forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index)" ui-sref="dashboard.InProgressSelling" data-dismiss="modal">Make Offer</button>
-									<button ng-if="!forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index)" ui-sref="dashboard.InProgressBuying" data-dismiss="modal">Make Request</button>
+									<button ng-if="forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index, false)">Make Offer</button>
+									<button ng-if="!forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index, true)">Make Request</button>
 								</td>
 							</tr>
 						</tbody>
@@ -178,8 +180,8 @@
 								</table>
 								<p class="text-muted"><small>Recommended unit price = {{offering.price|currency}} Recommended total price = {{offering.price*inputQuantity|currency}}</small></p>
 
-								<button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessOffer(offering)" ui-sref="dashboard.InProgressSelling" data-dismiss="modal">Make A Sales Offer</button>
-								<button type="button" class="btn btn-primary btn-lg btn-block" ng-if="!forExcess" ng-click="shortageOffer(offering)" ui-sref="dashboard.InProgressBuying" data-dismiss="modal">Make A Purchase Request</button>
+								<button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessOffer(offering)">Make A Sales Offer</button>
+								<button type="button" class="btn btn-primary btn-lg btn-block" ng-if="!forExcess" ng-click="shortageOffer(offering)">Make A Purchase Request</button>
 							</div>
 						</div>
 					</div>
