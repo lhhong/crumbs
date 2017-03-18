@@ -9,6 +9,10 @@
 angular.module('sbAdminApp')
   .controller('PredictCtrl', ['$interval', '$timeout', '$scope', 'txService', 'predictionService', function($interval, $timeout, $scope, txService, predictionService) {
 
+    $scope.collapsed=true;
+    $scope.toggleCollapsed = function() {
+        $scope.collapsed = !$scope.collapsed;
+    }
     console.log("loaded");
     $scope.balance = 0;
     predictionService.getPredictions(
@@ -64,6 +68,7 @@ angular.module('sbAdminApp')
     );
 
     $scope.excessViewOffer = function(index) {
+        $scope.collapsed = true;
         $scope.forExcess = true;
         $scope.offering = $scope.predictions.excessShipments[index];
         predictionService.excessViewOffers($scope.predictions.excessShipments[index],
@@ -76,6 +81,7 @@ angular.module('sbAdminApp')
     }
 
     $scope.shortageViewOffer = function(index) {
+        $scope.collapsed = true;
         $scope.forExcess = false;
         $scope.offering = $scope.predictions.stockShortages[index];
         predictionService.shortageViewOffers($scope.predictions.stockShortages[index],

@@ -1,272 +1,272 @@
 <style>
-    #overlay {
-        background: rgba(255,255,255,0.8);
-        color: #666666;
-        position: fixed;
-        height: 100%;
-        width: 100%;
-        z-index: 5000;
-        top: 0;
-        left: 0;
-        float: left;
-        text-align: center;
-        padding-top: 25%;
-    }
+#overlay {
+	background: rgba(255,255,255,0.8);
+	color: #666666;
+	position: fixed;
+	height: 100%;
+	width: 100%;
+	z-index: 5000;
+	top: 0;
+	left: 0;
+	float: left;
+	text-align: center;
+	padding-top: 25%;
+}
 </style>
 <div ng-hide="predictions" id="overlay">
-    <img src="loader.gif" alt="Loading" /><br/>
-    <h1 class="page-header">Running Predictions...</h1>
+	<img src="loader.gif" alt="Loading" /><br/>
+	<h1 class="page-header">Running Predictions...</h1>
 </div>
 <div>
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header"><i class="fa fa-bar-chart-o fa-fw"></i><em> MyPredictions</em></h1>
-        </div>
-    </div>
-    <div class="alert alert-success">
-        Current Balance: <em>{{ balance| currency }}</em>
-    </div>
+	<div class="row">
+		<div class="col-lg-12">
+			<h1 class="page-header"><i class="fa fa-bar-chart-o fa-fw"></i><em> MyPredictions</em></h1>
+		</div>
+	</div>
+	<div class="alert alert-success">
+		Current Balance: <em>{{ balance| currency }}</em>
+	</div>
 
-    <!-- Table for Predicted Excess -->
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <strong>Predicted Excess</strong>
-        </div>
-        <!-- /.panel-heading -->
-        <div class="panel-body">
-            <div class="table-responsive">
-                <table id = "ExcessTable" class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th class="col-md-2">Date of Excess</th>
-                        <th class="col-md-3">Product</th>
-                        <th class="col-md-2">Quantity</th>
-                        <th class="col-md-2"> Price</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr ng-repeat="x in predictions.excessShipments track by $index" ng-hide="x.hidden" ng-style="getColour('excessShipments', $index)">
-                        <td>{{ x.expiry | date}}</td>
-                        <td>{{ x.name }}</td>
-                        <td>{{ x.offerQuantity }}</td>
-                        <td>{{ x.price * x.offerQuantity| currency }}</td>
-                        <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#PredictionModal" ng-click="viewChart(x,1)">View Chart</button></td>
-                        <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarketModal" ng-click="excessViewOffer($index)">View Market</button></td>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <!-- /.table-responsive -->
-        </div>
-        <!-- /.panel-body -->
-    </div>
+	<!-- Table for Predicted Excess -->
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<strong>Predicted Excess</strong>
+		</div>
+		<!-- /.panel-heading -->
+		<div class="panel-body">
+			<div class="table-responsive">
+				<table id = "ExcessTable" class="table table-striped">
+					<thead>
+						<tr>
+							<th class="col-md-2">Date of Excess</th>
+							<th class="col-md-3">Product</th>
+							<th class="col-md-2">Quantity</th>
+							<th class="col-md-2"> Price</th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="x in predictions.excessShipments track by $index" ng-hide="x.hidden" ng-style="getColour('excessShipments', $index)">
+							<td>{{ x.expiry | date}}</td>
+							<td>{{ x.name }}</td>
+							<td>{{ x.offerQuantity }}</td>
+							<td>{{ x.price * x.offerQuantity| currency }}</td>
+							<td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#PredictionModal" ng-click="viewChart(x,1)">View Chart</button></td>
+							<td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarketModal" ng-click="excessViewOffer($index)">View Market</button></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!-- /.table-responsive -->
+		</div>
+		<!-- /.panel-body -->
+	</div>
 
-    <!-- Table for Predicted Shortages -->
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <strong>Predicted Shortages</strong>
-      </div>
-      <!-- /.panel-heading -->
-      <div class="panel-body">
-          <div class="table-responsive">
-              <table id = "ShortageTable" class="table table-striped" width="100%">
-                  <thead>
-                      <tr>
-                          <th class="col-md-2">Date of Shortage</th>
-                          <th class="col-md-3">Product</th>
-                          <th class="col-md-2">Quantity</th>
-                          <th class="col-md-2">Price</th>
-                          <th></th>
-                          <th></th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr ng-repeat="x in predictions.stockShortages track by $index" ng-hide="x.hidden" ng-style="getColour('stockShortages', $index)">
-                          <td>{{ x.requestDate | date}}</td>
-                          <td>{{ x.name }}</td>
-                          <td>{{ x.offerQuantity }}</td>
-                          <td>{{ x.price*x.offerQuantity| currency }}</td>
-                          <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#PredictionModal" ng-click="viewChart(x,0)">View Chart</button></td>
-                          <td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarketModal" ng-click="shortageViewOffer($index)">View Market</button></td>
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
-          <!-- /.table-responsive -->
-      </div>
-      <!-- /.panel-body -->
-    </div>
+	<!-- Table for Predicted Shortages -->
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<strong>Predicted Shortages</strong>
+		</div>
+		<!-- /.panel-heading -->
+		<div class="panel-body">
+			<div class="table-responsive">
+				<table id = "ShortageTable" class="table table-striped" width="100%">
+					<thead>
+						<tr>
+							<th class="col-md-2">Date of Shortage</th>
+							<th class="col-md-3">Product</th>
+							<th class="col-md-2">Quantity</th>
+							<th class="col-md-2">Price</th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="x in predictions.stockShortages track by $index" ng-hide="x.hidden" ng-style="getColour('stockShortages', $index)">
+							<td>{{ x.requestDate | date}}</td>
+							<td>{{ x.name }}</td>
+							<td>{{ x.offerQuantity }}</td>
+							<td>{{ x.price*x.offerQuantity| currency }}</td>
+							<td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#PredictionModal" ng-click="viewChart(x,0)">View Chart</button></td>
+							<td><button type="button" class="btn btn-info btn-xs" data-toggle="modal" data-target="#ViewMarketModal" ng-click="shortageViewOffer($index)">View Market</button></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!-- /.table-responsive -->
+		</div>
+		<!-- /.panel-body -->
+	</div>
 
-    <!-- Modal for View Market -->
-    <div class="modal fade" id="ViewMarketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Recommended Matches for {{ offering.name }}</h4>
-                </div>
-                <div class="modal-body">
-                    <!-- Matches Table -->
-                  <table id = "ViewMatchesTable" ng-if="offers.length" class="table table-hover">
-                      <thead>
-                          <tr>
-                              <th>Store Name</th>
-                              <th>Product</th>
-                              <th>Quantity</th>
-                              <th ng-if="forExcess">Request Date</th>
-                              <th ng-if="!forExcess">Offer Date</th>
-                              <th>Recommended Price</th>
-                              <th>Suggested Transport Cost</th>
-                              <th></th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                          <tr ng-repeat="x in offers track by $index">
-                              <td>{{ x.sender.name }}</td>
-                              <td>{{ x.item }}</td>
-                              <td>{{ x.quantity }}</td>
-                              <td ng-if="forExcess">{{ x.requestDate | date }}</td>
-                              <td ng-if="!forExcess">{{ x.expiry | date }}</td>
-                              <td>{{ x.price | currency }}</td>
-                              <td>{{ x.transportCost | currency }}</td>
-                              <td>
-                                  <button ng-if="forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index)" ui-sref="dashboard.InProgressSelling" data-dismiss="modal">Make Offer</button>
-                                  <button ng-if="!forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index)" ui-sref="dashboard.InProgressBuying" data-dismiss="modal">Make Request</button>
-                              </td>
-                        </tr>
-                      </tbody>
+	<!-- Modal for View Market -->
+	<div class="modal fade" id="ViewMarketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Recommended Matches for {{ offering.name }}</h4>
+				</div>
+				<div class="modal-body">
+					<!-- Matches Table -->
+					<table id = "ViewMatchesTable" ng-if="offers.length" class="table table-hover">
+						<thead>
+							<tr>
+								<th>Store Name</th>
+								<th>Product</th>
+								<th>Quantity</th>
+								<th ng-if="forExcess">Request Date</th>
+								<th ng-if="!forExcess">Offer Date</th>
+								<th>Recommended Price</th>
+								<th>Suggested Transport Cost</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="x in offers track by $index">
+								<td>{{ x.sender.name }}</td>
+								<td>{{ x.item }}</td>
+								<td>{{ x.quantity }}</td>
+								<td ng-if="forExcess">{{ x.requestDate | date }}</td>
+								<td ng-if="!forExcess">{{ x.expiry | date }}</td>
+								<td>{{ x.price | currency }}</td>
+								<td>{{ x.transportCost | currency }}</td>
+								<td>
+									<button ng-if="forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index)" ui-sref="dashboard.InProgressSelling" data-dismiss="modal">Make Offer</button>
+									<button ng-if="!forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index)" ui-sref="dashboard.InProgressBuying" data-dismiss="modal">Make Request</button>
+								</td>
+							</tr>
+						</tbody>
 
-                  </table>
-                    <p ng-if="offers.length" class="text-muted text-center"><small>If none of the above offers are satisfactory, click button below to make new request on the market</small></p>
+					</table>
+					<p ng-if="offers.length" class="text-muted text-center"><small>If none of the above offers are satisfactory, click button below to make new request on the market</small></p>
 
-                    <p ng-if="!offers.length" class="text-center"> <strong> Sorry, no matches found. </strong></p>
+					<p ng-if="!offers.length" class="text-center"> <strong> Sorry, no matches found. </strong></p>
 
 
-                    <!-- Table for Predicted Shortages -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading" ng-if="forExcess">
-                            <strong>Offer Summary</strong>
-                        </div>
-                        <div class="panel-heading" ng-if="!forExcess">
-                            <strong>Request Summary</strong>
-                        </div>
-                        <!-- /.panel-heading -->
-                        <div class="panel-body">
-                            <!-- Summary Table-->
-                            <table id = "ViewSummaryTable" class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th class="col-md-3">Product</th>
-                                    <th class="col-md-2">Quantity</th>
-                                    <th class="col-md-2" ng-if="forExcess">Disposal Date</th>
-                                    <th class="col-md-2" ng-if="!forExcess">Request Date</th>
-                                    <th class="col-md-2">Price ($)</th>
-                                </tr>
-                                </thead>
+					<!-- Table for Predicted Shortages -->
+					<div class="panel-group" id="newTx">
+						<div class="panel panel-default">
+							<div class="panel-heading" ng-if="forExcess" ng-click="toggleCollapsed()" style="cursor:pointer;">
+								<strong ng-if="forExcess">New Offer</strong>
+								<strong ng-if="!forExcess">New Request</strong>
+							</div>
+							<!-- /.panel-heading -->
+							<div class="panel-body" uib-collapse="collapsed">
+								<!-- Summary Table-->
+								<table id = "ViewSummaryTable" class="table table-hover">
+									<thead>
+										<tr>
+											<th class="col-md-3">Product</th>
+											<th class="col-md-2">Quantity</th>
+											<th class="col-md-2" ng-if="forExcess">Disposal Date</th>
+											<th class="col-md-2" ng-if="!forExcess">Request Date</th>
+											<th class="col-md-2">Price ($)</th>
+										</tr>
+									</thead>
 
-                                <tbody>
-                                <tr >
-                                    <td>{{ offering.name }}</td>
-                                    <td>{{ offering.offerQuantity }}</td>
-                                    <td ng-if="forExcess">{{ offering.expiry | date }}</td>
-                                    <td ng-if="!forExcess">{{ offering.requestDate | date }}</td>
-                                    <td><input class="tbl_input" id = "inputPrice" type="Text" value="{{offering.price * offering.offerQuantity}}"></td>
+									<tbody>
+										<tr >
+											<td>{{ offering.name }}</td>
+											<td>{{ offering.offerQuantity }}</td>
+											<td ng-if="forExcess">{{ offering.expiry | date }}</td>
+											<td ng-if="!forExcess">{{ offering.requestDate | date }}</td>
+											<td><input class="tbl_input" id = "inputPrice" type="Text" value="{{offering.price * offering.offerQuantity}}"></td>
 
-                                </tr>
-                                </tbody>
-                            </table>
-                            <p class="text-muted"><small>Recommended unit price = {{offering.price|currency}} </small></p>
+										</tr>
+									</tbody>
+								</table>
+								<p class="text-muted"><small>Recommended unit price = {{offering.price|currency}} </small></p>
 
-                        </div>
-                    </div>
+								<button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessOffer(offering)" ui-sref="dashboard.InProgressSelling" data-dismiss="modal">Make A Sales Offer</button>
+								<button type="button" class="btn btn-primary btn-lg btn-block" ng-if="!forExcess" ng-click="shortageOffer(offering)" ui-sref="dashboard.InProgressBuying" data-dismiss="modal">Make A Purchase Request</button>
+							</div>
+						</div>
+					</div>
 
-                  <button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessOffer(offering)" ui-sref="dashboard.InProgressSelling" data-dismiss="modal">Make A Sales Offer</button>
-                  <button type="button" class="btn btn-primary btn-lg btn-block" ng-if="!forExcess" ng-click="shortageOffer(offering)" ui-sref="dashboard.InProgressBuying" data-dismiss="modal">Make A Purchase Request</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
 
-    <!-- Modal for Prediction Chart -->
-    <div class="modal fade" id="PredictionModal" tabindex="-1" role="dialog" aria-labelledby="PredictionModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Prediction Model for {{ predictedItem.name }}</h4>
-                </div>
-                <div class="modal-body">
-                    <!-- /.Graph showing sales projection -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <strong> Sales Projection</strong>
-                        </div>
-                        <div class="panel-body">
-                            <div>
-                                <canvas id="canvas" width="100" height="50" ></canvas>
-                            </div>
-                        </div>
-                    </div>
+	<!-- Modal for Prediction Chart -->
+	<div class="modal fade" id="PredictionModal" tabindex="-1" role="dialog" aria-labelledby="PredictionModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title">Prediction Model for {{ predictedItem.name }}</h4>
+				</div>
+				<div class="modal-body">
+					<!-- /.Graph showing sales projection -->
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<strong> Sales Projection</strong>
+						</div>
+						<div class="panel-body">
+							<div>
+								<canvas id="canvas" width="100" height="50" ></canvas>
+							</div>
+						</div>
+					</div>
 
-                    <!-- /.Table showing breakdown -->
-                    <div class="panel panel-default">
-                        <div class="panel-heading"><b>Prediction Summary</b></div>
-                        <div class="panel-body">
-                            <table class="table table-striped table-bordered table-hover" style="border-collapse: collapse" id="dataTables-example" >
-                                <thead>
-                                <tr>
-                                    <th ng-style="getMonthCellColour()"></th>
-                                    <td class="text-center" colspan="15" ng-style="getMonthCellColour()"><strong>April</strong></td>
-                                </tr>
-                                <tr>
-                                    <th>Date</th>
-                                    <th ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="formatColumn($index,columnNumberToHighlight)" class="text-center">{{ $index+7 }}</th>
-                                </tr>
-                                </thead>
-                                <tbody>
+					<!-- /.Table showing breakdown -->
+					<div class="panel panel-default">
+						<div class="panel-heading"><b>Prediction Summary</b></div>
+						<div class="panel-body">
+							<table class="table table-striped table-bordered table-hover" style="border-collapse: collapse" id="dataTables-example" >
+								<thead>
+									<tr>
+										<th ng-style="getMonthCellColour()"></th>
+										<td class="text-center" colspan="15" ng-style="getMonthCellColour()"><strong>April</strong></td>
+									</tr>
+									<tr>
+										<th>Date</th>
+										<th ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="formatColumn($index,columnNumberToHighlight)" class="text-center">{{ $index+7 }}</th>
+									</tr>
+								</thead>
+								<tbody>
 
-                                <tr class="odd gradeX" style="border-bottom:2px solid #010000;">
-                                    <td class="center" ><b>Starting Inventory</b></td>
-                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="formatColumn($index,columnNumberToHighlight)" class="text-center">{{ replaceWithDashes(x.startingInventory-x.stock+x.disposal).newString }}</td>
-                                </tr>
+									<tr class="odd gradeX" style="border-bottom:2px solid #010000;">
+										<td class="center" ><b>Starting Inventory</b></td>
+										<td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="formatColumn($index,columnNumberToHighlight)" class="text-center">{{ replaceWithDashes(x.startingInventory-x.stock+x.disposal).newString }}</td>
+									</tr>
 
-                                <tr class="odd gradeX">
-                                    <td class="center">Add: Shipments</td>
-                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="formatColumn($index,columnNumberToHighlight)" class="text-center">{{ replaceWithDashes(x.stock).newString }}</td>
-                                </tr>
+									<tr class="odd gradeX">
+										<td class="center">Add: Shipments</td>
+										<td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="formatColumn($index,columnNumberToHighlight)" class="text-center">{{ replaceWithDashes(x.stock).newString }}</td>
+									</tr>
 
-                                <tr class="odd gradeX">
-                                    <td class="center" ng-style= "{'background-color': '#ffffff'}" >Less: Disposal</td>
-                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="getDisposalCellColour($index,columnNumberToHighlight)" class="text-center">{{ formatDisposal(x.disposal).newString }}</td>
+									<tr class="odd gradeX">
+										<td class="center" ng-style= "{'background-color': '#ffffff'}" >Less: Disposal</td>
+										<td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="getDisposalCellColour($index,columnNumberToHighlight)" class="text-center">{{ formatDisposal(x.disposal).newString }}</td>
 
-                                </tr>
+									</tr>
 
-                                <tr class="odd gradeX">
-                                    <td class="center">Less: Sales</td>
-                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="formatColumn($index,columnNumberToHighlight)" class="text-center">({{ x.demand }})</td>
-                                </tr>
+									<tr class="odd gradeX">
+										<td class="center">Less: Sales</td>
+										<td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="formatColumn($index,columnNumberToHighlight)" class="text-center">({{ x.demand }})</td>
+									</tr>
 
-                                <tr class="odd gradeX" style="border-top:2px solid #010000;">
-                                    <td class="center"><b>Ending Inventory</b></td>
-                                    <td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="formatColumn($index,columnNumberToHighlight)" class="text-center">{{ x.endingInventory }}</td>
-                                </tr>
-                                </tbody>
-                                <p> {{ test }}</p>
-                            </table>
-                        </div>
-                    </div>
+									<tr class="odd gradeX" style="border-top:2px solid #010000;">
+										<td class="center"><b>Ending Inventory</b></td>
+										<td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="formatColumn($index,columnNumberToHighlight)" class="text-center">{{ x.endingInventory }}</td>
+									</tr>
+								</tbody>
+								<p> {{ test }}</p>
+							</table>
+						</div>
+					</div>
 
-                  <p class="text-muted text-center"><small>Predictions are made over a horizon of 14 days</small></p>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
-    </div>
-    <!-- /.modal -->
+					<p class="text-muted text-center"><small>Predictions are made over a horizon of 14 days</small></p>
+				</div>
+			</div>
+			<!-- /.modal-content -->
+		</div>
+		<!-- /.modal-dialog -->
+	</div>
+	<!-- /.modal -->
 </div>
