@@ -142,7 +142,7 @@ angular.module('sbAdminApp')
         console.log(excessShipment);
         txService.excessOffer(excessShipment, function(response) {
             $('.modal-backdrop').remove();
-            $state.go('dashboard.InProgressBuying');
+            $state.go('dashboard.InProgressSelling');
         }, function () {
             $scope.alert = true;
         })
