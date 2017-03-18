@@ -168,10 +168,10 @@
 									<tbody>
 										<tr >
 											<td>{{ offering.name }}</td>
-											<td><input class="tbl_input" type="number" value="{{ offering.offerQuantity }}" ng-model="inputQuantity"></td>
+											<td><input class="tbl_input" type="number" ng-model="inputQuantity"></td>
 											<td ng-if="forExcess">{{ offering.expiry | date }}</td>
 											<td ng-if="!forExcess">{{ offering.requestDate | date }}</td>
-											<td>$<input class="tbl_input" type="number" value="{{offering.price * offering.offerQuantity}}" ng-model="inputPrice"></td>
+											<td>$<input class="tbl_input" type="number" ng-model="inputPrice"></td>
 
 										</tr>
 									</tbody>
