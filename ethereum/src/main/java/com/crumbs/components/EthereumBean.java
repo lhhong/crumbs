@@ -3,12 +3,15 @@ package com.crumbs.components;
 import com.alibaba.fastjson.JSON;
 import com.crumbs.repositories.CrumbsContractRepo;
 import com.crumbs.services.StateUpdater;
+import com.crumbs.util.BooleanObj;
 import com.crumbs.util.CrumbsUtil;
+import com.crumbs.util.TxCancelledException;
 import org.ethereum.core.CallTransaction;
 import org.ethereum.core.Transaction;
 import org.ethereum.crypto.ECKey;
 import org.ethereum.facade.Ethereum;
 import org.ethereum.facade.EthereumFactory;
+import org.ethereum.listener.EthereumListener;
 import org.ethereum.util.ByteUtil;
 import org.ethereum.vm.program.ProgramResult;
 import org.slf4j.Logger;
@@ -17,6 +20,7 @@ import org.spongycastle.util.encoders.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.concurrent.Future;
 
 
@@ -73,37 +77,59 @@ public class EthereumBean{
 
 	public void sendTransaction(Transaction tx, SendingTxListener listener) {
 		Future<Transaction> ft = ethereum.submitTransaction(tx);
-		Thread t = new Thread(new WaitingThread(tx, ft, listener));
+		Thread t = new Thread(new WaitingThread(tx, ft, listener, ethereum));
 		t.start();
 	}
 
-	public void sendTransaction(byte[] senderPrivKey, byte[] receiverAddress, long payment, byte[] data) {
+	public void sendTransaction(byte[] senderPrivKey, byte[] receiverAddress, long payment, byte[] data) throws TxCancelledException {
 		sendTransaction(createTx(senderPrivKey,receiverAddress,payment,data));
 	}
-	public void sendTransaction(byte[] receiverAddress, byte[] data) {
+	public void sendTransaction(byte[] receiverAddress, byte[] data) throws TxCancelledException {
 		sendTransaction(createTx(receiverAddress, data));
 	}
 
-	public void sendTransaction(byte[] contractAddr, long payment, byte[] functionCallBytes) {
+	public void sendTransaction(byte[] contractAddr, long payment, byte[] functionCallBytes) throws TxCancelledException {
 		sendTransaction(createTx(contractAddr, payment, functionCallBytes));
 	}
 
-	public void sendTransaction(Transaction tx) {
-		SendingTxListener listener = new SendingTxListener() {
-			@Override
-			public void isDone(Transaction tx) {
-				//TODO save tx in database??
-			}
-
-			@Override
-			public void isCancelled() {
-				//TODO send error msg??
-			}
-		};
-		sendTransaction(tx, listener);
+	public void addTxUpdateListener(TxUpdateListener listener) {
+		ethereum.addListener(listener);
 	}
 
-	public void sendEtherFromRich (byte[] receiveAddr) {
+	public void sendTransaction(Transaction tx) throws TxCancelledException {
+		Thread current = Thread.currentThread();
+		BooleanObj error = new BooleanObj();
+		error.setFalse();
+		addTxUpdateListener((transactionReceipt, pendingTransactionState, block) -> {
+			if (Arrays.equals(transactionReceipt.getTransaction().getHash(), tx.getHash())) {
+				if (pendingTransactionState.compareTo(EthereumListener.PendingTransactionState.DROPPED) == 0) {
+					logger.error("transaction {} dropped", tx.getHash());
+					error.setTrue();
+					current.interrupt();
+				}
+				else {
+					logger.info("Transaction ste of {}: {}", tx.getHash(), pendingTransactionState.name());
+					current.interrupt();
+				}
+			}
+		});
+		try {
+			Thread.sleep(200);
+		} catch (InterruptedException e) {
+			logger.info("submitting tx");
+		}
+		ethereum.submitTransaction(tx);
+		try {
+			Thread.sleep(60000);
+		} catch (InterruptedException e) {
+			logger.info("Listener returned");
+			if (error.getValue()) {
+				throw new TxCancelledException();
+			}
+		}
+	}
+
+	public void sendEtherFromRich (byte[] receiveAddr) throws TxCancelledException {
 		sendTransaction(createTx(RICH_KEY, receiveAddr, 90000L , null));
 	}
 

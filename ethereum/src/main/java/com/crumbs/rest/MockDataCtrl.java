@@ -15,6 +15,7 @@ import com.crumbs.services.TransactionService;
 import com.crumbs.services.WebSocketSrvc;
 import com.crumbs.util.CrumbsUtil;
 import com.crumbs.util.DateUtil;
+import com.crumbs.util.TxCancelledException;
 import org.ethereum.crypto.ECKey;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,13 +77,13 @@ public class MockDataCtrl {
 
 	@RequestMapping(value = "test_tx", method = POST)
 	@ResponseBody
-	public void setTest(@RequestBody String test) {
+	public void setTest(@RequestBody String test) throws TxCancelledException {
 		contractService.sendToTxContract("setTest", 0, test);
 	}
 
 	@RequestMapping(value = "mock_register/{id}", method = POST)
 	@ResponseBody
-	public boolean mockRegister(@PathVariable("id") int id, @RequestBody Member member) {
+	public boolean mockRegister(@PathVariable("id") int id, @RequestBody Member member) throws TxCancelledException {
 		if (id == 1) {
 			logger.error("SCREW YOU!!! DON'T POST ACCOUNT WITH ID 1!!!");
 			return false;
@@ -116,7 +117,7 @@ public class MockDataCtrl {
 
 	@RequestMapping(value = "mock_offer/{memberId}", method = POST)
 	@ResponseBody
-	public String mockTx(@PathVariable("memberId") int memberId, @RequestBody TxSent txSent) {
+	public String mockTx(@PathVariable("memberId") int memberId, @RequestBody TxSent txSent) throws TxCancelledException {
 		Account account = accountRepo.findOne(memberId);
 		String uuid = txService.generateUUID();
 		txSent.setUuid(uuid);
@@ -126,13 +127,13 @@ public class MockDataCtrl {
 
 	@RequestMapping(value = "mock_accept/{memberId}", method = POST)
 	@ResponseBody
-	public void mockAccept(@PathVariable("memberId") int id, @RequestBody TransactionVM tx) {
+	public void mockAccept(@PathVariable("memberId") int id, @RequestBody TransactionVM tx) throws TxCancelledException {
 		Account account = accountRepo.findOne(id);
 		txService.accept(account.getPrivateKey(), tx.getUuid(), tx.getTransportPrice(), tx.getExpiry(), tx.getTxDate(), true);
 	}
 
 	@RequestMapping(value = "mock_agree/{memberId}", method = POST)
-	public void mockAgree(@PathVariable("memberId") int id, @RequestBody TransactionVM tx) {
+	public void mockAgree(@PathVariable("memberId") int id, @RequestBody TransactionVM tx) throws TxCancelledException {
 		Account account = accountRepo.findOne(id);
 		long payment = 0;
 		if (!tx.isSell()) {
@@ -183,7 +184,7 @@ public class MockDataCtrl {
 
 	@RequestMapping(value = "/modify-sample-contract", method = GET)
 	@ResponseBody
-	public void modifySampleContract() throws IOException {
+	public void modifySampleContract() throws IOException, TxCancelledException {
 		contractService.modifyMortalGreeting();
 	}
 

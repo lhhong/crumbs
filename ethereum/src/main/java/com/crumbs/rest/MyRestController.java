@@ -7,6 +7,7 @@ import com.crumbs.entities.CrumbsContract;
 import com.crumbs.repositories.CrumbsContractRepo;
 import com.crumbs.services.ContractService;
 import com.crumbs.util.CrumbsUtil;
+import com.crumbs.util.TxCancelledException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +47,7 @@ public class MyRestController {
 
 	@RequestMapping(value = "/topup-contract", method = GET)
 	@ResponseBody
-	public void topUpContract() throws IOException {
+	public void topUpContract() throws IOException, TxCancelledException {
 		contractService.topUpContract();
 	}
 

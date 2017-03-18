@@ -10,6 +10,7 @@ import com.crumbs.models.*;
 import com.crumbs.services.Optimize;
 import com.crumbs.services.PredictionCacheSrvc;
 import com.crumbs.services.TransactionService;
+import com.crumbs.util.TxCancelledException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,25 +64,37 @@ public class TransactionController {
 
 	@RequestMapping(value = "/register", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public void register(@RequestBody Member member) {
+	public void register(@RequestBody Member member) throws TxCancelledException {
 		transactionService.register(member.getName(), member.getX(), member.getY());
 	}
 
 	@RequestMapping(value = "/offer_excess", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public boolean postOfferExcess(@RequestBody ExceShipVM exceShip) {
+	public ResponseEntity<Boolean> postOfferExcess(@RequestBody ExceShipVM exceShip) {
+		try {
+			String uuid = transactionService.newOffer(exceShip);
+		} catch (TxCancelledException e) {
+			logger.error("Transaction not carried out");
+			return ResponseEntity.unprocessableEntity().build();
+		}
 		predictionCache.hideExcess(exceShip.getName(), exceShip.getExpiry());
-		return postOffer(exceShip);
+		return ResponseEntity.ok(true);
 	}
 
 	@RequestMapping(value = "/offer_shortage", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public boolean postOfferShort(@RequestBody RemStockVM remStock) {
+	public ResponseEntity<Boolean> postOfferShort(@RequestBody RemStockVM remStock) {
+		try {
+			String uuid = transactionService.newOffer(remStock);
+		} catch (TxCancelledException e) {
+			logger.error("Transaction not carried out");
+			return ResponseEntity.unprocessableEntity().build();
+		}
 		predictionCache.hideShortage(remStock.getName(), remStock.getRequestDate());
-		return postOffer(remStock);
+		return ResponseEntity.ok(true);
 	}
 
-	private boolean postOffer(BasicShortExceVM shortExce) {
+	private boolean postOffer(BasicShortExceVM shortExce) throws TxCancelledException {
 		String uuid = transactionService.newOffer(shortExce);
 		if (uuid == null) {
 			return false;
@@ -114,19 +127,31 @@ public class TransactionController {
 
 	@RequestMapping(value = "/accept", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public void accept(@RequestBody TransactionVM tx) {
-		transactionService.accept(tx.getUuid(), tx.getTransportPrice(), tx.getExpiry(), tx.getTxDate());
+	public ResponseEntity accept(@RequestBody TransactionVM tx) {
+		try {
+			transactionService.accept(tx.getUuid(), tx.getTransportPrice(), tx.getExpiry(), tx.getTxDate());
+		} catch (TxCancelledException e) {
+			logger.error("Transaction not carried out");
+			return ResponseEntity.unprocessableEntity().build();
+		}
 		if (tx.isSell()) {
 			predictionCache.hideShortage(tx.getItem(), tx.getTxDate());
 		}
 		else {
 			predictionCache.hideExcess(tx.getItem(), tx.getExpiry());
 		}
+		return ResponseEntity.ok().build();
 	}
 
 	@RequestMapping(value = "/agree", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public void agree(@RequestBody String uuid) throws IOException {
-		transactionService.agree(uuid);
+	public ResponseEntity agree(@RequestBody String uuid) throws IOException {
+		try {
+			transactionService.agree(uuid);
+		} catch (TxCancelledException e) {
+			logger.error("Transaction not carried out");
+			return ResponseEntity.unprocessableEntity().build();
+		}
+		return ResponseEntity.ok().build();
 	}
 }

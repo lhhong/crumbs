@@ -6,6 +6,7 @@ import com.crumbs.entities.*;
 import com.crumbs.models.*;
 import com.crumbs.repositories.*;
 import com.crumbs.util.CrumbsUtil;
+import com.crumbs.util.TxCancelledException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,19 +116,19 @@ public class TransactionService {
 		return sold;
 	}
 
-	public void register(String name, long x, long y) {
+	public void register(String name, long x, long y) throws TxCancelledException {
 		Member me = new Member();
 		me.setName(name);
 		me.setAddr(accountBean.getAddressAsBytes());
 		me.setOwn(true);
 		me.setX(x);
 		me.setY(y);
-		memberRepo.save(me);
 		//contractService.sendToTxContract("deleteTx", 0, name);
 		contractService.sendToTxContract("register", 0, name, x, y);
+		memberRepo.save(me);
 	}
 
-	public void register(byte[] senderPrivKey, Member mem) {
+	public void register(byte[] senderPrivKey, Member mem) throws TxCancelledException {
 		contractService.sendToTxContract(senderPrivKey, "register", 0, mem.getName(), mem.getX(), mem.getY());
 	}
 
@@ -226,7 +227,7 @@ public class TransactionService {
 		}
 	}
 
-	public void newOffer(byte[] senderPrivAddr, TxSent tx) {
+	public void newOffer(byte[] senderPrivAddr, TxSent tx) throws TxCancelledException {
 		long date;
 		if (tx.isSell())
 			date = tx.getExpiry().getTime();
@@ -235,7 +236,7 @@ public class TransactionService {
 		contractService.sendToTxContract(senderPrivAddr, "newOffer", 0, tx.getUuid(), tx.getPrice(), tx.getItem(),tx.getQuantity(), date, tx.isSell());
 	}
 
-	public String newOffer(BasicShortExceVM shortExce) {
+	public String newOffer(BasicShortExceVM shortExce) throws TxCancelledException {
 		TxSent tx = new TxSent();
 		String uuid = generateUUID();
 		tx.setUuid(uuid);
@@ -257,9 +258,9 @@ public class TransactionService {
 			logger.error("Unknown error");
 			return null;
 		}
-		txSentRepo.save(tx);
 		logger.info("new offer: price {}, item {}, quantity {}", tx.getPrice(), tx.getItem(), tx.getQuantity());
 		contractService.sendToTxContract("newOffer", 0, uuid, tx.getPrice(), tx.getItem(), tx.getQuantity(), date, tx.isSell());
+		txSentRepo.save(tx);
 		logger.info("Created new offer transaction {}", uuid);
 		return uuid;
 	}
@@ -387,26 +388,28 @@ public class TransactionService {
 		return keys.split(";");
 	}
 
-	public void accept(String uuid, long transportPrice, Date expiry, Date txDate) {
+	public void accept(String uuid, long transportPrice, Date expiry, Date txDate) throws TxCancelledException {
 		accept(new byte[0], uuid, transportPrice, expiry, txDate, false);
 	}
 
-	public void accept(byte[] senderPrivKey, String uuid, long transportPrice, Date expiry, Date txDate, boolean isMock) {
+	public void accept(byte[] senderPrivKey, String uuid, long transportPrice, Date expiry, Date txDate, boolean isMock) throws TxCancelledException {
 		Object[] result = contractService.constFunction("getTxById", uuid);
 		if (result == null) {
 			logger.warn("offer {} no longer exist", uuid);
 			return;
 		}
+		Member from = null;
+		boolean saveMember = false;
 		TxAccepted tx = new TxAccepted();
 		try {
-			Member from = memberRepo.findOne((byte[]) result[0]);
+			from = memberRepo.findOne((byte[]) result[0]);
 			if (from == null) {
 				from = new Member();
 				from.setAddr((byte[]) result[0]);
 				from.setName((String) result[1]);
 				from.setX(((BigInteger) result[2]).longValue());
 				from.setY(((BigInteger) result[3]).longValue());
-				memberRepo.save(from);
+				saveMember = true;
 			}
 			tx.setUuid(uuid);
 			tx.setSender(from);
@@ -440,24 +443,25 @@ public class TransactionService {
 		}
 		else {
 			accept(tx, transportPrice, payment, date);
+			if (saveMember) memberRepo.save(from);
 		}
 	}
 
-	public void accept(TxAccepted tx, long transportPrice, long payment, long date) {
+	public void accept(TxAccepted tx, long transportPrice, long payment, long date) throws TxCancelledException {
 		contractService.sendToTxContract("accept", payment, tx.getUuid(), transportPrice, date);
 		txAcceptedRepo.save(tx);
 		logger.info("Created accepting transaction {}", tx.getUuid());
 	}
 
-	public void mockAccept(byte[] senderPrivKey, TxAccepted tx, long transportPrice, long payment, long date) {
+	public void mockAccept(byte[] senderPrivKey, TxAccepted tx, long transportPrice, long payment, long date) throws TxCancelledException {
 		contractService.sendToTxContract(senderPrivKey,"accept", payment, tx.getUuid(), transportPrice, date);
 	}
 
-	public void agree(Account account, String uuid, long payment) {
+	public void agree(Account account, String uuid, long payment) throws TxCancelledException {
 		contractService.sendToTxContract(account.getPrivateKey(), "agree", payment, uuid);
 	}
 
-	public void agree(String uuid) {
+	public void agree(String uuid) throws TxCancelledException {
 		TxSent tx = txSentRepo.findOne(uuid);
 		if (tx == null) {
 			logger.error("transaction {} to be agreed do not exist", uuid);
@@ -473,11 +477,11 @@ public class TransactionService {
 		}
 		tx.setDone(true);
 		tx.setIncluded(false);
-		txSentRepo.save(tx);
 		agree(uuid, payment);
+		txSentRepo.save(tx);
 	}
 
-	public void agree(String uuid, long payment) {
+	public void agree(String uuid, long payment) throws TxCancelledException {
 		contractService.sendToTxContract("agree", payment, uuid);
 		logger.info("Created agreeing transaction {}", uuid);
 	}

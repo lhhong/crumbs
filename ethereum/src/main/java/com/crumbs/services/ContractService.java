@@ -6,6 +6,7 @@ import com.crumbs.components.EthereumBean;
 import com.crumbs.components.SendingTxListener;
 import com.crumbs.entities.CrumbsContract;
 import com.crumbs.repositories.CrumbsContractRepo;
+import com.crumbs.util.TxCancelledException;
 import org.ethereum.core.CallTransaction;
 import org.ethereum.core.Transaction;
 import org.ethereum.solidity.compiler.CompilationResult;
@@ -146,7 +147,7 @@ public class ContractService {
 	 * @param payment payment to send with transaction if any
 	 * @param args args of contract function
 	 */
-	public void sendToTxContract(byte[] senderPrivKey, String functionName, long payment, Object... args) {
+	public void sendToTxContract(byte[] senderPrivKey, String functionName, long payment, Object... args) throws TxCancelledException {
 		CrumbsContract contractDef = crumbsContractRepo.findOne("crumbs_tx");
 		if (contractDef == null) {
 			logger.error("crumbs_tx contract not loaded");
@@ -164,7 +165,7 @@ public class ContractService {
 	 * @param payment payment if any
 	 * @param args args of contract function
 	 */
-	public void sendToTxContract(String functionName, long payment, Object... args) {
+	public void sendToTxContract(String functionName, long payment, Object... args) throws TxCancelledException {
 		CrumbsContract contractDef = crumbsContractRepo.findOne("crumbs_tx");
 		if (contractDef == null) {
 			logger.error("crumbs_tx contract not loaded");
@@ -199,7 +200,7 @@ public class ContractService {
 		}
 	}
 
-	public void topUpContract() {
+	public void topUpContract() throws TxCancelledException {
 		sendToTxContract("topup", 100);
 	}
 
@@ -256,7 +257,7 @@ public class ContractService {
 		compileAndSend(SAMPLE_CONTRACT, "mortal_tx");
 	}
 
-	public void modifyMortalGreeting() {
+	public void modifyMortalGreeting() throws TxCancelledException {
 
 		CrumbsContract testContract = crumbsContractRepo.findOne("mortal_tx");
 		logger.info("loaded contract : " + JSON.toJSONString(testContract, true) );

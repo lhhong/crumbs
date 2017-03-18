@@ -1,10 +1,13 @@
 package com.crumbs.components;
 
 import org.ethereum.core.Transaction;
+import org.ethereum.facade.Ethereum;
+import org.ethereum.listener.EthereumListener;
 import org.ethereum.util.ByteUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
@@ -14,33 +17,43 @@ import java.util.concurrent.Future;
  */
 public class WaitingThread implements Runnable {
 
-	private SendingTxListener listener;
+	private SendingTxListener sendingTxListener;
+	private TxUpdateListener txUpdateListener;
 	private Future<Transaction> ft;
 	private Transaction tx;
+	private Thread callingThread;
+	private Ethereum ethereum;
+	boolean carryOn = true;
 	private static final Logger logger = LoggerFactory.getLogger(WaitingThread.class);
 
-	public WaitingThread(Transaction tx, Future<Transaction> ft, SendingTxListener listener) {
-		this.listener  = listener;
+	public WaitingThread(Transaction tx, Future<Transaction> ft, SendingTxListener sendingTxListener, Ethereum ethereum) {
+		this.sendingTxListener = sendingTxListener;
+		this.tx = tx;
+		this.callingThread = callingThread;
+		this.ethereum = ethereum;
+		this.txUpdateListener = ((transactionReceipt, pendingTransactionState, block) -> {
+			if (Arrays.equals(transactionReceipt.getTransaction().getHash(), this.tx.getHash())) {
+				if (pendingTransactionState.compareTo(EthereumListener.PendingTransactionState.DROPPED) == 0) {
+					logger.error("transaction {} dropped", tx.getHash());
+					sendingTxListener.isCancelled();
+				}
+				else {
+					logger.info("Transaction ste of {}: {}", tx.getHash(), pendingTransactionState.name());
+					sendingTxListener.isDone(tx);
+				}
+				carryOn = false;
+			}
+		});
 		this.ft = ft;
 	}
 
 	@Override
 	public void run() {
-		while (true) {
+		ethereum.addListener(txUpdateListener);
+		while (carryOn) {
 			if (ft.isCancelled()) {
 				logger.warn("transaction [" + ByteUtil.toHexString(tx.getHash()) + "] cancelled");
-				listener.isCancelled();
-				break;
-			}
-			if (ft.isDone()) {
-				logger.info("transaction is done");
-				try {
-					Transaction tx = ft.get();
-					logger.info(tx.toString());
-					listener.isDone(tx);
-				} catch (InterruptedException | ExecutionException e) {
-					e.printStackTrace();
-				}
+				sendingTxListener.isCancelled();
 				break;
 			}
 			try {
@@ -51,4 +64,5 @@ public class WaitingThread implements Runnable {
 		}
 
 	}
+
 }
