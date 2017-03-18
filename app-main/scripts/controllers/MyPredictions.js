@@ -204,9 +204,9 @@ angular.module('sbAdminApp')
         return { newString }
      };
 
-    $scope.formatColumn = function(colNumber,columnNumberToHighlight) {
+    $scope.formatColumn = function(colNumber,colNumberToHighlight) {
         var colour;
-        if (colNumber == columnNumberToHighlight) {
+        if (colNumber == colNumberToHighlight) {
             colour = '#FF9191'
         }
         return {
