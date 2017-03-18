@@ -28,6 +28,7 @@ angular.module('sbAdminApp')
 
             for (var i = 0; i<txs.pendingAgrees.length; i++) {
                 txs.pendingAgrees[i].agreeing = true;
+                txs.pendingAgrees[i].pending = true;
             }
             for (var i = 0; i<txs.offersAccepted.length; i++) {
                 txs.offersAccepted[i].agreeing = true;
@@ -95,7 +96,7 @@ angular.module('sbAdminApp')
 
     $interval(function() {
         reloadData();
-    }, 5000)
+    }, 3000)
     reloadData();
 
     $scope.getBackground = function(pending) {
@@ -115,10 +116,10 @@ angular.module('sbAdminApp')
     $scope.agree = function(uuid) {
         txService.agree(uuid, function(response) {
             console.log("Agree sent");
+            $scope.reloaded = false;
         }, function() {
             $scope.alert = true;
         })
-        $scope.reloaded = false;
     };
     $('#ViewRequestModal').on('show.bs.modal', function (event) {
             $(this).find('.modal-dialog').css({width:'60%',
