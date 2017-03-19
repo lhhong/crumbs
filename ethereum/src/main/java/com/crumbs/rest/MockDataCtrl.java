@@ -148,12 +148,6 @@ public class MockDataCtrl {
 		inventoryService.deleteAll();
 	}
 
-	@RequestMapping(value = "/block_chain_members", method = GET)
-	@ResponseBody
-	public String getAllMembers() {
-		return txService.getAllMembers();
-	}
-
 	@RequestMapping(value = "/block_chain_tx", method = GET)
 	@ResponseBody
 	public String[] getAllTx() {

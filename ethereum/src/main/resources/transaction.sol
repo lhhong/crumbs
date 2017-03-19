@@ -13,6 +13,7 @@ contract transaction {
 		string name;
 		int64 x_loc; //x, y coordinate of member
 		int64 y_loc;
+		string loc;
 	}
 	struct MemberList {
 		mapping(address => Member) members;
@@ -32,6 +33,7 @@ contract transaction {
 		uint64 transportPrice;
 		bool pending;
 		bool done;
+		uint32 keyIndex;
 	}
 	struct TxList {
 		mapping(string => Tx) txs;
@@ -42,7 +44,7 @@ contract transaction {
 	MemberList memList;
 	TxList list;
 
-	function register(string _name, int64 _x, int64 _y) public {
+	function register(string _name, int64 _x, int64 _y, string _location) public {
 		uint key = 0;
 		while (key < memList.nextKey && !memList.keys[key].deleted) {
 		    if (memList.keys[key].addr == msg.sender) {
@@ -59,13 +61,39 @@ contract transaction {
 		memList.members[memList.keys[key].addr].name = _name;
 		memList.members[memList.keys[key].addr].x_loc = _x;
 		memList.members[memList.keys[key].addr].y_loc = _y;
+		memList.members[memList.keys[key].addr].loc = _location;
+	}
+
+	function checkRegistration() constant returns (bool registered, string _name, int64 _x, int64 _y, string _location, address _addr) {
+		if (memList.members[msg.sender].x_loc == 0) {
+			registered = false;
+		}
+		else {
+			registered = true;
+		    _name = memList.members[msg.sender].name;
+		    _x = memList.members[msg.sender].x_loc;
+		    _y = memList.members[msg.sender].y_loc;
+		    _location = memList.members[msg.sender].loc;
+		    _addr = memList.members[msg.sender].addr;
+		}
+	}
+
+	function deleteOffer(string _uuid) public {
+	    if (list.txs[_uuid].quantity == 0) {
+	        throw;
+	    }
+	    if (msg.sender != list.txs[_uuid].from.addr) {
+        	throw;
+        }
+	    list.txs[_uuid].quantity = 0;
+	    list.keys[list.txs[_uuid].keyIndex].deleted = true;
 	}
 
 	function newOffer(string _uuid, uint64 _price, string _item, uint32 _quantity, uint64 _date, bool _toSell) public {
 		if (memList.members[msg.sender].x_loc == 0) {
 			throw;
 		}
-		uint key = 0;
+		uint32 key = 0;
 		while (key < list.nextKey && !list.keys[key].deleted) {
 			key++;
 		}
@@ -80,6 +108,7 @@ contract transaction {
 		list.txs[list.keys[key].uuid].item = _item;
 		list.txs[list.keys[key].uuid].quantity = _quantity;
 		list.txs[list.keys[key].uuid].toSell = _toSell;
+		list.txs[list.keys[key].uuid].keyIndex = key;
 		if (_toSell) {
 		    list.txs[list.keys[key].uuid].expiry = _date;
 		}
@@ -125,12 +154,17 @@ contract transaction {
 		}
 	}
 
-	function getTxById(string _uuid) constant returns (address _addr, string _name, int64 _x, int64 _y, uint64 _price, string _item, uint32 _quantity, uint64 _expiry, bool _toSell, bool _pending, bool _done, uint64 _txDate) {
+    //Done is always set to false
+	function getTxById(string _uuid) constant returns (address _addr, string _name, int64 _x, int64 _y, uint64 _price, string _item, uint32 _quantity, uint64 _expiry, bool _toSell, bool _pending, string _location, uint64 _txDate) {
 		if (list.txs[_uuid].quantity == 0) {
 			throw;
 		}
+		if (list.txs[_uuid].done) {
+		    throw;
+		}
 		_addr = list.txs[_uuid].from.addr;
 		_name = list.txs[_uuid].from.name;
+		_location = list.txs[_uuid].from.loc;
 		_x = list.txs[_uuid].from.x_loc;
 		_y = list.txs[_uuid].from.y_loc;
 		_price = list.txs[_uuid].price;
@@ -139,11 +173,10 @@ contract transaction {
 		_expiry = list.txs[_uuid].expiry;
 		_toSell = list.txs[_uuid].toSell;
 		_pending = list.txs[_uuid].pending;
-		_done = list.txs[_uuid].done;
 		_txDate = list.txs[_uuid].txDate;
 	}
 
-	function checkPendingStatus(string _uuid) constant returns (bool _pending, address _addr, string _name, int64 _x, int64 _y, uint64 _transportPrice, uint64 _date) {
+	function checkPendingStatus(string _uuid) constant returns (bool _pending, address _addr, string _name, int64 _x, int64 _y, uint64 _transportPrice, uint64 _date, string _location) {
 		if (list.txs[_uuid].quantity == 0) {
 			throw;
 		}
@@ -151,6 +184,7 @@ contract transaction {
 		if (_pending) {
     		_addr = list.txs[_uuid].accepter.addr;
 	    	_name = list.txs[_uuid].accepter.name;
+		    _location = list.txs[_uuid].accepter.loc;
 		    _x = list.txs[_uuid].accepter.x_loc;
 	    	_y = list.txs[_uuid].accepter.y_loc;
     		_transportPrice = list.txs[_uuid].transportPrice;

@@ -54,10 +54,10 @@ public class MatchMakingTest {
 
 		Member own = memberRepo.findByOwn(true).get(0);
 
-		Member mem1 = new Member(new byte[0], "Giant Tampines Mall", 13, 14, false);
-		Member mem2 = new Member(new byte[0], "Cold Storage Katong V", 53, 3, false);
-		Member mem3 = new Member(new byte[0], "Lee Minimart Katong V", 23, 88, false);
-		Member mem4 = new Member(new byte[0], "Bedok Givers Charity", 45, 60, false);
+		Member mem1 = new Member(new byte[0], "Giant Tampines Mall", "loc", 13, 14, false);
+		Member mem2 = new Member(new byte[0], "Cold Storage Katong V", "loc", 53, 3, false);
+		Member mem3 = new Member(new byte[0], "Lee Minimart Katong V", "loc", 23, 88, false);
+		Member mem4 = new Member(new byte[0], "Bedok Givers Charity", "loc", 45, 60, false);
 		//TODO add more members
 
 		Calendar cal = Calendar.getInstance();

@@ -116,20 +116,21 @@ public class TransactionService {
 		return sold;
 	}
 
-	public void register(String name, long x, long y) throws TxCancelledException {
+	public void register(String name, long x, long y, String location) throws TxCancelledException {
 		Member me = new Member();
 		me.setName(name);
 		me.setAddr(accountBean.getAddressAsBytes());
 		me.setOwn(true);
 		me.setX(x);
 		me.setY(y);
+		me.setLocation(location);
 		//contractService.sendToTxContract("deleteTx", 0, name);
-		contractService.sendToTxContract("register", 0, name, x, y);
+		contractService.sendToTxContract("register", 0, name, x, y, location);
 		memberRepo.save(me);
 	}
 
 	public void register(byte[] senderPrivKey, Member mem) throws TxCancelledException {
-		contractService.sendToTxContract(senderPrivKey, "register", 0, mem.getName(), mem.getX(), mem.getY());
+		contractService.sendToTxContract(senderPrivKey, "register", 0, mem.getName(), mem.getX(), mem.getY(), mem.getLocation());
 	}
 
 	public void checkAcceptanceAgreed() {
@@ -193,6 +194,7 @@ public class TransactionService {
 					accepter.setName((String) result[2]);
 					accepter.setX(((BigInteger) result[3]).longValue());
 					accepter.setY(((BigInteger) result[4]).longValue());
+					accepter.setLocation((String) result[7]);
 					memberRepo.save(accepter);
 				}
 				tx.setAccepter(accepter);
@@ -379,8 +381,42 @@ public class TransactionService {
 		}
 	}
 
-	public String getAllMembers() {
-		return (String) contractService.constFunction("getMember")[0];
+	public Member checkAndGetRegInfo() {
+		Member retrieved = getRegInfo();
+		if (retrieved == null) {
+			return null;
+		}
+		List<Member> stored = memberRepo.findByOwn(true);
+		if (stored.size() != 1) {
+			logger.info("No stored own account");
+			stored.forEach(s -> memberRepo.delete(s));
+		}
+		else if (!stored.get(0).equals(retrieved)) {
+			logger.info("Invalid account stored, refreshing");
+			memberRepo.delete(stored.get(0));
+			memberRepo.save(retrieved);
+		}
+		return retrieved;
+	}
+
+	public void deleteTx(String uuid) throws TxCancelledException {
+		contractService.sendToTxContract("deleteOffer", 0, uuid);
+	}
+
+	//gets registration info from the blockchain
+	private Member getRegInfo() {
+		Object[] reg = contractService.constFunction("checkRegistration");
+		Member mem = null;
+		if ((boolean) reg[0]) {
+			mem = new Member();
+			mem.setName((String) reg[1]);
+			mem.setX(((BigInteger) reg[2]).longValue());
+			mem.setY(((BigInteger) reg[3]).longValue());
+			mem.setLocation((String) reg[4]);
+			mem.setAddr((byte[]) reg[5]);
+			mem.setOwn(true);
+		}
+		return mem;
 	}
 
 	public String[] getAllTxKeys() {
@@ -409,6 +445,7 @@ public class TransactionService {
 				from.setName((String) result[1]);
 				from.setX(((BigInteger) result[2]).longValue());
 				from.setY(((BigInteger) result[3]).longValue());
+				from.setLocation((String) result[10]);
 				saveMember = true;
 			}
 			tx.setUuid(uuid);
@@ -419,7 +456,7 @@ public class TransactionService {
 			tx.setExpiry(new Date(((BigInteger) result[7]).longValue()));
 			tx.setSell((boolean) result[8]);
 			tx.setPending((boolean) result[9]);
-			tx.setDone((boolean) result[10]);
+			tx.setDone(false);
 			tx.setTxDate(new Date(((BigInteger) result[11]).longValue()));
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
@@ -507,6 +544,7 @@ public class TransactionService {
 						from.setName((String) result[1]);
 						from.setX(((BigInteger) result[2]).longValue());
 						from.setY(((BigInteger) result[3]).longValue());
+						from.setLocation((String) result[10]);
 					}
 					tx.setUuid(key);
 					tx.setSender(from);
@@ -516,7 +554,7 @@ public class TransactionService {
 					tx.setExpiry(new Date(((BigInteger) result[7]).longValue()));
 					tx.setSell((boolean) result[8]);
 					tx.setPending((boolean) result[9]);
-					tx.setDone((boolean) result[10]);
+					tx.setDone(false);
 					tx.setTxDate(new Date(((BigInteger) result[11]).longValue()));
 					if (tx.isPending() || tx.isDone()) {
 						logger.warn("transaction {} changed state", tx.getUuid());

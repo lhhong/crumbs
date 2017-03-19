@@ -22,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -62,10 +63,27 @@ public class TransactionController {
 		return transactionService.getBought(status);
 	}
 
+	@RequestMapping(value = "/register", method = GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<Member> getReg() {
+		return ResponseEntity.ok(transactionService.checkAndGetRegInfo());
+	}
+
 	@RequestMapping(value = "/register", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public void register(@RequestBody Member member) throws TxCancelledException {
-		transactionService.register(member.getName(), member.getX(), member.getY());
+		transactionService.register(member.getName(), member.getX(), member.getY(), member.getLocation());
+	}
+
+	@RequestMapping(value = "/offer", method = DELETE, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public ResponseEntity<Boolean> deleteOffer(@RequestBody String uuid) {
+		try {
+			transactionService.deleteTx(uuid);
+			return ResponseEntity.ok(true);
+		} catch (TxCancelledException e) {
+			return ResponseEntity.unprocessableEntity().build();
+		}
 	}
 
 	@RequestMapping(value = "/offer_excess", method = POST, produces = APPLICATION_JSON_VALUE)
