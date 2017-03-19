@@ -6,7 +6,7 @@
  * # RequestsCtrl
  */
 angular.module('sbAdminApp')
-  .controller('InProgressCtrl', ['$scope', '$interval', 'txService', function($scope, $interval, txService) {
+  .controller('InProgressCtrl', ['$scope', '$interval', 'txService', '$stateParams', function($scope, $interval, txService, $stateParams) {
     console.log("loaded");
     $scope.balance = 0;
 
@@ -111,7 +111,14 @@ angular.module('sbAdminApp')
 
     $scope.closeAlert = function(index) {
         $scope.alert = false;
-    }
+    };
+
+    $scope.txAlert = $stateParams.txSent;
+    $scope.txDetails = $stateParams.txDetails;
+
+    $scope.closeTxAlert = function(index) {
+        $scope.txAlert = false;
+    };
 
     $scope.agree = function(uuid) {
         txService.agree(uuid, function(response) {

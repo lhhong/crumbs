@@ -28,6 +28,7 @@
     <div class="alert alert-success">
         Current Balance: <em>{{ balance| currency }}</em>
     </div>
+    <div uib-alert ng-if="txAlert" class="alert-success" close="closeTxAlert()" dismiss-on-timeout="5000">Transaction created for {{txDetails}}</div>
 
     <!-- Table for Requests Made -->
     <div class="panel panel-default">

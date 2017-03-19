@@ -173,9 +173,10 @@ angular
 		}
 	})
 	.state('dashboard.InProgressSelling',{
-		url:'/InProgressSelling',
+		url:'/InProgressSelling/',
 		templateUrl:'views/MyTransactions/InProgressSelling.html',
 		controller: 'InProgressCtrl',
+		params: {txSent: false, txDetails: null },
 		resolve: {
 			loadMyFile:function($ocLazyLoad) {
 				return $ocLazyLoad.load({
@@ -191,6 +192,7 @@ angular
 		url:'/InProgressBuying',
 		templateUrl:'views/MyTransactions/InProgressBuying.html',
 		controller: 'InProgressCtrl',
+		params: {txSent: false, txDetails: null },
 		resolve: {
 			loadMyFile:function($ocLazyLoad) {
 				return $ocLazyLoad.load({

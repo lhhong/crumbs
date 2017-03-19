@@ -71,9 +71,10 @@ angular.module('sbAdminApp')
         }
     );
 
-    $scope.excessViewOffer = function(index) {
+    $scope.excessViewOffer = function(x) {
         $scope.collapsed = true;
         $scope.forExcess = true;
+        var index = $scope.predictions.excessShipments.indexOf(x);
         $scope.offering = $scope.predictions.excessShipments[index];
         $scope.inputQuantity = $scope.offering.offerQuantity;
         $scope.inputPrice = $scope.offering.price * $scope.offering.offerQuantity;
@@ -86,9 +87,10 @@ angular.module('sbAdminApp')
             });
     }
 
-    $scope.shortageViewOffer = function(index) {
+    $scope.shortageViewOffer = function(x) {
         $scope.collapsed = true;
         $scope.forExcess = false;
+        var index = $scope.predictions.stockShortages.indexOf(x);
         $scope.offering = $scope.predictions.stockShortages[index];
         $scope.inputQuantity = $scope.offering.offerQuantity;
         $scope.inputPrice = $scope.offering.price * $scope.offering.offerQuantity;
@@ -129,7 +131,7 @@ angular.module('sbAdminApp')
         console.log(stockShortage);
         txService.shortageOffer(stockShortage, function(response) {
             $('.modal-backdrop').remove();
-            $state.go('dashboard.InProgressBuying');
+            $state.go('dashboard.InProgressBuying', {txSent: true, txDetails: stockShortage.name });
         }, function () {
             $scope.alert = true;
         })
@@ -142,13 +144,14 @@ angular.module('sbAdminApp')
         console.log(excessShipment);
         txService.excessOffer(excessShipment, function(response) {
             $('.modal-backdrop').remove();
-            $state.go('dashboard.InProgressSelling');
+            $state.go('dashboard.InProgressSelling', {txSent: true, txDetails: excessShipment.name });
         }, function () {
             $scope.alert = true;
         })
     };
 
-    $scope.getColour = function(shortOrExce, index) {
+    $scope.getColour = function(shortOrExce, x) {
+        var index = $scope.predictions[shortOrExce].indexOf(x);
         var code = $scope.predictions[shortOrExce][index].urgencyLevel;
         var colour;
         if (code == "red") {
@@ -302,5 +305,46 @@ angular.module('sbAdminApp')
         });
 
     });
+
+    // Sorting functionality
+    // For Excess Table
+    $scope.sortByUrgencyEx = function () {
+      $scope.sortColumnEx = null;
+      $scope.reverseSortEx = false;
+    };
+
+    $scope.sortColumnEx = null;
+    $scope.reverseSortEx = false;
+
+    $scope.sortDataEx = function (column) {
+    $scope.reverseSortEx = ($scope.sortColumnEx == column) ? !$scope.reverseSortEx : false;
+    $scope.sortColumnEx = column;
+    };
+
+    $scope.getSortClassEx = function (column) {
+    if ($scope.sortColumnEx == column) {
+      return $scope.reverseSortEx ? 'arrow-down' : 'arrow-up'
+    }
+    };
+
+    // For Shortage Table
+    $scope.sortByUrgencySh = function () {
+        $scope.sortColumnSh = null;
+        $scope.reverseSortSh = false;
+    };
+
+    $scope.sortColumnSh = null;
+    $scope.reverseSortSh = false;
+
+    $scope.sortDataSh = function (column) {
+      $scope.reverseSortSh = ($scope.sortColumnSh == column) ? !$scope.reverseSortSh : false;
+      $scope.sortColumnSh = column;
+    };
+
+    $scope.getSortClassSh = function (column) {
+      if ($scope.sortColumnSh == column) {
+        return $scope.reverseSortSh ? 'arrow-down' : 'arrow-up'
+      }
+    };
 
   }]);
