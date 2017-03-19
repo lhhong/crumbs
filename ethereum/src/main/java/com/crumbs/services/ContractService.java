@@ -127,7 +127,7 @@ public class ContractService {
 				crumbsContract.setBin(compiledContract);
 				crumbsContract.setIncluded(false);
 				logger.info("CONTRACT ADDRESS ON CREATION: " + ByteUtil.toHexString(tx.getContractAddress()));
-				crumbsContractRepo.save(crumbsContract);
+				//crumbsContractRepo.save(crumbsContract);
 				writeContractAddressToFile(ByteUtil.toHexString(tx.getContractAddress()));
 			}
 

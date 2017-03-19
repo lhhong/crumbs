@@ -6,7 +6,9 @@ import com.crumbs.components.SendingTxListener;
 import com.crumbs.entities.BasicTx;
 import com.crumbs.entities.Member;
 import com.crumbs.entities.TxAccepted;
+import com.crumbs.entities.TxSent;
 import com.crumbs.models.*;
+import com.crumbs.repositories.TxSentRepo;
 import com.crumbs.services.Optimize;
 import com.crumbs.services.PredictionCacheSrvc;
 import com.crumbs.services.TransactionService;
@@ -43,6 +45,9 @@ public class TransactionController {
 	@Autowired
 	private PredictionCacheSrvc predictionCache;
 
+	@Autowired
+	private TxSentRepo txSentRepo;
+
 	@RequestMapping(value = "/all_tx", method = GET, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public TxStatus getStatus() {
@@ -71,8 +76,14 @@ public class TransactionController {
 
 	@RequestMapping(value = "/register", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public void register(@RequestBody Member member) throws TxCancelledException {
-		transactionService.register(member.getName(), member.getX(), member.getY(), member.getLocation());
+	public ResponseEntity<Boolean> register(@RequestBody Member member) {
+		logger.info(JSON.toJSONString(member));
+		try {
+			transactionService.register(member.getName(), member.getX(), member.getY(), member.getLocation());
+			return ResponseEntity.ok(true);
+		} catch (TxCancelledException e) {
+			return ResponseEntity.unprocessableEntity().build();
+		}
 	}
 
 	@RequestMapping(value = "/offer", method = DELETE, produces = APPLICATION_JSON_VALUE)
@@ -80,6 +91,7 @@ public class TransactionController {
 	public ResponseEntity<Boolean> deleteOffer(@RequestBody String uuid) {
 		try {
 			transactionService.deleteTx(uuid);
+			txSentRepo.delete(uuid);
 			return ResponseEntity.ok(true);
 		} catch (TxCancelledException e) {
 			return ResponseEntity.unprocessableEntity().build();
@@ -95,7 +107,11 @@ public class TransactionController {
 			logger.error("Transaction not carried out");
 			return ResponseEntity.unprocessableEntity().build();
 		}
-		predictionCache.hideExcess(exceShip.getName(), exceShip.getExpiry());
+		try {
+			predictionCache.hideExcess(exceShip.getName(), exceShip.getExpiry());
+		} catch (NullPointerException e) {
+			logger.warn("offer not in predictions");
+		}
 		return ResponseEntity.ok(true);
 	}
 
@@ -108,7 +124,11 @@ public class TransactionController {
 			logger.error("Transaction not carried out");
 			return ResponseEntity.unprocessableEntity().build();
 		}
-		predictionCache.hideShortage(remStock.getName(), remStock.getRequestDate());
+		try {
+			predictionCache.hideShortage(remStock.getName(), remStock.getRequestDate());
+		} catch (NullPointerException e) {
+			logger.warn("offer not in predictions");
+		}
 		return ResponseEntity.ok(true);
 	}
 

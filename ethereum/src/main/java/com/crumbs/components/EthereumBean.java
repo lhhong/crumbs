@@ -102,13 +102,14 @@ public class EthereumBean{
 		error.setFalse();
 		addTxUpdateListener((transactionReceipt, pendingTransactionState, block) -> {
 			if (Arrays.equals(transactionReceipt.getTransaction().getHash(), tx.getHash())) {
-				if (pendingTransactionState.compareTo(EthereumListener.PendingTransactionState.DROPPED) == 0) {
+				if (pendingTransactionState.compareTo(EthereumListener.PendingTransactionState.DROPPED) == 0 ||
+						!(transactionReceipt.getError() == null || transactionReceipt.getError().equals(""))) {
 					logger.error("transaction {} dropped", tx.getHash());
 					error.setTrue();
 					current.interrupt();
 				}
 				else {
-					logger.info("Transaction ste of {}: {}", tx.getHash(), pendingTransactionState.name());
+					logger.info("Transaction state of {}: {}", tx.getHash(), pendingTransactionState.name());
 					current.interrupt();
 				}
 			}

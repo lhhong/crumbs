@@ -125,12 +125,12 @@ public class TransactionService {
 		me.setY(y);
 		me.setLocation(location);
 		//contractService.sendToTxContract("deleteTx", 0, name);
-		contractService.sendToTxContract("register", 0, name, x, y, location);
+		contractService.sendToTxContract("register", 0, name+";"+location, x, y);
 		memberRepo.save(me);
 	}
 
 	public void register(byte[] senderPrivKey, Member mem) throws TxCancelledException {
-		contractService.sendToTxContract(senderPrivKey, "register", 0, mem.getName(), mem.getX(), mem.getY(), mem.getLocation());
+		contractService.sendToTxContract(senderPrivKey, "register", 0, mem.getName()+";"+mem.getLocation(), mem.getX(), mem.getY());
 	}
 
 	public void checkAcceptanceAgreed() {
@@ -190,11 +190,17 @@ public class TransactionService {
 				Member accepter = memberRepo.findOne((byte[]) result[1]);
 				if (accepter == null) {
 					accepter = new Member();
+					String[] nameLoc = ((String) result[2]).split(";");
+					if (nameLoc.length !=2) {
+						logger.error("Name wrong format");
+					}
+					else {
+						accepter.setLocation(nameLoc[1]);
+					}
+					accepter.setName(nameLoc[0]);
 					accepter.setAddr((byte[]) result[1]);
-					accepter.setName((String) result[2]);
 					accepter.setX(((BigInteger) result[3]).longValue());
 					accepter.setY(((BigInteger) result[4]).longValue());
-					accepter.setLocation((String) result[7]);
 					memberRepo.save(accepter);
 				}
 				tx.setAccepter(accepter);
@@ -441,11 +447,17 @@ public class TransactionService {
 			from = memberRepo.findOne((byte[]) result[0]);
 			if (from == null) {
 				from = new Member();
+				String[] nameLoc = ((String) result[1]).split(";");
+				if (nameLoc.length !=2) {
+					logger.error("Name wrong format");
+				}
+				else {
+					from.setLocation(nameLoc[1]);
+				}
+				from.setName(nameLoc[0]);
 				from.setAddr((byte[]) result[0]);
-				from.setName((String) result[1]);
 				from.setX(((BigInteger) result[2]).longValue());
 				from.setY(((BigInteger) result[3]).longValue());
-				from.setLocation((String) result[10]);
 				saveMember = true;
 			}
 			tx.setUuid(uuid);
@@ -456,7 +468,7 @@ public class TransactionService {
 			tx.setExpiry(new Date(((BigInteger) result[7]).longValue()));
 			tx.setSell((boolean) result[8]);
 			tx.setPending((boolean) result[9]);
-			tx.setDone(false);
+			tx.setDone((boolean) result[10]);
 			tx.setTxDate(new Date(((BigInteger) result[11]).longValue()));
 		} catch (ArrayIndexOutOfBoundsException e) {
 			e.printStackTrace();
@@ -540,11 +552,17 @@ public class TransactionService {
 					Member from = memberRepo.findOne((byte[]) result[0]);
 					if (from == null) {
 						from = new Member();
+						String[] nameLoc = ((String) result[1]).split(";");
+						if (nameLoc.length !=2) {
+							logger.error("Name wrong format");
+						}
+						else {
+							from.setLocation(nameLoc[1]);
+						}
+						from.setName(nameLoc[0]);
 						from.setAddr((byte[]) result[0]);
-						from.setName((String) result[1]);
 						from.setX(((BigInteger) result[2]).longValue());
 						from.setY(((BigInteger) result[3]).longValue());
-						from.setLocation((String) result[10]);
 					}
 					tx.setUuid(key);
 					tx.setSender(from);
@@ -554,7 +572,7 @@ public class TransactionService {
 					tx.setExpiry(new Date(((BigInteger) result[7]).longValue()));
 					tx.setSell((boolean) result[8]);
 					tx.setPending((boolean) result[9]);
-					tx.setDone(false);
+					tx.setDone((boolean) result[10]);
 					tx.setTxDate(new Date(((BigInteger) result[11]).longValue()));
 					if (tx.isPending() || tx.isDone()) {
 						logger.warn("transaction {} changed state", tx.getUuid());
