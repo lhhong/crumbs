@@ -24,7 +24,7 @@
 			<h1 class="page-header"><i class="fa fa-bar-chart-o fa-fw"></i><em> MyPredictions</em></h1>
 		</div>
 	</div>
-	<div class="alert alert-success">
+	<div class="alert alert-info">
 		Current Balance: <em>{{ balance| currency }}</em>
 	</div>
 
@@ -154,10 +154,12 @@
 					<p ng-if="!offers.length" class="text-center"> <strong> Sorry, no matches found. </strong></p>
 
 
-					<!-- Table for Predicted Shortages -->
+					<!-- Table for Offer/Request summary -->
 					<div class="panel-group" id="newTx">
 						<div class="panel panel-default">
 							<div class="panel-heading" ng-click="toggleCollapsed()" style="cursor:pointer;">
+								<p ng-if=collapsed class="fa fa-chevron-down"></p>
+								<p ng-if=!collapsed class="fa fa-chevron-up"></p>
 								<strong ng-if="forExcess">Make a New Offer</strong>
 								<strong ng-if="!forExcess">Make a New Request</strong>
 							</div>
