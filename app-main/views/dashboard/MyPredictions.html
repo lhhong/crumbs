@@ -18,10 +18,10 @@
 	<h1 class="page-header">Running Predictions...</h1>
 </div>
 <div>
-	<button ng-click="testError()">Test Error</button>
+	<!--<button ng-click="testError()">Test Error</button>-->
 	<div class="row">
 		<div class="col-lg-12">
-			<h1 class="page-header"><i class="fa fa-bar-chart-o fa-fw"></i><em> MyPredictions</em></h1>
+			<h1 class="page-header"><i class="fa fa-bar-chart-o fa-fw"></i><em> <strong>MyPredictions</strong></em></h1>
 		</div>
 	</div>
 	<div class="alert alert-info">
@@ -123,6 +123,7 @@
 						<thead>
 							<tr>
 								<th>Store Name</th>
+								<th>Location</th>
 								<th>Product</th>
 								<th>Quantity</th>
 								<th ng-if="forExcess">Request Date</th>
@@ -135,12 +136,13 @@
 						<tbody>
 							<tr ng-repeat="x in offers track by $index">
 								<td>{{ x.sender.name }}</td>
+								<td>{{ x.sender.location }}</td>
 								<td>{{ x.item }}</td>
 								<td>{{ x.quantity }}</td>
 								<td ng-if="forExcess">{{ x.requestDate | date }}</td>
 								<td ng-if="!forExcess">{{ x.expiry | date }}</td>
 								<td>{{ x.price | currency }}</td>
-								<td>{{ x.transportCost | currency }}</td>
+								<td>{{ x.transportPrice | currency }}</td>
 								<td>
 									<button ng-if="forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index, false)">Make Offer</button>
 									<button ng-if="!forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index, true)">Make Request</button>
@@ -188,7 +190,7 @@
 										</tr>
 									</tbody>
 								</table>
-								<p class="text-muted"><small>Recommended unit price = {{offering.price|currency}} Recommended total price = {{offering.price*inputQuantity|currency}}</small></p>
+								<p class="text-muted"><small>Recommended unit price = {{offering.price|currency}}   |   Recommended total price = {{offering.price*inputQuantity|currency}}</small></p>
 
 								<button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessOffer(offering)">Make Offer</button>
 								<button type="button" class="btn btn-primary btn-lg btn-block" ng-if="!forExcess" ng-click="shortageOffer(offering)">Make Request</button>

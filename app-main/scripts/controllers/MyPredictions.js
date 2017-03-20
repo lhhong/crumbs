@@ -228,6 +228,20 @@ angular.module('sbAdminApp')
     }, 5000);
     reloadData();
 
+    // To control the size of the modals
+    $('#ViewMarketModal').on('show.bs.modal', function (event) {
+            $(this).find('.modal-dialog').css({width:'60%',
+                                       height:'40%',
+                                      'max-height':'80%'});
+    });
+
+    $('#PredictionModal').on('show.bs.modal', function (event) {
+            $(this).find('.modal-dialog').css({width:'80%',
+                                       height:'50%',
+                                      'max-height':'80%'});
+    });
+
+    // Plotting functions for predictions chart
     $scope.chart = [];
 
     $scope.viewChart = function(predictedItem,isSell) {
@@ -242,29 +256,6 @@ angular.module('sbAdminApp')
             $scope.demand = demand;
         })
     };
-
-    $scope.salesData = {
-	    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-	    series: ['Series A'],
-	    data: [
-	      [65, 59, 80, 81, 56, 55, 40]
-	    ],
-	    onClick: function (points, evt) {
-	      console.log(points, evt);
-	    }
-    };
-
-    $('#ViewMarketModal').on('show.bs.modal', function (event) {
-            $(this).find('.modal-dialog').css({width:'60%',
-                                       height:'40%',
-                                      'max-height':'80%'});
-    });
-
-    $('#PredictionModal').on('show.bs.modal', function (event) {
-            $(this).find('.modal-dialog').css({width:'80%',
-                                       height:'50%',
-                                      'max-height':'80%'});
-    });
 
     $('#PredictionModal').on('shown.bs.modal', function (event) {
         var modal = $(this);

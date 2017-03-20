@@ -13,12 +13,31 @@ angular.module('sbAdminApp')
     var reloadData = function() {
         txService.getEther(function(balance) {
             $scope.balance = balance;
-        })
+        });
+        txService.getTransactions(function(txs) {
+            $scope.allOffers = txs.pendingOffers;
+        });
     }
 
     $interval(function() {
         reloadData();
     }, 5000)
+
+    $scope.isSomeoneElseSelling = function(x){
+        var isSell = false;
+        if (x.sender!= null && x.accepter == null && x.sender.name != "NTUC" && x.sell ){
+            isSell = true;
+        }
+        return { isSell }
+    };
+
+    $scope.isSomeoneElseBuying = function(x){
+        var isBuy = false;
+        if (x.accepter == null && x.sender!= null && x.sender.name != "NTUC" && !x.sell ){
+            isBuy = true;
+        }
+        return { isBuy }
+    };
 
     $scope.dairy = [{
       'storename' : 'NTUC',
