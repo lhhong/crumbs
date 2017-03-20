@@ -25,7 +25,7 @@ angular.module('sbAdminApp')
 
     $scope.isSomeoneElseSelling = function(x){
         var isSell = false;
-        if (x.sender!= null && x.accepter == null && x.sender.name != "NTUC" && x.sell ){
+        if ( x.sender!= null && x.accepter == null && x.sender.name != "NTUC" && x.sell ){
             isSell = true;
         }
         return { isSell }
@@ -33,7 +33,7 @@ angular.module('sbAdminApp')
 
     $scope.isSomeoneElseBuying = function(x){
         var isBuy = false;
-        if (x.accepter == null && x.sender!= null && x.sender.name != "NTUC" && !x.sell ){
+        if ( x.sender!= null && x.accepter == null && x.sender.name != "NTUC" && !x.sell ){
             isBuy = true;
         }
         return { isBuy }
