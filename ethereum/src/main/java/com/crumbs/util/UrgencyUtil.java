@@ -5,10 +5,15 @@ package com.crumbs.util;
  */
 public class UrgencyUtil {
 
-	private static final double PERFECT_PERCENTAGE = 0.2;
+	private static final double PERFECT_EXCESS_PERCENTAGE = 0.2;
+	private static final double PERFECT_DISPOSAL_PERCENTAGE = 0.2;
 
 	public static double getPerfectExcess() {
-		return PERFECT_PERCENTAGE;
+		return PERFECT_EXCESS_PERCENTAGE;
+	}
+
+	public static double getPerfectDisposal() {
+		return PERFECT_DISPOSAL_PERCENTAGE;
 	}
 
 	private static double rawPercentage(int top, int bottom) {
@@ -28,13 +33,13 @@ public class UrgencyUtil {
 	}
 
 	public static String getShortageUrgencyLevel(double urgency) {
-		if (urgency < 0) {
+		if (urgency < -0.1) {
 			return "red";
 		}
-		else if (urgency < 0.5) {
+		else if (urgency < 0) {
 			return "orange";
 		}
-		else if (urgency < 0.8) {
+		else if (urgency < 0.1) {
 			return "yellow";
 		}
 		else {
@@ -42,13 +47,13 @@ public class UrgencyUtil {
 		}
 	}
 	public static String getExcessUrgencyLevel(double urgency) {
-		if (urgency > 0.35) {
+		if (urgency > 0.45) {
 			return "red";
 		}
-		else if (urgency > 0.30) {
+		else if (urgency > 0.38) {
 			return "orange";
 		}
-		else if (urgency > 0.25) {
+		else if (urgency > 0.3) {
 			return "yellow";
 		}
 		else {

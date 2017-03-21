@@ -218,9 +218,11 @@ angular.module('sbAdminApp')
      };
 
     // Hide any offer quantities below the cutoff
-    $scope.isWithinCutOff = function(qty){
+    $scope.isWithinCutOff = function(qty,isShortage){
+        var cutoffMatrix = [ 100, 50 ]; // [ Excess, Shortage ]
+        var cutoff = cutoffMatrix[isShortage];
         var withinCutoff = true;
-        if (qty < 80){
+        if (qty < cutoff){
             withinCutoff = false;
         }
         return {withinCutoff}

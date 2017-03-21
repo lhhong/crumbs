@@ -50,12 +50,12 @@ def addShipmentRecords(product):
 def main():
 	#populate a list of products
 	products = []
-	product_names = [[ "Marigold Milk", "Dairy product", 4.50 ],
-					 [ "Parmesan Cheese", "Dairy product", 6.00 ],
-					 [ "Onion", "Vegetables", 2,50 ],
-					 [ "Carrot", "Vegetables", 4.00],
-					 [ "Sardines", "Canned foods", 3.50 ],
-					 [ "Corn", "Canned foods", 4.00]
+	product_names = [[ "Marigold Milk", "Dairy product", 3.00 ],
+					 [ "Parmesan Cheese", "Dairy product", 3.00 ],
+					 [ "Onion", "Vegetables", 1.00 ],
+					 [ "Carrot", "Vegetables", 1.00],
+					 [ "Sardines", "Canned foods", 2.00 ],
+					 [ "Corn", "Canned foods", 2.00]
 					 ]
 	for itemInfo in product_names:
 		products.append( Product(itemInfo[0],itemInfo[1],itemInfo[2]) )
