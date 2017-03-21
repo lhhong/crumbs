@@ -217,9 +217,10 @@ angular.module('sbAdminApp')
         }
      };
 
+    // Hide any offer quantities below the cutoff
     $scope.isWithinCutOff = function(qty){
         var withinCutoff = true;
-        if (qty < 60){
+        if (qty < 80){
             withinCutoff = false;
         }
         return {withinCutoff}

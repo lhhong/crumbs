@@ -43,6 +43,11 @@ public class PredictionSrvc {
 	@Autowired
 	InventoryCacheSrvc inventoryCache;
 
+	private int roundUpToNearestK( int query, int k ){
+		int x = (int)Math.ceil(query/k)*k;
+		return x;
+	}
+	
 	public PredictionQty getPredictionQty() {
 		PredictionQty qty = new PredictionQty();
 		if (predictionCache.needsFirstRun()) {
@@ -176,10 +181,12 @@ public class PredictionSrvc {
 				//TODO: Check if offerQuantity is being calculated correctly
 				//ideal value to be put up to offer for shortages
 				int toOffer = (int) (demand.get(i) * (1.00 + UrgencyUtil.getPerfectExcess())) - predictedStock;
+				toOffer = roundUpToNearestK(toOffer,20);
 				prediction.addToStockList(new RemainingStock(demand.get(i), predictedStock, i-7, toOffer));
 
 				//ideal value to be put up to offer for excess
 				toOffer = disposals.get(i) - (int) (currentStock.get(i).getDisposed() * UrgencyUtil.getPerfectExcess());
+				toOffer = roundUpToNearestK(toOffer,20);
 				prediction.addToShipmentList(new ExcessShipment(currentStock.get(i).getDisposed(), disposals.get(i), i-7, toOffer));
 			}
 

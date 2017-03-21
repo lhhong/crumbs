@@ -11,31 +11,30 @@ public class UrgencyUtil {
 		return PERFECT_PERCENTAGE;
 	}
 
-	private static double rawPercentage(int initial, int excess) {
-		return  ((double) excess) / ((double) initial);
+	private static double rawPercentage(int top, int bottom) {
+		return  ((double) top) / ((double) bottom);
 	}
 
 	public static int percentageExtra(int initial, int excess) {
-		return ((int) (100 * rawPercentage(initial, excess)));
+		return ((int) (100 * rawPercentage(excess, initial)));
 	}
 
-
 	public static double shortageUrg(int demand, int predictedStock) {
-		return rawPercentage(demand, predictedStock);
+		return rawPercentage(predictedStock, demand);
 	}
 
 	public static double excessUrg(int initialDispose, int actualDispose) {
-		return rawPercentage(initialDispose, actualDispose);
+		return rawPercentage(actualDispose, initialDispose);
 	}
 
 	public static String getShortageUrgencyLevel(double urgency) {
-		if (urgency < -0.1) {
+		if (urgency < 0) {
 			return "red";
 		}
-		else if (urgency < 0) {
+		else if (urgency < 0.5) {
 			return "orange";
 		}
-		else if (urgency < 0.15) {
+		else if (urgency < 0.8) {
 			return "yellow";
 		}
 		else {
