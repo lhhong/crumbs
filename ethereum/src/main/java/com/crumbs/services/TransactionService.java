@@ -491,8 +491,8 @@ public class TransactionService {
 			mockAccept(senderPrivKey, tx, transportPrice, payment, date);
 		}
 		else {
-			accept(tx, transportPrice, payment, date);
 			if (saveMember) memberRepo.save(from);
+			accept(tx, transportPrice, payment, date);
 		}
 	}
 
