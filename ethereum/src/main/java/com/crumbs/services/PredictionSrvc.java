@@ -178,7 +178,6 @@ public class PredictionSrvc {
 				endingInventory.add(predictedStock);
 
 			if (i > 6) {
-				//TODO: Check if offerQuantity is being calculated correctly
 				//ideal value to be put up to offer for shortages
 				int toOffer = (int) (demand.get(i) * (UrgencyUtil.getPerfectExcess())) - predictedStock;
 				toOffer = roundUpToNearestK(toOffer,20);
