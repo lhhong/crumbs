@@ -139,7 +139,7 @@
 								<td>{{ x.sender.location }}</td>
 								<td>{{ x.item }}</td>
 								<td>{{ x.quantity }}</td>
-								<td ng-if="forExcess">{{ x.requestDate | date }}</td>
+								<td ng-if="forExcess">{{ x.txDate | date }}</td>
 								<td ng-if="!forExcess">{{ x.expiry | date }}</td>
 								<td>{{ x.price | currency }}</td>
 								<td>{{ x.transportPrice | currency }}</td>
