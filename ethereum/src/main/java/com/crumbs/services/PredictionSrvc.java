@@ -84,7 +84,7 @@ public class PredictionSrvc {
 			});
 		});
 		predictionVM.getExcessShipments().sort((s, s1) -> -Double.compare(s.getUrgency(), s1.getUrgency()));
-		predictionVM.getStockShortages().sort((s, s1) -> -Double.compare(s.getUrgency(), s1.getUrgency()));
+		predictionVM.getStockShortages().sort((s, s1) -> Double.compare(s.getUrgency(), s1.getUrgency()));
 		return predictionVM;
 	}
 
@@ -173,8 +173,9 @@ public class PredictionSrvc {
 				endingInventory.add(predictedStock);
 
 			if (i > 6) {
+				//TODO: Check if offerQuantity is being calculated correctly
 				//ideal value to be put up to offer for shortages
-				int toOffer = (int) (demand.get(i) * (UrgencyUtil.getPerfectExcess())) - predictedStock;
+				int toOffer = (int) (demand.get(i) * (1.00 + UrgencyUtil.getPerfectExcess())) - predictedStock;
 				prediction.addToStockList(new RemainingStock(demand.get(i), predictedStock, i-7, toOffer));
 
 				//ideal value to be put up to offer for excess

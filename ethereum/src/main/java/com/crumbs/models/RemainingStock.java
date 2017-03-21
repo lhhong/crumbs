@@ -34,7 +34,7 @@ public class RemainingStock {
 	public RemainingStock(int demand, int stockLeft, int index, int offerQuantity) {
 		quantity = stockLeft;
 		urgency = UrgencyUtil.shortageUrg(demand, stockLeft);
-		urgencyLevel = UrgencyUtil.getUrgencyLevel(urgency);
+		urgencyLevel = UrgencyUtil.getShortageUrgencyLevel(urgency);
 		percentExtra = UrgencyUtil.percentageExtra(demand, stockLeft);
 		requestDate = DateUtil.daysFromToday(index);
 		this.offerQuantity = offerQuantity;

@@ -217,6 +217,14 @@ angular.module('sbAdminApp')
         }
      };
 
+    $scope.isWithinCutOff = function(qty){
+        var withinCutoff = true;
+        if (qty < 60){
+            withinCutoff = false;
+        }
+        return {withinCutoff}
+    };
+
     var reloadData = function() {
         txService.getEther(function(balance) {
             $scope.balance = balance;

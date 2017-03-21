@@ -160,6 +160,22 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
         })
     }
 
+    var getAvailTransactions = function(callback, failureCallback) {
+        $http({
+            method: 'GET',
+            url: baseUrl + "all_avail_tx"
+        }).then(function(response) {
+            if (callback) {
+                callback(response.data);
+            }
+        },function(response)  {
+            //console.log("server error, code = " + status)
+            if (failureCallback) {
+                failureCallback();
+            }
+        })
+    }
+
     var agree = function(uuid, callback, errorCallback) {
         $http({
             method: 'POST',
@@ -191,6 +207,7 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
         excessOffer: excessOffer,
         getEther: getEther,
         getTransactions: getTransactions,
+        getAvailTransactions:getAvailTransactions,
         getBought: getBought,
         getSold: getSold,
         agree: agree

@@ -52,7 +52,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="x in predictions.excessShipments| orderBy:sortColumnEx:reverseSortEx" ng-hide="x.hidden" ng-style="getColour('excessShipments', x)">
+						<tr ng-repeat="x in predictions.excessShipments| orderBy:sortColumnEx:reverseSortEx" ng-hide="x.hidden" ng-style="getColour('excessShipments', x)" ng-if="isWithinCutOff(x.offerQuantity).withinCutoff")>
 							<td>{{ x.expiry | date}}</td>
 							<td>{{ x.name }}</td>
 							<td>{{ x.offerQuantity }}</td>
@@ -92,7 +92,7 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr ng-repeat="x in predictions.stockShortages | orderBy:sortColumnSh:reverseSortSh" ng-hide="x.hidden" ng-style="getColour('stockShortages', x)">
+						<tr ng-repeat="x in predictions.stockShortages | orderBy:sortColumnSh:reverseSortSh" ng-hide="x.hidden" ng-style="getColour('stockShortages', x)" ng-if="isWithinCutOff(x.offerQuantity).withinCutoff">
 							<td>{{ x.requestDate | date}}</td>
 							<td>{{ x.name }}</td>
 							<td>{{ x.offerQuantity }}</td>

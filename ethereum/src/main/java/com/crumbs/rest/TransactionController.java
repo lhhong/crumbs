@@ -2,11 +2,8 @@ package com.crumbs.rest;
 
 import com.alibaba.fastjson.JSON;
 import com.crumbs.components.CheckIncludedListener;
-import com.crumbs.components.SendingTxListener;
-import com.crumbs.entities.BasicTx;
 import com.crumbs.entities.Member;
 import com.crumbs.entities.TxAccepted;
-import com.crumbs.entities.TxSent;
 import com.crumbs.models.*;
 import com.crumbs.repositories.TxSentRepo;
 import com.crumbs.services.Optimize;
@@ -17,16 +14,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
-import static org.springframework.web.bind.annotation.RequestMethod.GET;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 /**
  * Created by low on 7/2/17 8:14 PM.
@@ -52,6 +49,12 @@ public class TransactionController {
 	@ResponseBody
 	public TxStatus getStatus() {
 		return transactionService.getTxStatus();
+	}
+
+	@RequestMapping(value = "/all_avail_tx", method = GET, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<TxAccepted> getAllAvailTx() {
+		return transactionService.getAllAvailTx();
 	}
 
 	@RequestMapping(value = "/sold_tx", method = GET, produces = APPLICATION_JSON_VALUE)

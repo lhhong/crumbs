@@ -14,14 +14,26 @@ angular.module('sbAdminApp')
         txService.getEther(function(balance) {
             $scope.balance = balance;
         });
-        txService.getTransactions(function(txs) {
-            $scope.allOffers = txs.pendingOffers;
+        txService.getAvailTransactions(function(txs) {
+            var salesTx = [];
+            var purchasesTx = [];
+            for (var i = 0; i<txs.length; i++) {
+                if ((txs[i]).sell){
+                    salesTx.push(txs[i]);
+                }
+                else{
+                    purchasesTx.push(txs[i]);
+                }
+            }
+            $scope.salesTx = salesTx;
+            $scope.purchasesTx = purchasesTx;
         });
     }
 
     $interval(function() {
         reloadData();
-    }, 5000)
+    }, 3000)
+    reloadData();
 
     $scope.isSomeoneElseSelling = function(x){
         var isSell = false;

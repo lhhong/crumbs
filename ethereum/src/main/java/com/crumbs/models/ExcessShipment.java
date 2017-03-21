@@ -33,7 +33,7 @@ public class ExcessShipment {
 	public ExcessShipment(int initialDispose, int actualDispose, int index, int offerQuantity) {
 		quantity = actualDispose;
 		urgency = UrgencyUtil.excessUrg(initialDispose, actualDispose);
-		urgencyLevel = UrgencyUtil.getUrgencyLevel(urgency);
+		urgencyLevel = UrgencyUtil.getExcessUrgencyLevel(urgency);
 		percentExtra = UrgencyUtil.percentageExtra(initialDispose, actualDispose);
 		expiry = DateUtil.daysFromToday(index + 1);
 		this.offerQuantity = offerQuantity;

@@ -17,57 +17,7 @@
     <!-- Dairy Product Tab -->
     <div class="panel panel-default">
       <div class="panel-heading">
-        <strong> Dairy Products</strong>
-      </div>
-      <!-- /.panel-heading -->
-      <div class="panel-body">
-          <div class="table-responsive">
-              <table class="table table-striped">
-                  <thead>
-                      <tr>
-                          <th class="col-md-1" ng-click="sortData('product')">
-                              Product <div ng-class="getSortClass('product')"></div>
-                          </th>
-                          <th class="col-md-1" ng-click="sortData('qty')">
-                              Quantity <div ng-class="getSortClass('qty')"></div>
-                          </th>
-                          <th class="col-md-1" ng-click="sortData('storename')">
-                            Store Name <div ng-class="getSortClass('storename')"></div>
-                          </th>
-                          <th class="col-md-1" ng-click="sortData('location')">
-                              Location <div ng-class="getSortClass('location')"></div>
-                          </th>
-                          <th class="col-md-1" ng-click="sortData('expiryDate')">
-                              Disposal On <div ng-class="getSortClass('expiryDate')"></div>
-                          </th>
-                          <th class="col-md-1" ng-click="sortData('price')">
-                            Price <div ng-class="getSortClass('price')"></div>
-                          </th>
-                          <th class="col-md-1" >
-                              Details
-                          </th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr ng-repeat="x in allOffers | filter:searchText | orderBy:sortColumn:reverseSort" ng-if="isSomeoneElseSelling(x).isSell">
-                          <td>{{ x.item }}</td>
-                          <td>{{ x.quantity }}</td>
-                          <td>{{ x.sender.name }}</td>
-                          <td>{{ x.sender.location }}</td>
-                          <td>{{ x.expiry | date }}</td>
-                          <td>{{ x.price + x.transportPrice | currency }}</td>
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
-          <!-- /.table-responsive -->
-      </div>
-      <!-- /.panel-body -->
-    </div>
-    <!-- Vegetables Product Tab -->
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <strong> Vegetables </strong>
+        <strong> Selling</strong>
       </div>
       <!-- /.panel-heading -->
       <div class="panel-body">
@@ -99,13 +49,63 @@
                       </tr>
                   </thead>
                   <tbody>
-                      <tr ng-repeat="x in vegetable | filter:searchText | orderBy:sortColumn:reverseSort">
-                          <td>{{ x.product }}</td>
-                          <td>{{ x.qty }}</td>
-                          <td>{{ x.storename }}</td>
-                          <td>{{ x.location }}</td>
-                          <td>{{ x.expiryDate | date }}</td>
-                          <td>{{ x.price + x.transportCost | currency }}</td>
+                      <tr ng-repeat="x in salesTx | filter:searchText | orderBy:sortColumn:reverseSort" >
+                          <td>{{ x.item }}</td>
+                          <td>{{ x.quantity }}</td>
+                          <td>{{ x.sender.name }}</td>
+                          <td>{{ x.sender.location }}</td>
+                          <td>{{ x.expiry | date }}</td>
+                          <td>{{ x.price + x.transportPrice | currency }}</td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+          <!-- /.table-responsive -->
+      </div>
+      <!-- /.panel-body -->
+    </div>
+    <!-- Vegetables Product Tab -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong> Buying </strong>
+      </div>
+      <!-- /.panel-heading -->
+      <div class="panel-body">
+          <div class="table-responsive">
+              <table class="table table-striped">
+                  <thead>
+                      <tr>
+                          <th class="col-md-1" ng-click="sortData('product')">
+                              Product <div ng-class="getSortClass('product')"></div>
+                          </th>
+                          <th class="col-md-1" ng-click="sortData('qty')">
+                              Quantity <div ng-class="getSortClass('qty')"></div>
+                          </th>
+                          <th class="col-md-1" ng-click="sortData('storename')">
+                              Store Name <div ng-class="getSortClass('storename')"></div>
+                          </th>
+                          <th class="col-md-1" ng-click="sortData('location')">
+                              Location <div ng-class="getSortClass('location')"></div>
+                          </th>
+                          <th class="col-md-1" ng-click="sortData('expiryDate')">
+                              Buying On <div ng-class="getSortClass('expiryDate')"></div>
+                          </th>
+                          <th class="col-md-1" ng-click="sortData('price')">
+                              Price <div ng-class="getSortClass('price')"></div>
+                          </th>
+                          <th class="col-md-1" >
+                              Details
+                          </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr ng-repeat="x in purchasesTx | filter:searchText | orderBy:sortColumn:reverseSort">
+                          <td>{{ x.item }}</td>
+                          <td>{{ x.quantity }}</td>
+                          <td>{{ x.sender.name }}</td>
+                          <td>{{ x.sender.location }}</td>
+                          <td>{{ x.txDate | date }}</td>
+                          <td>{{ x.price + x.transportPrice | currency }}</td>
                       </tr>
                   </tbody>
               </table>
