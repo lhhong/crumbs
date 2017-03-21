@@ -127,7 +127,7 @@
 								<th>Product</th>
 								<th>Quantity</th>
 								<th ng-if="forExcess">Request Date</th>
-								<th ng-if="!forExcess">Offer Date</th>
+								<th ng-if="!forExcess">Disposal Date</th>
 								<th>Recommended Price</th>
 								<th>Suggested Transport Cost</th>
 								<th></th>
@@ -144,8 +144,8 @@
 								<td>{{ x.price | currency }}</td>
 								<td>{{ x.transportPrice | currency }}</td>
 								<td>
-									<button ng-if="forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index, false)">Make Offer</button>
-									<button ng-if="!forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index, true)">Make Request</button>
+									<button ng-if="forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index, true)">Make Offer</button>
+									<button ng-if="!forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index, false)">Make Request</button>
 								</td>
 							</tr>
 						</tbody>
