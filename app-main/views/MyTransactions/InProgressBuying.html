@@ -132,7 +132,7 @@
                           <tr>
                               <th>Store Name</th>
                               <th>Location</th>
-                              <th>Transport Date</th>
+                              <th>Transaction Date</th>
                               <th>Transport Cost</th>
                               <th>Total Cost</th>
                               <th></th>
@@ -142,7 +142,7 @@
                           <tr>
                               <td>{{ txView.accepter.name }}</td>
                               <td>{{ txView.accepter.location }}</td>
-                              <td>---</td>
+                              <td>{{ txView.txDate | date }}</td>
                               <td>{{ txView.transportPrice | currency }}</td>
                               <td>{{ txView.price * txView.quantity + txView.transportPrice | currency }}</td>
                               <td><button ng-click="agree(txView.uuid)" type="button" data-dismiss="modal" class="btn btn-success btn-xs">Purchase</button></td>
@@ -172,7 +172,7 @@
                         <tr>
                             <th>Store Name</th>
                             <th>Location</th>
-                            <th>Transport Date</th>
+                            <th>Transaction Date</th>
                             <th>Transport Cost</th>
                             <th>Total Cost</th>
                             <th></th>
@@ -182,7 +182,7 @@
                         <tr>
                             <td>{{ txView.sender.name }}</td>
                             <td>{{ txView.sender.location }}</td>
-                            <td>---</td>
+                            <td>{{ txView.txDate | date }}</td>
                             <td>{{ txView.transportPrice | currency }}</td>
                             <td>{{ txView.price * txView.quantity + txView.transportPrice | currency }}</td>
                         </tr>

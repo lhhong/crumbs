@@ -132,7 +132,7 @@
                       <tr>
                           <th>Store Name</th>
                           <th>Location</th>
-                          <th>Transport Date</th>
+                          <th>Transaction Date</th>
                           <th>Transport Cost</th>
                           <th>Total Cost</th>
                           <th></th>
@@ -171,7 +171,7 @@
                         <tr>
                             <th>Store Name</th>
                             <th>Location</th>
-                            <th>Transport Date</th>
+                            <th>Transaction Date</th>
                             <th>Transport Cost</th>
                             <th>Total Cost</th>
                             <th></th>
@@ -181,7 +181,7 @@
                         <tr>
                             <td>{{ txView.sender.name }}</td>
                             <td>{{ txView.sender.location }}</td>
-                            <td>{{ txView.txDate }}</td>
+                            <td>{{ txView.txDate | date}}</td>
                             <td>{{ txView.transportPrice | currency }}</td>
                             <td>{{ txView.price * txView.quantity + txView.transportPrice | currency }}</td>
                         </tr>
