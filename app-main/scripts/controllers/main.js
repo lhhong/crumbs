@@ -23,13 +23,13 @@ angular.module('sbAdminApp')
             $scope.txs = txs;
             //count selling and buying
             var count = 0;
-            for (var i = 0; i<txs.pendingAgrees.length; i++) {
-                if (txs.pendingAgrees[i].sell){
+            for (var i = 0; i<txs.offersAccepted.length; i++) {
+                if (txs.offersAccepted[i].sell){
                     count++;
                 }
             }
             $scope.numOfSalesToApprove = count;
-            $scope.numOfPurchasesToApprove = txs.pendingAgrees.length-count;
+            $scope.numOfPurchasesToApprove = txs.offersAccepted.length-count;
         });
         predictionService.getQuantity(function(predictQty) {
             if (predictQty.valid) {
