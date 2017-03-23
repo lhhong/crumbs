@@ -25,6 +25,7 @@
                           <th class="col-md-2">Store Name</th>
                           <th class="col-md-2">Location</th>
                           <th class="col-md-2">Transaction Date</th>
+                          <th class="col-md-2">Disposal Date</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -35,6 +36,7 @@
                           <td>{{ x.accepter.name }}{{ x.sender.name }}</td>
                           <td>{{ x.accepter.location }}{{ x.sender.location }}</td>
                           <td>{{ x.txDate | date }}</td>
+                          <td>{{ x.disposal | date }}</td>
                       </tr>
                   </tbody>
               </table>
@@ -59,6 +61,7 @@
                           <th class="col-md-2">Store Name</th>
                           <th class="col-md-2">Location</th>
                           <th class="col-md-2">Transaction Date</th>
+                          <th class="col-md-2">Disposal Date</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -69,6 +72,7 @@
                           <td>{{ x.accepter.name }}{{ x.sender.name }}</td>
                           <td>{{ x.accepter.location }}{{ x.sender.location }}</td>
                           <td>{{ x.txDate | date }}</td>
+                          <td>{{ x.expiry | date }}</td>
                       </tr>
                   </tbody>
               </table>

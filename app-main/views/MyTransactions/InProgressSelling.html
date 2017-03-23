@@ -142,7 +142,7 @@
                       <tr>
                           <td>{{ txView.accepter.name }}</td>
                           <td>{{ txView.accepter.location }}</td>
-                          <td>{{ txView.txDate }}</td>
+                          <td>{{ txView.txDate | date}}</td>
                           <td>{{ txView.transportPrice | currency }}</td>
                           <td>{{ txView.price + txView.transportPrice | currency }}</td>
                           <td><button ng-click="agree(txView.uuid)" type="button" class="btn btn-success btn-txViews">Sell</button></td>
