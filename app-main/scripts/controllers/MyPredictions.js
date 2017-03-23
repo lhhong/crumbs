@@ -22,6 +22,7 @@ angular.module('sbAdminApp')
     predictionService.getPredictions(
         function(predictions) {
             $scope.predictions = predictions;
+            console.log(predictions);
         },
         function() {
             $scope.predictions = {
@@ -169,10 +170,11 @@ angular.module('sbAdminApp')
         }
     };
 
-    $scope.getDisposalCellColour = function(colNumber,columnNumberToHighlight) {
+    $scope.getDisposalCellColour = function(colNumber) {
         var colour;
-        if (colNumber == columnNumberToHighlight) {
-            colour = '#FF9191'
+        var indexCol = $scope.colNumbers.indexOf(colNumber);
+        if (indexCol != -1){
+            colour = $scope.colColours[indexCol].background;
         }
         else {
             colour = '#ffffff'
@@ -207,13 +209,10 @@ angular.module('sbAdminApp')
         return { newString }
      };
 
-    $scope.formatColumn = function(colNumber,colNumberToHighlight) {
-        var colour;
-        if (colNumber == colNumberToHighlight) {
-            colour = '#FF9191'
-        }
-        return {
-            background: colour
+    $scope.formatColumn = function(colNumber) {
+        var indexCol = $scope.colNumbers.indexOf(colNumber);
+        if (indexCol != -1){
+            return $scope.colColours[indexCol]
         }
      };
 
@@ -255,17 +254,47 @@ angular.module('sbAdminApp')
     // Plotting functions for predictions chart
     $scope.chart = [];
 
-    $scope.viewChart = function(predictedItem,isSell) {
+    $scope.viewChart = function(shortOrExce, predictedItem) {
         $scope.predictedItem = predictedItem;
-        if (isSell){ var day = new Date(predictedItem.expiry); }
-        else { var day = new Date(predictedItem.requestDate); }
-        $scope.columnNumberToHighlight = day.getDate()-7;
+        $scope.getColumns(shortOrExce, predictedItem);
         console.log(predictedItem.name);
         var productName = predictedItem.name;
         predictionService.getChart(productName, function(chart, demand) {
             $scope.chart = chart;
             $scope.demand = demand;
         })
+    };
+
+    $scope.getColumns = function(shortOrExce, predictedItem){
+        var colNumbers = [];
+        var colColours = [];
+        if (shortOrExce == 'excessShipments'){
+            $scope.predictForExcess = true;
+            for (var i = 0; i < $scope.predictions.excessShipments.length; i++) {
+                var excessShipment = $scope.predictions.excessShipments[i];
+                if (excessShipment.name == predictedItem.name && ($scope.isWithinCutOff(excessShipment.offerQuantity,0)).withinCutoff){
+                    colNumbers.push($scope.convertToColNumber(excessShipment.expiry));
+                    colColours.push($scope.getColour(shortOrExce, excessShipment));
+                }
+            }
+        }
+        else {
+            $scope.predictForExcess = false;
+            for (var i = 0; i < $scope.predictions.stockShortages.length; i++) {
+                var stockShortage = $scope.predictions.stockShortages[i];
+                if (stockShortage.name == predictedItem.name && $scope.isWithinCutOff(stockShortage.offerQuantity,1)){
+                    colNumbers.push($scope.convertToColNumber(stockShortage.requestDate));
+                    colColours.push($scope.getColour(shortOrExce, stockShortage));
+                }
+            }
+        }
+        $scope.colNumbers = colNumbers;
+        $scope.colColours = colColours;
+    };
+
+    $scope.convertToColNumber = function(predictedDate){
+        var day = new Date(predictedDate);
+        return (day.getDate() - 7);
     };
 
     $('#PredictionModal').on('shown.bs.modal', function (event) {
