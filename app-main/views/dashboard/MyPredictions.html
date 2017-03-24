@@ -226,7 +226,6 @@
 							</div>
 						</div>
 					</div>
-
 					<!-- /.Table showing breakdown -->
 					<div class="panel panel-default">
 						<div class="panel-heading"><b>Prediction Summary</b></div>
@@ -270,15 +269,12 @@
 										<td ng-repeat="x in chart track by $index" ng-if="$index>6" ng-style="formatColumn($index)" class="text-center">{{ x.endingInventory }}</td>
 									</tr>
 								</tbody>
-								<caption align="bottom">
-									<p class="text-muted text-right" ng-if= predictForExcess><small>*Days of excess are highlighted according to their urgency levels</small></p>
-									<p class="text-muted text-right" ng-if= !predictForExcess><small>*Days of shortage are highlighted according to their urgency levels</small></p>
-								</caption>
 							</table>
+							<p class="text-muted text-right" ng-if= predictForExcess><small>*Days of excess are highlighted according to their urgency levels</small></p>
+							<p class="text-muted text-right" ng-if= !predictForExcess><small>*Days of shortage are highlighted according to their urgency levels</small></p>
 						</div>
 					</div>
-
-					<p class="text-muted text-center"><small>Predictions are made over a horizon of 14 days</small></p>
+					<p class="text-muted text-center"><small><b>Predictions are made over a horizon of 14 days</b></small></p>
 				</div>
 			</div>
 			<!-- /.modal-content -->
