@@ -106,14 +106,14 @@ public class MatchMakingSrvc {
 		double rank = 0;
 		if (shortExce instanceof RemStockVM) {
 			// To rank potential sellers, prefer low price and more days before expiry
-			// Assume that each day before expiry is worth $100
+			// Assume that each day before expiry is worth $200
 			double price = tx.getPrice() + tx.getTransportPrice();
 			int daysBeforeExpiry = DateUtil.toLocalDate(tx.getExpiry()).getDayOfYear()-DateUtil.toLocalDate(((RemStockVM) shortExce).getRequestDate()).getDayOfYear();
 			rank = 1/(price-100*daysBeforeExpiry); //Take the inverse of price
 		}
 		else if (shortExce instanceof ExceShipVM) {
 			// To rank potential buyers, prefer higher price
-			rank = tx.getPrice();
+			rank = tx.getPrice() + tx.getTransportPrice();
 		}
 
 		return rank;

@@ -8,10 +8,46 @@
     <div class="alert alert-info">
         Current Balance: <em>{{ balance| currency }}</em>
     </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Products Sold</strong>
+        </div>
+        <!-- /.panel-heading -->
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th class="col-md-2">Product</th>
+                        <th class="col-md-1">Quantity</th>
+                        <th class="col-md-1">Price</th>
+                        <th class="col-md-2">Store Name</th>
+                        <th class="col-md-2">Location</th>
+                        <th class="col-md-2">Transaction Date</th>
+                        <th class="col-md-2">Disposal Date</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="x in sold">
+                        <td>{{ x.item }}</td>
+                        <td>{{ x.quantity }}</td>
+                        <td>{{ x.price | currency }}</td>
+                        <td>{{ x.accepter.name }}{{ x.sender.name }}</td>
+                        <td>{{ x.accepter.location }}{{ x.sender.location }}</td>
+                        <td>{{ x.txDate | date }}</td>
+                        <td>{{ x.expiry | date }}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.table-responsive -->
+        </div>
+        <!-- /.panel-body -->
+    </div>
     <!-- /.row -->
     <div class="panel panel-default">
       <div class="panel-heading">
-        <strong>Bought</strong>
+        <strong>Products Bought</strong>
       </div>
       <!-- /.panel-heading -->
       <div class="panel-body">
@@ -37,42 +73,6 @@
                           <td>{{ x.accepter.location }}{{ x.sender.location }}</td>
                           <td>{{ x.txDate | date }}</td>
                           <td>{{ x.disposal | date }}</td>
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
-          <!-- /.table-responsive -->
-      </div>
-      <!-- /.panel-body -->
-    </div>
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <strong>Sold</strong>
-      </div>
-      <!-- /.panel-heading -->
-      <div class="panel-body">
-          <div class="table-responsive">
-              <table class="table table-striped">
-                  <thead>
-                      <tr>
-                          <th class="col-md-2">Product</th>
-                          <th class="col-md-1">Quantity</th>
-                          <th class="col-md-1">Price</th>
-                          <th class="col-md-2">Store Name</th>
-                          <th class="col-md-2">Location</th>
-                          <th class="col-md-2">Transaction Date</th>
-                          <th class="col-md-2">Disposal Date</th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr ng-repeat="x in sold">
-                          <td>{{ x.item }}</td>
-                          <td>{{ x.quantity }}</td>
-                          <td>{{ x.price | currency }}</td>
-                          <td>{{ x.accepter.name }}{{ x.sender.name }}</td>
-                          <td>{{ x.accepter.location }}{{ x.sender.location }}</td>
-                          <td>{{ x.txDate | date }}</td>
-                          <td>{{ x.expiry | date }}</td>
                       </tr>
                   </tbody>
               </table>

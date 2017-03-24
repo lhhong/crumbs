@@ -17,6 +17,7 @@ angular.module('sbAdminApp')
         })
         txService.getBought(function(txs) {
             $scope.bought = txs;
+            $scope.bought = $scope.bought.filter($scope.filterOutDonations);
         }, function() {
             $scope.bought = [
                 {
@@ -38,6 +39,7 @@ angular.module('sbAdminApp')
         })
         txService.getSold(function(txs) {
             $scope.sold = txs;
+            $scope.sold = $scope.sold.filter($scope.filterOutDonations);
         }, function() {
             $scope.sold = [
                 {
@@ -58,6 +60,13 @@ angular.module('sbAdminApp')
             ];
         })
     }
+
+    $scope.filterOutDonations = function(item){
+        if (item.price == 0){
+            return false;
+        }
+        return true;
+    };
 
     $interval(function() {
         reloadData();

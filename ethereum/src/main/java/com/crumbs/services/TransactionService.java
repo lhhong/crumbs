@@ -540,7 +540,7 @@ public class TransactionService {
 		return keys.split(";");
 	}
 
-	public List<TxAccepted> getAllAvailTx() {
+	public List<TxAccepted> getAllTxs() {
 		List<TxAccepted> txs = new ArrayList<>();
 		String[] keys = getAllAvailTxKeys();
 		for (String key : keys) {
@@ -576,12 +576,24 @@ public class TransactionService {
 					tx.setTxDate(new Date(((BigInteger) result[11]).longValue()));
 					if (tx.isPending() || tx.isDone()) {
 						logger.warn("transaction {} changed state", tx.getUuid());
-					} else {
+					}
+					else {
 						txs.add(tx);
 					}
 				} catch (ArrayIndexOutOfBoundsException e) {
 					e.printStackTrace();
 				}
+			}
+		}
+		return txs;
+	}
+
+	// Filter out any donations
+	public List<TxAccepted> getAllAvailTx() {
+		List<TxAccepted> txs = getAllTxs();
+		for (int i = 0; i < txs.size(); i++){
+			if (txs.get(i).getPrice() == 0){
+				txs.remove(i);
 			}
 		}
 		return txs;

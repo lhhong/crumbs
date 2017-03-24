@@ -114,47 +114,52 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">Recommended Matches for {{ offering.name }}</h4>
+					<h4 class="modal-title">Market for {{ offering.name }}</h4>
 				</div>
 				<div class="modal-body">
-					<div uib-alert ng-if="alert" class="alert-danger" close="closeAlert()" dismiss-on-timeout="3000">Error: Please wait for previous transaction to be mined before continuing</div>
-					<!-- Matches Table -->
-					<table id = "ViewMatchesTable" ng-if="offers.length" class="table table-hover">
-						<thead>
-							<tr>
-								<th>Store Name</th>
-								<th>Location</th>
-								<th>Product</th>
-								<th>Quantity</th>
-								<th ng-if="forExcess">Request Date</th>
-								<th ng-if="!forExcess">Disposal Date</th>
-								<th>Recommended Price</th>
-								<th>Suggested Transport Cost</th>
-								<th></th>
-							</tr>
-						</thead>
-						<tbody>
-							<tr ng-repeat="x in offers track by $index">
-								<td>{{ x.sender.name }}</td>
-								<td>{{ x.sender.location }}</td>
-								<td>{{ x.item }}</td>
-								<td>{{ x.quantity }}</td>
-								<td ng-if="forExcess">{{ x.txDate | date }}</td>
-								<td ng-if="!forExcess">{{ x.expiry | date }}</td>
-								<td>{{ x.price | currency }}</td>
-								<td>{{ x.transportPrice | currency }}</td>
-								<td>
-									<button ng-if="forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index, true)">Make Offer</button>
-									<button ng-if="!forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index, false)">Make Request</button>
-								</td>
-							</tr>
-						</tbody>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<strong> Recommended Matches</strong>
+						</div>
+						<div class="panel-body">
+							<div uib-alert ng-if="alert" class="alert-danger" close="closeAlert()" dismiss-on-timeout="3000">Error: Please wait for previous transaction to be mined before continuing</div>
+							<!-- Matches Table -->
+							<table id = "ViewMatchesTable" ng-if="offers.length" class="table table-hover">
+								<thead>
+									<tr>
+										<th>Store Name</th>
+										<th>Location</th>
+										<th>Product</th>
+										<th>Quantity</th>
+										<th ng-if="forExcess">Request Date</th>
+										<th ng-if="!forExcess">Disposal Date</th>
+										<th>Recommended Price</th>
+										<th>Suggested Transport Cost</th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="x in offers track by $index">
+										<td>{{ x.sender.name }}</td>
+										<td>{{ x.sender.location }}</td>
+										<td>{{ x.item }}</td>
+										<td>{{ x.quantity }}</td>
+										<td ng-if="forExcess">{{ x.txDate | date }}</td>
+										<td ng-if="!forExcess">{{ x.expiry | date }}</td>
+										<td>{{ x.price | currency }}</td>
+										<td>{{ x.transportPrice | currency }}</td>
+										<td>
+											<button ng-if="forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index, true)">Make Offer</button>
+											<button ng-if="!forExcess" type="button" class="btn btn-success btn-xs" ng-click="acceptOffer($index, false)">Make Request</button>
+										</td>
+									</tr>
+								</tbody>
 
-					</table>
-					<p ng-if="offers.length" class="text-muted text-center"><small>If none of the above offers are satisfactory, click button below to make new request on the market</small></p>
-
-					<p ng-if="!offers.length" class="text-center"> <strong> Sorry, no matches found. </strong></p>
-
+							</table>
+							<p ng-if="offers.length" class="text-muted text-center"><small>If none of the above offers are satisfactory, click button below to make new request on the market</small></p>
+							<p ng-if="!offers.length" class="text-center"> <strong> Sorry, no matches found. </strong></p>
+						</div>
+					</div>
 
 					<!-- Table for Offer/Request summary -->
 					<div class="panel-group" id="newTx">
@@ -228,7 +233,9 @@
 					</div>
 					<!-- /.Table showing breakdown -->
 					<div class="panel panel-default">
-						<div class="panel-heading"><b>Prediction Summary</b></div>
+						<div class="panel-heading">
+							<strong> Prediction Summary</strong>
+						</div>
 						<div class="panel-body">
 							<table class="table table-striped table-bordered table-hover" style="border-collapse: collapse" id="dataTables-example" >
 								<thead>

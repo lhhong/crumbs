@@ -35,7 +35,13 @@ angular.module('sbAdminApp')
             }
             $scope.agrees = txs.pendingAgrees.concat(txs.offersAccepted);
             $scope.offers = $scope.offers.concat($scope.agrees);
+
+            // Filter out donations
+            $scope.accepts = $scope.accepts.filter($scope.filterOutDonations);
+            $scope.agrees = $scope.agrees.filter($scope.filterOutDonations);
+            $scope.offers = $scope.offers.filter($scope.filterOutDonations);
             $scope.reloaded = true;
+
         }, function() {
             //add mock data here when server not running
             $scope.offers = [{
@@ -86,6 +92,13 @@ angular.module('sbAdminApp')
 
         })
         $scope.reloaded = true;
+    };
+
+    $scope.filterOutDonations = function(item){
+        if (item.price == 0){
+            return false;
+        }
+        return true;
     };
 
     $scope.txView = {};

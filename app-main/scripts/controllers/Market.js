@@ -27,6 +27,9 @@ angular.module('sbAdminApp')
             }
             $scope.salesTx = salesTx;
             $scope.purchasesTx = purchasesTx;
+
+            $scope.salesTx = $scope.salesTx.filter($scope.filterOutDonations);
+            $scope.purchasesTx = $scope.purchasesTx.filter($scope.filterOutDonations);
         });
     }
 
@@ -151,4 +154,12 @@ angular.module('sbAdminApp')
       return $scope.reverseSort ? 'arrow-down' : 'arrow-up'
     }
   };
+
+  $scope.filterOutDonations = function(item){
+    if (item.price == 0){
+      return false;
+    }
+    return true;
+  };
+
   }]);
