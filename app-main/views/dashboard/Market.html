@@ -1,117 +1,116 @@
-<br>
-    <div class="row">
-        <div class="col-lg-12">
-            <h1 class="page-header"><i class="fa fa-shopping-cart fa-fw"></i><em><strong>Market</strong></em></h1>
-        </div>
-        <!-- /.col-lg-12 -->
-    </div>
-    <div class="alert alert-info">
-        Current Balance: <em>{{ balance| currency }}</em>
-    </div>
+<div class="row">
     <div class="col-lg-12">
-      <input type="text" ng-model="searchText.storename" placeholder="Search by Store name" />
-      <input type="text" ng-model="searchText.product" placeholder="Search by Product" />
+        <h1 class="page-header"><i class="fa fa-shopping-cart fa-fw"></i><em><strong>Market</strong></em></h1>
     </div>
-    <br><br>
+</div>
 
-    <!-- Dairy Product Tab -->
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <strong> All Offers</strong>
+<div class="alert alert-info">
+    Current Balance: <em>{{ balance| currency }}</em>
+</div>
+<div class="col-lg-12">
+  <input type="text" ng-model="searchText.storename" placeholder="Search by Store name" />
+  <input type="text" ng-model="searchText.product" placeholder="Search by Product" />
+</div>
+<br><br>
+
+<!-- All Offers on the Market -->
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong> All Offers</strong>
+  </div>
+  <!-- /.panel-heading -->
+  <div class="panel-body">
+      <div class="table-responsive">
+          <table class="table table-striped">
+              <thead>
+                  <tr>
+                      <th class="col-md-1" ng-click="sortData('product')">
+                          Product <div ng-class="getSortClass('product')"></div>
+                      </th>
+                      <th class="col-md-1" ng-click="sortData('qty')">
+                          Quantity <div ng-class="getSortClass('qty')"></div>
+                      </th>
+                      <th class="col-md-1" ng-click="sortData('storename')">
+                          Store Name <div ng-class="getSortClass('storename')"></div>
+                      </th>
+                      <th class="col-md-1" ng-click="sortData('location')">
+                          Location <div ng-class="getSortClass('location')"></div>
+                      </th>
+                      <th class="col-md-1" ng-click="sortData('expiryDate')">
+                          Disposal On <div ng-class="getSortClass('expiryDate')"></div>
+                      </th>
+                      <th class="col-md-1" ng-click="sortData('price')">
+                          Price <div ng-class="getSortClass('price')"></div>
+                      </th>
+                      <th class="col-md-1" >
+                          Details
+                      </th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr ng-repeat="x in salesTx | filter:searchText | orderBy:sortColumn:reverseSort" >
+                      <td>{{ x.item }}</td>
+                      <td>{{ x.quantity }}</td>
+                      <td>{{ x.sender.name }}</td>
+                      <td>{{ x.sender.location }}</td>
+                      <td>{{ x.expiry | date }}</td>
+                      <td>{{ x.price + x.transportPrice | currency }}</td>
+                  </tr>
+              </tbody>
+          </table>
       </div>
-      <!-- /.panel-heading -->
-      <div class="panel-body">
-          <div class="table-responsive">
-              <table class="table table-striped">
-                  <thead>
-                      <tr>
-                          <th class="col-md-1" ng-click="sortData('product')">
-                              Product <div ng-class="getSortClass('product')"></div>
-                          </th>
-                          <th class="col-md-1" ng-click="sortData('qty')">
-                              Quantity <div ng-class="getSortClass('qty')"></div>
-                          </th>
-                          <th class="col-md-1" ng-click="sortData('storename')">
-                              Store Name <div ng-class="getSortClass('storename')"></div>
-                          </th>
-                          <th class="col-md-1" ng-click="sortData('location')">
-                              Location <div ng-class="getSortClass('location')"></div>
-                          </th>
-                          <th class="col-md-1" ng-click="sortData('expiryDate')">
-                              Disposal On <div ng-class="getSortClass('expiryDate')"></div>
-                          </th>
-                          <th class="col-md-1" ng-click="sortData('price')">
-                              Price <div ng-class="getSortClass('price')"></div>
-                          </th>
-                          <th class="col-md-1" >
-                              Details
-                          </th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr ng-repeat="x in salesTx | filter:searchText | orderBy:sortColumn:reverseSort" >
-                          <td>{{ x.item }}</td>
-                          <td>{{ x.quantity }}</td>
-                          <td>{{ x.sender.name }}</td>
-                          <td>{{ x.sender.location }}</td>
-                          <td>{{ x.expiry | date }}</td>
-                          <td>{{ x.price + x.transportPrice | currency }}</td>
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
-          <!-- /.table-responsive -->
+      <!-- /.table-responsive -->
+  </div>
+  <!-- /.panel-body -->
+</div>
+
+<!-- All Requests on the Market -->
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong> All Requests </strong>
+  </div>
+  <!-- /.panel-heading -->
+  <div class="panel-body">
+      <div class="table-responsive">
+          <table class="table table-striped">
+              <thead>
+                  <tr>
+                      <th class="col-md-1" ng-click="sortData('product')">
+                          Product <div ng-class="getSortClass('product')"></div>
+                      </th>
+                      <th class="col-md-1" ng-click="sortData('qty')">
+                          Quantity <div ng-class="getSortClass('qty')"></div>
+                      </th>
+                      <th class="col-md-1" ng-click="sortData('storename')">
+                          Store Name <div ng-class="getSortClass('storename')"></div>
+                      </th>
+                      <th class="col-md-1" ng-click="sortData('location')">
+                          Location <div ng-class="getSortClass('location')"></div>
+                      </th>
+                      <th class="col-md-1" ng-click="sortData('expiryDate')">
+                          Buying On <div ng-class="getSortClass('expiryDate')"></div>
+                      </th>
+                      <th class="col-md-1" ng-click="sortData('price')">
+                          Price <div ng-class="getSortClass('price')"></div>
+                      </th>
+                      <th class="col-md-1" >
+                          Details
+                      </th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr ng-repeat="x in purchasesTx | filter:searchText | orderBy:sortColumn:reverseSort">
+                      <td>{{ x.item }}</td>
+                      <td>{{ x.quantity }}</td>
+                      <td>{{ x.sender.name }}</td>
+                      <td>{{ x.sender.location }}</td>
+                      <td>{{ x.txDate | date }}</td>
+                      <td>{{ x.price + x.transportPrice | currency }}</td>
+                  </tr>
+              </tbody>
+          </table>
       </div>
-      <!-- /.panel-body -->
-    </div>
-    <!-- Vegetables Product Tab -->
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <strong> All Requests </strong>
-      </div>
-      <!-- /.panel-heading -->
-      <div class="panel-body">
-          <div class="table-responsive">
-              <table class="table table-striped">
-                  <thead>
-                      <tr>
-                          <th class="col-md-1" ng-click="sortData('product')">
-                              Product <div ng-class="getSortClass('product')"></div>
-                          </th>
-                          <th class="col-md-1" ng-click="sortData('qty')">
-                              Quantity <div ng-class="getSortClass('qty')"></div>
-                          </th>
-                          <th class="col-md-1" ng-click="sortData('storename')">
-                              Store Name <div ng-class="getSortClass('storename')"></div>
-                          </th>
-                          <th class="col-md-1" ng-click="sortData('location')">
-                              Location <div ng-class="getSortClass('location')"></div>
-                          </th>
-                          <th class="col-md-1" ng-click="sortData('expiryDate')">
-                              Buying On <div ng-class="getSortClass('expiryDate')"></div>
-                          </th>
-                          <th class="col-md-1" ng-click="sortData('price')">
-                              Price <div ng-class="getSortClass('price')"></div>
-                          </th>
-                          <th class="col-md-1" >
-                              Details
-                          </th>
-                      </tr>
-                  </thead>
-                  <tbody>
-                      <tr ng-repeat="x in purchasesTx | filter:searchText | orderBy:sortColumn:reverseSort">
-                          <td>{{ x.item }}</td>
-                          <td>{{ x.quantity }}</td>
-                          <td>{{ x.sender.name }}</td>
-                          <td>{{ x.sender.location }}</td>
-                          <td>{{ x.txDate | date }}</td>
-                          <td>{{ x.price + x.transportPrice | currency }}</td>
-                      </tr>
-                  </tbody>
-              </table>
-          </div>
-          <!-- /.table-responsive -->
-      </div>
-      <!-- /.panel-body -->
-    </div>
+      <!-- /.table-responsive -->
+  </div>
+  <!-- /.panel-body -->
 </div>
