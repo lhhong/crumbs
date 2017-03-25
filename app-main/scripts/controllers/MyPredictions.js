@@ -13,10 +13,17 @@ angular.module('sbAdminApp')
         console.log("testing Error");
         errorService.displayError();
     }
-    $scope.collapsed=true;
-    $scope.toggleCollapsed = function() {
-        $scope.collapsed = !$scope.collapsed;
+    $scope.txCollapsed=true;
+    $scope.toggleTxCollapsed = function() {
+        if (!$scope.donationsCollapsed){ $scope.toggleDonationsCollapsed() }
+        $scope.txCollapsed = !$scope.txCollapsed;
     }
+    $scope.donationsCollapsed=true;
+    $scope.toggleDonationsCollapsed = function() {
+        if (!$scope.txCollapsed){ $scope.toggleTxCollapsed() }
+        $scope.donationsCollapsed = !$scope.donationsCollapsed;
+    }
+
     console.log("loaded");
     $scope.balance = 0;
     predictionService.getPredictions(
@@ -73,7 +80,7 @@ angular.module('sbAdminApp')
     );
 
     $scope.excessViewOffer = function(x) {
-        $scope.collapsed = true;
+        $scope.txCollapsed = true;
         $scope.forExcess = true;
         var index = $scope.predictions.excessShipments.indexOf(x);
         $scope.offering = $scope.predictions.excessShipments[index];
@@ -89,7 +96,7 @@ angular.module('sbAdminApp')
     }
 
     $scope.shortageViewOffer = function(x) {
-        $scope.collapsed = true;
+        $scope.txCollapsed = true;
         $scope.forExcess = false;
         var index = $scope.predictions.stockShortages.indexOf(x);
         $scope.offering = $scope.predictions.stockShortages[index];
@@ -146,6 +153,19 @@ angular.module('sbAdminApp')
         txService.excessOffer(excessShipment, function(response) {
             $('.modal-backdrop').remove();
             $state.go('dashboard.InProgressSelling', {txSent: true, txDetails: excessShipment.name });
+        }, function () {
+            $scope.alert = true;
+        })
+    };
+
+    $scope.excessDonate = function(excessShipment) {
+        excessShipment.price = 0; // Default price is set to 0 for donations
+        excessShipment.offerQuantity = $scope.inputQuantity;
+        console.log("printing offer");
+        console.log(excessShipment);
+        txService.excessOffer(excessShipment, function(response) {
+            $('.modal-backdrop').remove();
+            $state.go('dashboard.Donations', {txSent: true, txDetails: excessShipment.name });
         }, function () {
             $scope.alert = true;
         })

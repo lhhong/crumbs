@@ -164,21 +164,21 @@
 					<!-- Table for Offer/Request summary -->
 					<div class="panel-group" id="newTx">
 						<div class="panel panel-default">
-							<div class="panel-heading" ng-click="toggleCollapsed()" style="cursor:pointer;">
-								<p ng-if=collapsed class="fa fa-chevron-down"></p>
-								<p ng-if=!collapsed class="fa fa-chevron-up"></p>
+							<div class="panel-heading" ng-click="toggleTxCollapsed()" style="cursor:pointer;">
+								<p ng-if=txCollapsed class="fa fa-chevron-down"></p>
+								<p ng-if=!txCollapsed class="fa fa-chevron-up"></p>
 								<strong ng-if="forExcess">Make a New Offer</strong>
 								<strong ng-if="!forExcess">Make a New Request</strong>
 							</div>
 							<!-- /.panel-heading -->
-							<div class="panel-body" uib-collapse="collapsed">
+							<div class="panel-body" uib-collapse="txCollapsed">
 								<!-- Summary Table-->
 								<table id = "ViewSummaryTable" class="table table-hover">
 									<thead>
 										<tr>
 											<th class="col-md-3">Product</th>
 											<th class="col-md-2">Quantity</th>
-											<th class="col-md-2" ng-if="forExcess">Disposal Date</th>
+											<th class="col-md-2" ng-if="forExcess">Expires On</th>
 											<th class="col-md-2" ng-if="!forExcess">Request Date</th>
 											<th class="col-md-2">Price</th>
 										</tr>
@@ -199,6 +199,39 @@
 
 								<button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessOffer(offering)">Make Offer</button>
 								<button type="button" class="btn btn-primary btn-lg btn-block" ng-if="!forExcess" ng-click="shortageOffer(offering)">Make Request</button>
+							</div>
+						</div>
+					</div>
+					<!-- Table for Donation summary -->
+					<div class="panel-group" id="newDonation" ng-if="forExcess">
+						<div class="panel panel-default">
+							<div class="panel-heading" ng-click="toggleDonationsCollapsed()" style="cursor:pointer;">
+								<p ng-if=donationsCollapsed class="fa fa-chevron-down"></p>
+								<p ng-if=!donationsCollapsed class="fa fa-chevron-up"></p>
+								<strong ng-if="forExcess">Make a Donation</strong>
+							</div>
+							<!-- /.panel-heading -->
+							<div class="panel-body" uib-collapse="donationsCollapsed">
+								<!-- Summary Table-->
+								<table id = "ViewDonationsTable" class="table table-hover">
+									<thead>
+									<tr>
+										<th class="col-md-3">Product</th>
+										<th class="col-md-2">Quantity</th>
+										<th class="col-md-2" ng-if="forExcess">Expires On</th>
+									</tr>
+									</thead>
+
+									<tbody>
+									<tr >
+										<td>{{ offering.name }}</td>
+										<td><input class="tbl_input" type="number" ng-model="inputQuantity"></td>
+										<td ng-if="forExcess">{{ offering.expiry | date }}</td>
+									</tr>
+									</tbody>
+								</table>
+
+								<button type="button" class="btn btn-primary btn-lg btn-block" ng-click="excessDonate(offering)">Make Donation</button>
 							</div>
 						</div>
 					</div>

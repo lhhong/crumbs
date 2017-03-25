@@ -232,6 +232,20 @@ angular
 			}
 		}
 	})
+	.state('dashboard.Donations',{
+        url:'/Donations',
+        templateUrl:'views/dashboard/Donations.html',
+        controller: 'DonationsCtrl',
+        params: {txSent: false, txDetails: null },
+        resolve: {
+            loadMyFile:function($ocLazyLoad) {
+                return $ocLazyLoad.load({
+                    name:'sbAdminApp',
+                    files:['scripts/controllers/Donations.js']
+                })
+            }
+        }
+    })
 	.state('dashboard.Profile',{
         url:'/Profile',
         templateUrl:'views/user_profile/Profile.html'
