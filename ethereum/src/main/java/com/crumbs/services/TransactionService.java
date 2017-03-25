@@ -591,11 +591,14 @@ public class TransactionService {
 	// Filter out any donations
 	public List<TxAccepted> getAllAvailTx() {
 		List<TxAccepted> txs = getAllTxs();
-		for (int i = 0; i < txs.size(); i++){
-			if (txs.get(i).getPrice() == 0){
-				txs.remove(i);
-			}
-		}
+		txs.removeIf(tx -> (tx.getPrice() == 0));
+		return txs;
+	}
+
+	// Filter out any transactions
+	public List<TxAccepted> getAllDonations() {
+		List<TxAccepted> txs = getAllTxs();
+		txs.removeIf(tx -> (tx.getPrice() != 0));
 		return txs;
 	}
 

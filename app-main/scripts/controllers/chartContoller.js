@@ -68,10 +68,9 @@ angular.module('sbAdminApp')
     	    'Pie' : 'PolarArea';
 		}
     };
-    $scope.donutcolours = ["#70DBDB", "#66CD00", "#DB2929"];
-    $scope.barcolours = ["#66CCCC", "#66CD00", "#EE0000"];
+    $scope.donutcolours = ["#2DBAD5", "#66CD00", "#DB2929"];
     $scope.radarcolours = ["#66CD00", "#EE0000"];
-    $scope.lineMonthColours = ["#66CCCC", "#66CD00", "#EE0000"];
+    $scope.lineMonthColours = ["#2DBAD5", "#66CD00", "#EE0000"];
 
     /*["rgba(224, 108, 112, 1)",
             "rgba(224, 108, 112, 1)",
