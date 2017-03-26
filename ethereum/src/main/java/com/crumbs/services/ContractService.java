@@ -24,7 +24,7 @@ import java.util.Scanner;
 
 /**
  * Created by low on 4/2/17 2:38 PM.
- * For storing and loading of contracts
+ * For storing and loading of solidity contracts
  */
 @Service
 public class ContractService {
@@ -93,6 +93,10 @@ public class ContractService {
 		return abi.toString();
 	}
 
+	/**
+	 * When a contract is first created on the block chain
+	 * @param addr contract address
+	 */
 	public void writeContractAddressToFile(String addr) {
 		PrintWriter writer = null;
 		try {

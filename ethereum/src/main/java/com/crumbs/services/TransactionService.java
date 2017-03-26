@@ -57,6 +57,10 @@ public class TransactionService {
 		checkIncludedListeners.remove(listener);
 	}
 
+	/**
+	 * Models list of all types of transactions into a front-end entity which can be easily proccessed
+	 * @return organised list of all transactions
+	 */
 	public TxStatus getTxStatus() {
 		TxStatus status = new TxStatus();
 		List<TxSent> successfulOffer = txSentRepo.findByIncludedAndPendingAndDone(true, false, false);
@@ -92,6 +96,11 @@ public class TransactionService {
 		return status;
 	}
 
+	/**
+	 * get all completed transactions that the user bought
+	 * @param status object to retrieve the transaction
+	 * @return list of completed tx users bought
+	 */
 	public List<TransactionVM> getBought(TxStatus status) {
 		List<TransactionVM> bought = new ArrayList<>();
 		//String name = memberRepo.findByOwn(true).get(0).getName();
@@ -104,6 +113,11 @@ public class TransactionService {
 		});
 		return bought;
 	}
+	/**
+	 * get all completed transactions that the user sold
+	 * @param status object to retrieve the transaction
+	 * @return list of completed tx users sold
+	 */
 	public List<TransactionVM> getSold(TxStatus status) {
 		List<TransactionVM> sold = new ArrayList<>();
 		status.getDoneTx().forEach((tx) -> {
@@ -160,6 +174,7 @@ public class TransactionService {
 				shipmentRepo.save(shipment);
 			}
 		}
+		//In the event of the blockchain being re-branched, rollback changes
 		List<TxAccepted> done = txAcceptedRepo.findByIncludedAndDone(true, true);
 		for (TxAccepted tx : done) {
 			Object[] result = contractService.constFunction("checkDoneStatus", tx.getUuid());
@@ -216,7 +231,7 @@ public class TransactionService {
 				txSentRepo.save(tx);
 			}
 		}
-		//check for offers that are rejected
+		//In the event of the blockchain being re-branched, rollback changes
 		List<TxSent> accepted = txSentRepo.findByIncludedAndPendingAndDone(true, true, false);
 		for (TxSent tx : accepted) {
 			Object[] result = contractService.constFunction("checkPendingStatus", tx.getUuid());
@@ -235,44 +250,6 @@ public class TransactionService {
 		}
 	}
 
-	public void newOffer(byte[] senderPrivAddr, TxSent tx) throws TxCancelledException {
-		long date;
-		if (tx.isSell())
-			date = tx.getExpiry().getTime();
-		else
-			date = tx.getTxDate().getTime();
-		contractService.sendToTxContract(senderPrivAddr, "newOffer", 0, tx.getUuid(), tx.getPrice(), tx.getItem(),tx.getQuantity(), date, tx.isSell());
-	}
-
-	public String newOffer(BasicShortExceVM shortExce) throws TxCancelledException {
-		TxSent tx = new TxSent();
-		String uuid = generateUUID();
-		tx.setUuid(uuid);
-		tx.setQuantity(shortExce.getOfferQuantity());
-		tx.setItem(shortExce.getName());
-		tx.setPrice(shortExce.getPrice());
-		long date = 0;
-		if (shortExce instanceof ExceShipVM) {
-			tx.setSell(true);
-			tx.setExpiry(((ExceShipVM) shortExce).getExpiry());
-			date = tx.getExpiry().getTime();
-		}
-		else if (shortExce instanceof RemStockVM) {
-			tx.setSell(false);
-			tx.setTxDate(((RemStockVM) shortExce).getRequestDate());
-			date = tx.getTxDate().getTime();
-		}
-		else {
-			logger.error("Unknown error");
-			return null;
-		}
-		logger.info("new offer: price {}, item {}, quantity {}", tx.getPrice(), tx.getItem(), tx.getQuantity());
-		contractService.sendToTxContract("newOffer", 0, uuid, tx.getPrice(), tx.getItem(), tx.getQuantity(), date, tx.isSell());
-		txSentRepo.save(tx);
-		logger.info("Created new offer transaction {}", uuid);
-		return uuid;
-	}
-
 	public void checkOfferIncluded() {
 		Iterable<TxSent> unincluded = txSentRepo.findByIncludedAndPending(false, false);
 		String[] uuids = getAllTxKeys();
@@ -288,6 +265,7 @@ public class TransactionService {
 				}
 			}
 		}
+		//In the event of the blockchain being re-branched, rollback changes
 		List<String> uuidList = Arrays.asList(uuids);
 		Iterable<TxSent> included = txSentRepo.findByIncludedAndPending(true, false);
 		for (TxSent tx : included) {
@@ -317,6 +295,7 @@ public class TransactionService {
 				}
 			}
 		}
+		//In the event of the blockchain being re-branched, rollback changes
 		List<String> uuidList = Arrays.asList(uuids);
 		Iterable<TxAccepted> included = txAcceptedRepo.findByIncludedAndDone(true, false);
 		for (TxAccepted tx : included) {
@@ -367,6 +346,7 @@ public class TransactionService {
 				}
 			}
 		}
+		//In the event of the blockchain being re-branched, rollback changes
 		List<String> uuidList = Arrays.asList(uuids);
 		Iterable<TxSent> included = txSentRepo.findByIncludedAndPendingAndDone(true, true, true);
 		for (TxSent tx : included) {
@@ -387,6 +367,47 @@ public class TransactionService {
 		}
 	}
 
+	public void newOffer(byte[] senderPrivAddr, TxSent tx) throws TxCancelledException {
+		long date;
+		if (tx.isSell())
+			date = tx.getExpiry().getTime();
+		else
+			date = tx.getTxDate().getTime();
+		contractService.sendToTxContract(senderPrivAddr, "newOffer", 0, tx.getUuid(), tx.getPrice(), tx.getItem(),tx.getQuantity(), date, tx.isSell());
+	}
+
+	public String newOffer(BasicShortExceVM shortExce) throws TxCancelledException {
+		TxSent tx = new TxSent();
+		String uuid = generateUUID();
+		tx.setUuid(uuid);
+		tx.setQuantity(shortExce.getOfferQuantity());
+		tx.setItem(shortExce.getName());
+		tx.setPrice(shortExce.getPrice());
+		long date = 0;
+		if (shortExce instanceof ExceShipVM) {
+			tx.setSell(true);
+			tx.setExpiry(((ExceShipVM) shortExce).getExpiry());
+			date = tx.getExpiry().getTime();
+		}
+		else if (shortExce instanceof RemStockVM) {
+			tx.setSell(false);
+			tx.setTxDate(((RemStockVM) shortExce).getRequestDate());
+			date = tx.getTxDate().getTime();
+		}
+		else {
+			logger.error("Unknown error");
+			return null;
+		}
+		logger.info("new offer: price {}, item {}, quantity {}", tx.getPrice(), tx.getItem(), tx.getQuantity());
+		contractService.sendToTxContract("newOffer", 0, uuid, tx.getPrice(), tx.getItem(), tx.getQuantity(), date, tx.isSell());
+		txSentRepo.save(tx);
+		logger.info("Created new offer transaction {}", uuid);
+		return uuid;
+	}
+
+	/**
+	 * @deprecated due to getRegInfo() deprecated
+	 */
 	public Member checkAndGetRegInfo() {
 		Member retrieved = getRegInfo();
 		if (retrieved == null) {
@@ -405,11 +426,17 @@ public class TransactionService {
 		return retrieved;
 	}
 
+	/**
+	 * @deprecated unable to include deleteOffer into contract due to bug in ethereumJ
+	 */
 	public void deleteTx(String uuid) throws TxCancelledException {
 		contractService.sendToTxContract("deleteOffer", 0, uuid);
 	}
 
-	//gets registration info from the blockchain
+	/**
+	 * gets registration info from the blockchain
+	 * @deprecated unable to include checkRegistration into contract due to bug in ethereumJ
+	 */
 	private Member getRegInfo() {
 		Object[] reg = contractService.constFunction("checkRegistration");
 		Member mem = null;
