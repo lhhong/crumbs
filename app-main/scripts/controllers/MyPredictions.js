@@ -83,12 +83,11 @@ angular.module('sbAdminApp')
         $scope.txCollapsed = true;
         $scope.donationsCollapsed=true;
         $scope.forExcess = true;
-        var index = $scope.predictions.excessShipments.indexOf(x);
-        $scope.offering = $scope.predictions.excessShipments[index];
+        $scope.offering = x;
         $scope.inputQuantity = $scope.offering.offerQuantity;
         $scope.inputQuantityDonate = $scope.offering.offerQuantity;
         $scope.inputPrice = $scope.offering.price * $scope.offering.offerQuantity;
-        predictionService.excessViewOffers($scope.predictions.excessShipments[index],
+        predictionService.excessViewOffers(x,
             function(response) {
                 $scope.offers = response;
             }, function(response) {
@@ -100,11 +99,10 @@ angular.module('sbAdminApp')
     $scope.shortageViewOffer = function(x) {
         $scope.txCollapsed = true;
         $scope.forExcess = false;
-        var index = $scope.predictions.stockShortages.indexOf(x);
-        $scope.offering = $scope.predictions.stockShortages[index];
+        $scope.offering = x;
         $scope.inputQuantity = $scope.offering.offerQuantity;
         $scope.inputPrice = $scope.offering.price * $scope.offering.offerQuantity;
-        predictionService.shortageViewOffers($scope.predictions.stockShortages[index],
+        predictionService.shortageViewOffers(x,
             function(response) {
                 $scope.offers = response;
             }, function(response) {
@@ -163,6 +161,8 @@ angular.module('sbAdminApp')
     $scope.excessDonate = function(excessShipment) {
         excessShipment.price = 0; // Default price is set to 0 for donations
         excessShipment.offerQuantity = $scope.inputQuantityDonate;
+        console.log("printing quantity");
+        console.log($scope.inputQuantityDonate);
         console.log("printing offer");
         console.log(excessShipment);
         txService.excessOffer(excessShipment, function(response) {

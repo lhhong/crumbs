@@ -224,14 +224,14 @@
 									</thead>
 
 									<tbody>
-									<tr >
+									<tr>
 										<td>{{ offering.name }}</td>
 										<td><input class="tbl_input" type="number" ng-model="inputQuantityDonate"></td>
 										<td>{{ offering.expiry | date }}</td>
 									</tr>
 									</tbody>
 								</table>
-
+								<p class="text-muted"><small>Units = {{inputQuantityDonate}}</small></p>
 								<button type="button" class="btn btn-primary btn-lg btn-block" ng-click="excessDonate(offering)">Make Donation</button>
 							</div>
 						</div>
