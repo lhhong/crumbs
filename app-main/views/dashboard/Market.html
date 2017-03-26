@@ -3,6 +3,7 @@
         <h1 class="page-header"><i class="fa fa-shopping-cart fa-fw"></i><em><strong>Market</strong></em></h1>
     </div>
 </div>
+<div uib-alert ng-if="alert" class="alert-danger" close="closeAlert()" dismiss-on-timeout="3000">Error: please wait for previous action to be mined before continuing</div>
 
 <div class="alert alert-info">
     Current Balance: <em>{{ balance| currency }}</em>
@@ -12,6 +13,59 @@
   <input type="text" ng-model="searchText.product" placeholder="Search by Product" />
 </div>
 <br><br>
+
+
+<!-- All Requests on the Market -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong> All Requests </strong>
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th class="col-md-1" ng-click="sortData('product')">
+                        Product <div ng-class="getSortClass('product')"></div>
+                    </th>
+                    <th class="col-md-1" ng-click="sortData('qty')">
+                        Quantity <div ng-class="getSortClass('qty')"></div>
+                    </th>
+                    <th class="col-md-1" ng-click="sortData('storename')">
+                        Store Name <div ng-class="getSortClass('storename')"></div>
+                    </th>
+                    <th class="col-md-1" ng-click="sortData('location')">
+                        Location <div ng-class="getSortClass('location')"></div>
+                    </th>
+                    <th class="col-md-1" ng-click="sortData('expiryDate')">
+                        Buying On <div ng-class="getSortClass('expiryDate')"></div>
+                    </th>
+                    <th class="col-md-1" ng-click="sortData('price')">
+                        Price <div ng-class="getSortClass('price')"></div>
+                    </th>
+                    <th class="col-md-2" >
+                        Details
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="x in purchasesTx| filter:searchText | orderBy:sortColumn:reverseSort">
+                    <td>{{ x.item }}</td>
+                    <td>{{ x.quantity }}</td>
+                    <td>{{ x.sender.name }}</td>
+                    <td>{{ x.sender.location }}</td>
+                    <td>{{ x.txDate | date }}</td>
+                    <td>{{ x.price + x.transportPrice | currency }}</td>
+                    <td><button type="button" class="btn btn-success btn-xs" ng-click="acceptOffer(x, true)">Make Offer</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.table-responsive -->
+    </div>
+    <!-- /.panel-body -->
+</div>
 
 <!-- All Offers on the Market -->
 <div class="panel panel-default">
@@ -42,7 +96,7 @@
                       <th class="col-md-1" ng-click="sortData('price')">
                           Price <div ng-class="getSortClass('price')"></div>
                       </th>
-                      <th class="col-md-1" >
+                      <th class="col-md-2" >
                           Details
                       </th>
                   </tr>
@@ -55,6 +109,8 @@
                       <td>{{ x.sender.location }}</td>
                       <td>{{ x.expiry | date }}</td>
                       <td>{{ x.price + x.transportPrice | currency }}</td>
+                      <td><button type="button" class="btn btn-success btn-xs" ng-click="acceptOffer(x, false)">Make Request</button></td>
+
                   </tr>
               </tbody>
           </table>
@@ -64,53 +120,3 @@
   <!-- /.panel-body -->
 </div>
 
-<!-- All Requests on the Market -->
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <strong> All Requests </strong>
-  </div>
-  <!-- /.panel-heading -->
-  <div class="panel-body">
-      <div class="table-responsive">
-          <table class="table table-striped">
-              <thead>
-                  <tr>
-                      <th class="col-md-1" ng-click="sortData('product')">
-                          Product <div ng-class="getSortClass('product')"></div>
-                      </th>
-                      <th class="col-md-1" ng-click="sortData('qty')">
-                          Quantity <div ng-class="getSortClass('qty')"></div>
-                      </th>
-                      <th class="col-md-1" ng-click="sortData('storename')">
-                          Store Name <div ng-class="getSortClass('storename')"></div>
-                      </th>
-                      <th class="col-md-1" ng-click="sortData('location')">
-                          Location <div ng-class="getSortClass('location')"></div>
-                      </th>
-                      <th class="col-md-1" ng-click="sortData('expiryDate')">
-                          Buying On <div ng-class="getSortClass('expiryDate')"></div>
-                      </th>
-                      <th class="col-md-1" ng-click="sortData('price')">
-                          Price <div ng-class="getSortClass('price')"></div>
-                      </th>
-                      <th class="col-md-1" >
-                          Details
-                      </th>
-                  </tr>
-              </thead>
-              <tbody>
-                  <tr ng-repeat="x in purchasesTx | filter:searchText | orderBy:sortColumn:reverseSort">
-                      <td>{{ x.item }}</td>
-                      <td>{{ x.quantity }}</td>
-                      <td>{{ x.sender.name }}</td>
-                      <td>{{ x.sender.location }}</td>
-                      <td>{{ x.txDate | date }}</td>
-                      <td>{{ x.price + x.transportPrice | currency }}</td>
-                  </tr>
-              </tbody>
-          </table>
-      </div>
-      <!-- /.table-responsive -->
-  </div>
-  <!-- /.panel-body -->
-</div>

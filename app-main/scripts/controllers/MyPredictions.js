@@ -81,10 +81,12 @@ angular.module('sbAdminApp')
 
     $scope.excessViewOffer = function(x) {
         $scope.txCollapsed = true;
+        $scope.donationsCollapsed=true;
         $scope.forExcess = true;
         var index = $scope.predictions.excessShipments.indexOf(x);
         $scope.offering = $scope.predictions.excessShipments[index];
         $scope.inputQuantity = $scope.offering.offerQuantity;
+        $scope.inputQuantityDonate = $scope.offering.offerQuantity;
         $scope.inputPrice = $scope.offering.price * $scope.offering.offerQuantity;
         predictionService.excessViewOffers($scope.predictions.excessShipments[index],
             function(response) {
@@ -160,7 +162,7 @@ angular.module('sbAdminApp')
 
     $scope.excessDonate = function(excessShipment) {
         excessShipment.price = 0; // Default price is set to 0 for donations
-        excessShipment.offerQuantity = $scope.inputQuantity;
+        excessShipment.offerQuantity = $scope.inputQuantityDonate;
         console.log("printing offer");
         console.log(excessShipment);
         txService.excessOffer(excessShipment, function(response) {
