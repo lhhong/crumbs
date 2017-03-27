@@ -147,6 +147,7 @@ public class TransactionService {
 		contractService.sendToTxContract(senderPrivKey, "register", 0, mem.getName()+";"+mem.getLocation(), mem.getX(), mem.getY());
 	}
 
+	//State updating functions
 	public void checkAcceptanceAgreed() {
 		List<TxAccepted> acceptance = txAcceptedRepo.findByIncludedAndDone(true, false);
 		for (TxAccepted tx : acceptance) {
