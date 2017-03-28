@@ -132,9 +132,11 @@ angular.module('sbAdminApp')
         $scope.alert = false;
     }
 
+    $scope.q = {};
+
     $scope.shortageOffer = function(stockShortage) {
-        stockShortage.price = $scope.inputPrice;
-        stockShortage.offerQuantity = $scope.inputQuantity;
+        stockShortage.price = $scope.q.inputPrice;
+        stockShortage.offerQuantity = $scope.q.inputQuantity;
         console.log("printing offer");
         console.log(stockShortage);
         txService.shortageOffer(stockShortage, function(response) {
@@ -146,8 +148,8 @@ angular.module('sbAdminApp')
     };
 
     $scope.excessOffer = function(excessShipment) {
-        excessShipment.price = $scope.inputPrice;
-        excessShipment.offerQuantity = $scope.inputQuantity;
+        excessShipment.price = $scope.q.inputPrice;
+        excessShipment.offerQuantity = $scope.q.inputQuantity;
         console.log("printing offer");
         console.log(excessShipment);
         txService.excessOffer(excessShipment, function(response) {
@@ -160,9 +162,9 @@ angular.module('sbAdminApp')
 
     $scope.excessDonate = function(excessShipment) {
         excessShipment.price = 0; // Default price is set to 0 for donations
-        excessShipment.offerQuantity = $scope.inputQuantityDonate;
+        excessShipment.offerQuantity = $scope.q.inputQuantityDonate;
         console.log("printing quantity");
-        console.log($scope.inputQuantityDonate);
+        console.log($scope.q.inputQuantityDonate);
         console.log("printing offer");
         console.log(excessShipment);
         txService.excessOffer(excessShipment, function(response) {

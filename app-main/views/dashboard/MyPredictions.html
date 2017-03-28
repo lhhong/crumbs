@@ -188,15 +188,15 @@
 									<tbody>
 										<tr >
 											<td>{{ offering.name }}</td>
-											<td><input class="tbl_input" type="number" ng-model="inputQuantity"></td>
+											<td><input class="tbl_input" type="number" ng-model="q.inputQuantity"></td>
 											<td ng-if="forExcess">{{ offering.expiry | date }}</td>
 											<td ng-if="!forExcess">{{ offering.requestDate | date }}</td>
-											<td>$<input class="tbl_input" type="number" ng-model="inputPrice"></td>
+											<td>$<input class="tbl_input" type="number" ng-model="q.inputPrice"></td>
 
 										</tr>
 									</tbody>
 								</table>
-								<p class="text-muted"><small>Recommended unit price = {{offering.price|currency}}   |   Recommended total price = {{offering.price*inputQuantity|currency}}</small></p>
+								<p class="text-muted"><small>Recommended unit price = {{offering.price|currency}}   |   Recommended total price = {{offering.price*q.inputQuantity|currency}}</small></p>
 
 								<button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessOffer(offering)">Make Offer</button>
 								<button type="button" class="btn btn-primary btn-lg btn-block" ng-if="!forExcess" ng-click="shortageOffer(offering)">Make Request</button>
@@ -226,13 +226,13 @@
 									<tbody>
 									<tr>
 										<td>{{ offering.name }}</td>
-										<td><input class="tbl_input" type="number" ng-model="inputQuantityDonate"></td>
+										<td><input class="tbl_input" type="number" ng-model="q.inputQuantityDonate"></td>
 										<td>{{ offering.expiry | date }}</td>
 									</tr>
 									</tbody>
 								</table>
-								<p class="text-muted"><small>Units = {{inputQuantityDonate}}</small></p>
-								<button type="button" class="btn btn-primary btn-lg btn-block" ng-click="excessDonate(offering)">Make Donation</button>
+								<p class="text-muted"><small>Units = {{q.inputQuantityDonate}}</small></p>
+								<button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessDonate(offering)">Make Donation</button>
 							</div>
 						</div>
 					</div>
