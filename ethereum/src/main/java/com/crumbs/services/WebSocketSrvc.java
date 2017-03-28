@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 /**
  * Created by low on 18/2/17 6:08 PM.
+ * @deprecated web socket not working with electron
  */
 @Service
 public class WebSocketSrvc {
