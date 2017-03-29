@@ -200,6 +200,30 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
         })
     }
 
+    var getTransportPrice = function(x, callback, errorCallback) {
+        $http({
+            method: 'POST',
+            url: baseUrl + "transport_price",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            data: x
+        }).then(function(response) {
+            if (callback) {
+                callback(response.data)
+            }
+        },function(response) {
+            if (response.status == 422) {
+                if (errorCallback) errorCallback();
+            }
+            else {
+                if (callback) {
+                    callback(response.data)
+                }
+            }
+        })
+    }
+
     return {
         accept: accept,
         register: register,
@@ -210,6 +234,7 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
         getAvailTransactions:getAvailTransactions,
         getBought: getBought,
         getSold: getSold,
-        agree: agree
+        agree: agree,
+        getTransportPrice: getTransportPrice
     }
 }]);

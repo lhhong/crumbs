@@ -6,7 +6,7 @@
  * # RequestsCtrl
  */
 angular.module('sbAdminApp')
-  .controller('MarketCtrl', ['$state', '$interval', '$timeout', '$scope', 'txService', function($state, $interval, $timeout, $scope, txService) {
+  .controller('MarketCtrl', ['$state', '$interval', '$timeout', '$scope', 'txService', 'predictionService', function($state, $interval, $timeout, $scope, txService, predictionService) {
     console.log("loaded");
     $scope.balance = 0;
 
@@ -30,7 +30,6 @@ angular.module('sbAdminApp')
 
             $scope.salesTx = $scope.salesTx.filter($scope.filterOutDonations);
             $scope.purchasesTx = $scope.purchasesTx.filter($scope.filterOutDonations);
-            console.log($scope.salesTx);
         });
     }
 
@@ -39,11 +38,32 @@ angular.module('sbAdminApp')
     }, 3000)
     reloadData();
 
+    $scope.viewOffer = function(x, isSell) {
+        $scope.txViewed = x;
+        $scope.isSell = isSell;
+        if (isSell){
+            $scope.date = new Date($scope.txViewed.txDate);
+        }
+        else{
+            $scope.date = new Date($scope.txViewed.expiry);
+        }
+        txService.getTransportPrice(x,function(transportPrice) {
+            $scope.transportPrice = transportPrice;
+        })
+    };
 
-    $scope.acceptOffer = function(x, selling) {
-        txService.accept(x, function(response) {
+    $scope.acceptOffer = function(txViewed) {
+        txViewed.transportPrice = 200;
+        if ($scope.isSell){
+            txViewed.expiry = $scope.date.getTime();
+        }
+        else{
+            txViewed.txDate = $scope.date.getTime();
+        }
+        console.log(txViewed);
+        txService.accept(txViewed, function(response) {
             $('.modal-backdrop').remove();
-            if (selling) {
+            if ($scope.isSell) {
                 $state.go('dashboard.InProgressSelling');
             }
             else {
@@ -97,5 +117,11 @@ angular.module('sbAdminApp')
   $scope.closeAlert = function(index) {
     $scope.alert = false;
   };
+
+  $('#txOnMarketModal').on('show.bs.modal', function (event) {
+      $(this).find('.modal-dialog').css({width:'60%',
+                                 height:'40%',
+                                'max-height':'80%'});
+  });
 
   }]);

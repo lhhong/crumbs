@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
@@ -66,4 +65,5 @@ public class PredictionCtrl {
 	public List<TransactionVM> getMatchingTxForExcess(@RequestBody ExceShipVM exceShipVM) {
 		return matchMakingSrvc.getMatchingTx(exceShipVM);
 	}
+
 }

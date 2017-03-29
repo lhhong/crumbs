@@ -9,6 +9,7 @@ import com.crumbs.repositories.TxSentRepo;
 import com.crumbs.services.Optimize;
 import com.crumbs.services.PredictionCacheSrvc;
 import com.crumbs.services.TransactionService;
+import com.crumbs.util.CrumbsUtil;
 import com.crumbs.util.TxCancelledException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -194,5 +195,11 @@ public class TransactionController {
 			return ResponseEntity.unprocessableEntity().build();
 		}
 		return ResponseEntity.ok().build();
+	}
+
+	@RequestMapping(value = "/transport_price", method = POST, produces = APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public long getTransportPrice(@RequestBody TxAccepted tx) {
+		return optimize.calcTransportCost(CrumbsUtil.toTxVM(tx));
 	}
 }

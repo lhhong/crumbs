@@ -111,12 +111,11 @@ angular.module("sbAdminApp").factory('predictionService', ['$http', '$timeout', 
         })
     }
 
-
     return {
         getChart: getChart,
         getQuantity: getQuantity,
         getPredictions: getPredictions,
         excessViewOffers: excessViewOffers,
-        shortageViewOffers: shortageViewOffers,
+        shortageViewOffers: shortageViewOffers
     }
 }]);

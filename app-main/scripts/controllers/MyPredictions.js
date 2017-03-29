@@ -84,31 +84,33 @@ angular.module('sbAdminApp')
         $scope.donationsCollapsed=true;
         $scope.forExcess = true;
         $scope.offering = x;
-        $scope.inputQuantity = $scope.offering.offerQuantity;
-        $scope.inputQuantityDonate = $scope.offering.offerQuantity;
-        $scope.inputPrice = $scope.offering.price * $scope.offering.offerQuantity;
+        $scope.q.inputQuantity = $scope.offering.offerQuantity;
+        $scope.q.inputQuantityDonate = $scope.offering.offerQuantity;
+        $scope.q.inputPrice = $scope.offering.price * $scope.offering.offerQuantity;
         predictionService.excessViewOffers(x,
             function(response) {
                 $scope.offers = response;
             }, function(response) {
                 console.log("server error");
                 $scope.offers = [{price: 567}, {price: 22}];
-            });
+            }
+        );
     }
 
     $scope.shortageViewOffer = function(x) {
         $scope.txCollapsed = true;
         $scope.forExcess = false;
         $scope.offering = x;
-        $scope.inputQuantity = $scope.offering.offerQuantity;
-        $scope.inputPrice = $scope.offering.price * $scope.offering.offerQuantity;
+        $scope.q.inputQuantity = $scope.offering.offerQuantity;
+        $scope.q.inputPrice = $scope.offering.price * $scope.offering.offerQuantity;
         predictionService.shortageViewOffers(x,
             function(response) {
                 $scope.offers = response;
             }, function(response) {
                 console.log("server error");
                 $scope.offers = [{price: 567}, {price: 600}];
-            });
+            }
+        );
     };
 
     $scope.acceptOffer = function(index, selling) {

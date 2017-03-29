@@ -114,7 +114,8 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title">Market for {{ offering.name }}</h4>
+					<h4 class="modal-title" ng-if="forExcess">Selling {{ offering.name }} on Market</h4>
+					<h4 class="modal-title" ng-if="!forExcess">Buying {{ offering.name }} on Market</h4>
 				</div>
 				<div class="modal-body">
 					<div uib-alert ng-if="alert" class="alert-danger" close="closeAlert()" dismiss-on-timeout="3000">Error: Please wait for previous transaction to be mined before continuing</div>
@@ -158,7 +159,7 @@
 
 							</table>
 							<p ng-if="offers.length" class="text-muted text-center"><small>If none of the above offers are satisfactory, click button below to make new request on the market</small></p>
-							<p ng-if="!offers.length" class="text-center"> <strong> Sorry, no matches found. </strong></p>
+							<p ng-if="!offers.length" class="text-center"> <i> Sorry, no matches found. </i></p>
 						</div>
 					</div>
 
@@ -231,7 +232,6 @@
 									</tr>
 									</tbody>
 								</table>
-								<p class="text-muted"><small>Units = {{q.inputQuantityDonate}}</small></p>
 								<button type="button" class="btn btn-primary btn-lg btn-block" ng-if="forExcess" ng-click="excessDonate(offering)">Make Donation</button>
 							</div>
 						</div>
