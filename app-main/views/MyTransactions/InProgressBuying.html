@@ -24,7 +24,7 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
-    <div uib-alert ng-if="alert" class="alert-danger" close="closeAlert()" dismiss-on-timeout="3000">Error: please wait for previous action to be mined before continuing.</div>
+    <div uib-alert ng-if="alert" class="alert-danger" close="closeAlert()" dismiss-on-timeout="3000">Error: Please wait for previous transaction to complete uploading.</div>
     <div uib-alert ng-if="txAlert" class="alert-success" close="closeTxAlert()" dismiss-on-timeout="10000">New Request Created for {{txDetails}}.</div>
 
     <div class="alert alert-info">
@@ -55,7 +55,6 @@
                               Buying On <div ng-class="getSortClass('txDate')"></div>
                           </th>
                           <th class="col-md-2">
-                              Details
                           </th>
                       </tr>
                   </thead>
@@ -65,7 +64,9 @@
                           <td>{{ x.quantity }}</td>
                           <td>{{ x.price | currency }}</td>
                           <td>{{ x.txDate | date }}</td>
-                          <td><button type="button" class="btn btn-success btn-xs" ng-if="x.agreeing" data-toggle="modal" data-target="#ViewOfferModal" ng-click="viewTx(x)">View Offers</button></td>
+                          <td ng-if="x.pending" align="center" style="padding:0"><img src="t3.gif" alt="Loading" style="max-height: 36px; max-width: 36px"/></td>
+                          <td ng-if="!x.pending && !x.agreeing" align="center"><button type="button" class="btn btn-default disabled btn-xs">No matches yet</button></td>
+                          <td ng-if="!x.pending && x.agreeing" align="center"><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewOfferModal" ng-click="viewTx(x)">View Offers</button></td>
                       </tr>
                   </tbody>
               </table>
@@ -99,7 +100,6 @@
                               Buying On <div ng-class="getSortClass('txDate')"></div>
                           </th>
                           <th class="col-md-2">
-                              Details
                           </th>
                       </tr>
                   </thead>
@@ -109,7 +109,8 @@
                           <td>{{ x.quantity }}</td>
                           <td>{{ x.price | currency }}</td>
                           <td>{{ x.txDate | date }}</td>
-                          <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewDetailsModal2" ng-click="viewTx(x)">View Details</button></td>
+                          <td ng-if="x.pending" align="center" style="padding:0"><img src="t3.gif" alt="Loading" style="max-height: 36px; max-width: 36px"/></td>
+                          <td ng-if="!x.pending" align="center"><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewDetailsModal2" ng-click="viewTx(x)">View Details</button></td>
                       </tr>
                   </tbody>
               </table>
