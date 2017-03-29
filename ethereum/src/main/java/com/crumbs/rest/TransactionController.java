@@ -170,6 +170,7 @@ public class TransactionController {
 	@RequestMapping(value = "/accept", method = POST, produces = APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity accept(@RequestBody TransactionVM tx) {
+		logger.info("Printing from TransactionController");
 		try {
 			transactionService.accept(tx.getUuid(), tx.getTransportPrice(), tx.getExpiry(), tx.getTxDate());
 		} catch (TxCancelledException e) {
@@ -177,9 +178,11 @@ public class TransactionController {
 			return ResponseEntity.unprocessableEntity().build();
 		}
 		if (tx.isSell()) {
+			logger.info("Tracking for tx.txDate {}",tx.getTxDate());
 			predictionCache.hideShortage(tx.getItem(), tx.getTxDate());
 		}
 		else {
+			logger.info("Tracking for tx.getExpiry {}",tx.getExpiry());
 			predictionCache.hideExcess(tx.getItem(), tx.getExpiry());
 		}
 		return ResponseEntity.ok().build();

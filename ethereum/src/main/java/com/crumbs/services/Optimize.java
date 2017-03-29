@@ -29,9 +29,9 @@ public class Optimize {
 		double distance = Math.sqrt(x_diff*x_diff + y_diff*y_diff);
 
 		double flat_hiring_fee = 50;
-		double base_fare_rate = 100;
+		double base_fare_rate = 50;
 		int fare_increment = 10;
-		int base_quantity = 500;
+		int base_quantity = 200;
 
 		int diff_quantity = tx.getQuantity() - base_quantity;
 		if (diff_quantity > 0){

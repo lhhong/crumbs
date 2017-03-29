@@ -3,6 +3,7 @@ angular.module("sbAdminApp").factory('txService', ['$http', '$timeout', function
     var baseUrl = 'http://localhost:8080/'
 
     var accept = function(tx, callback, errorCallback) {
+        console.log(tx.txDate);
         $http({
             method: 'POST',
             url: baseUrl + 'accept',

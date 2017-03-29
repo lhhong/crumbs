@@ -525,6 +525,13 @@ public class TransactionService {
 	}
 
 	public void accept(TxAccepted tx, long transportPrice, long payment, long date) throws TxCancelledException {
+		tx.setTransportPrice(transportPrice);
+		if (tx.isSell()){
+			tx.setTxDate(new Date(date));
+		}
+		else {
+			tx.setExpiry(new Date(date));
+		}
 		contractService.sendToTxContract("accept", payment, tx.getUuid(), transportPrice, date);
 		txAcceptedRepo.save(tx);
 		logger.info("Created accepting transaction {}", tx.getUuid());

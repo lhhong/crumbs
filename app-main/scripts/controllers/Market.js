@@ -52,22 +52,22 @@ angular.module('sbAdminApp')
         })
     };
 
-    $scope.acceptOffer = function(txViewed) {
-        txViewed.transportPrice = 200;
+    $scope.acceptOffer = function() {
+        $scope.txViewed.transportPrice = $scope.transportPrice;
         if ($scope.isSell){
-            txViewed.expiry = $scope.date.getTime();
+            $scope.txViewed.expiry = $scope.date.getTime();
         }
         else{
-            txViewed.txDate = $scope.date.getTime();
+            $scope.txViewed.txDate = $scope.date.getTime();
         }
-        console.log(txViewed);
-        txService.accept(txViewed, function(response) {
+        console.log($scope.txViewed);
+        txService.accept($scope.txViewed, function(response) {
             $('.modal-backdrop').remove();
             if ($scope.isSell) {
-                $state.go('dashboard.InProgressSelling');
+                $state.go('dashboard.InProgressSelling', {txSent: true, txDetails: $scope.txViewed.item });
             }
             else {
-                $state.go('dashboard.InProgressBuying');
+                $state.go('dashboard.InProgressBuying', {txSent: true, txDetails: $scope.txViewed.item });
             }
         }, function () {
             $scope.alert = true;

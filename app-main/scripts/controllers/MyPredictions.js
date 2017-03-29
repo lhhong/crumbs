@@ -117,10 +117,10 @@ angular.module('sbAdminApp')
         txService.accept($scope.offers[index], function(response) {
             $('.modal-backdrop').remove();
             if (selling) {
-                $state.go('dashboard.InProgressSelling');
+                $state.go('dashboard.InProgressSelling', {txSent: true, txDetails: $scope.offers[index].item });
             }
             else {
-                $state.go('dashboard.InProgressBuying');
+                $state.go('dashboard.InProgressBuying', {txSent: true, txDetails: $scope.offers[index].item });
             }
         }, function () {
             $scope.alert = true;
@@ -196,52 +196,6 @@ angular.module('sbAdminApp')
         }
     };
 
-    $scope.getDisposalCellColour = function(colNumber) {
-        var colour;
-        var indexCol = $scope.colNumbers.indexOf(colNumber);
-        if (indexCol != -1){
-            colour = $scope.colColours[indexCol].background;
-        }
-        else {
-            colour = '#ffffff'
-        }
-        return {
-            background: colour
-        }
-    };
-
-    $scope.getMonthCellColour = function(n){
-        var colour = '#ECECEE';
-        return {
-            background: colour
-        }
-    };
-
-    $scope.replaceWithDashes = function(number) {
-        var newString;
-        newString = number;
-        if (number == 0) { newString = '-' }
-        return { newString }
-     };
-
-    $scope.formatDisposal = function(number) {
-        var newString;
-        if (number == 0) {
-            newString = '-';
-        }
-        else {
-            newString = '(' + number + ')';
-        }
-        return { newString }
-     };
-
-    $scope.formatColumn = function(colNumber) {
-        var indexCol = $scope.colNumbers.indexOf(colNumber);
-        if (indexCol != -1){
-            return $scope.colColours[indexCol]
-        }
-     };
-
     // Hide any offer quantities below the cutoff
     $scope.isWithinCutOff = function(qty,isShortage){
         var cutoffMatrix = [ 100, 50 ]; // [ Excess, Shortage ]
@@ -266,7 +220,7 @@ angular.module('sbAdminApp')
 
     // To control the size of the modals
     $('#ViewMarketModal').on('show.bs.modal', function (event) {
-            $(this).find('.modal-dialog').css({width:'60%',
+            $(this).find('.modal-dialog').css({width:'80%',
                                        height:'40%',
                                       'max-height':'80%'});
     });
@@ -362,6 +316,53 @@ angular.module('sbAdminApp')
         });
 
     });
+
+    // Formatting functions for predictions table
+    $scope.getDisposalCellColour = function(colNumber) {
+        var colour;
+        var indexCol = $scope.colNumbers.indexOf(colNumber);
+        if (indexCol != -1){
+            colour = $scope.colColours[indexCol].background;
+        }
+        else {
+            colour = '#ffffff'
+        }
+        return {
+            background: colour
+        }
+    };
+
+    $scope.getMonthCellColour = function(n){
+        var colour = '#ECECEE';
+        return {
+            background: colour
+        }
+    };
+
+    $scope.replaceWithDashes = function(number) {
+        var newString;
+        newString = number;
+        if (number == 0) { newString = '-' }
+        return { newString }
+     };
+
+    $scope.formatDisposal = function(number) {
+        var newString;
+        if (number == 0) {
+            newString = '-';
+        }
+        else {
+            newString = '(' + number + ')';
+        }
+        return { newString }
+     };
+
+    $scope.formatColumn = function(colNumber) {
+        var indexCol = $scope.colNumbers.indexOf(colNumber);
+        if (indexCol != -1){
+            return $scope.colColours[indexCol]
+        }
+     };
 
     // Sorting functionality
     // For Excess Table

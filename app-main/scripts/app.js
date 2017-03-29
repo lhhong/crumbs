@@ -228,6 +228,7 @@ angular
 				return $ocLazyLoad.load({
 					name:'sbAdminApp',
 					files:['scripts/controllers/Market.js',
+					        'scripts/services/transaction-service.js',
                             'scripts/services/prediction-service.js']
 				})
 			}
