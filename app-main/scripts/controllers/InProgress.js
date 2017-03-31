@@ -6,7 +6,7 @@
  * # RequestsCtrl
  */
 angular.module('sbAdminApp')
-  .controller('InProgressCtrl', ['$scope', '$interval', 'txService', '$stateParams', function($scope, $interval, txService, $stateParams) {
+  .controller('InProgressCtrl', ['$state', '$scope', '$interval', 'txService', '$stateParams', function($state, $scope, $interval, txService, $stateParams) {
     console.log("loaded");
     $scope.balance = 0;
 
@@ -26,14 +26,16 @@ angular.module('sbAdminApp')
             }
             $scope.accepts = txs.pendingAccepts.concat(txs.successfulAccepts);
 
+/*
             for (var i = 0; i<txs.pendingAgrees.length; i++) {
                 txs.pendingAgrees[i].agreeing = true;
                 txs.pendingAgrees[i].pending = true;
             }
+            */
             for (var i = 0; i<txs.offersAccepted.length; i++) {
                 txs.offersAccepted[i].agreeing = true;
             }
-            $scope.agrees = txs.pendingAgrees.concat(txs.offersAccepted);
+            //$scope.agrees = txs.pendingAgrees.concat(txs.offersAccepted);
             $scope.offers = $scope.offers.concat($scope.agrees);
 
             // Filter out donations
@@ -137,6 +139,8 @@ angular.module('sbAdminApp')
         txService.agree(uuid, function(response) {
             console.log("Agree sent");
             $scope.reloaded = false;
+            $('.modal-backdrop').remove();
+            $state.go('dashboard.Completed');
         }, function() {
             $scope.alert = true;
         })

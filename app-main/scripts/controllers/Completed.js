@@ -11,12 +11,24 @@ angular.module('sbAdminApp')
     console.log("loaded");
     $scope.balance = 0;
 
+    $scope.bought = [];
+    $scope.sold = [];
+
     var reloadData = function() {
-        txService.getEther(function(balance) {
-            $scope.balance = balance;
-        })
+        txService.getTransactions(function(txs) {
+            for (var i = 0; i<txs.pendingAgrees.length; i++) {
+                txs.pendingAgrees[i].agreeing = true;
+                txs.pendingAgrees[i].pending = true;
+                if (txs.pendingAgrees[i].sell) {
+                    $scope.sold.push(txs.pendingAgrees[i]);
+                }
+                else {
+                    $scope.bought.push(txs.pendingAgrees[i]);
+                }
+            }
+        });
         txService.getBought(function(txs) {
-            $scope.bought = txs;
+            $scope.bought = $scope.bought.concat(txs);
             $scope.bought = $scope.bought.filter($scope.filterOutDonations);
         }, function() {
             $scope.bought = [
@@ -38,7 +50,7 @@ angular.module('sbAdminApp')
             ];
         })
         txService.getSold(function(txs) {
-            $scope.sold = txs;
+            $scope.sold = $scope.sold.concat(txs);
             $scope.sold = $scope.sold.filter($scope.filterOutDonations);
         }, function() {
             $scope.sold = [
