@@ -25,7 +25,7 @@ angular.module('sbAdminApp')
                 txs.pendingAccepts[i].pending = true;
             }
             $scope.accepts = txs.pendingAccepts.concat(txs.successfulAccepts);
-
+            $scope.agrees = txs.offersAccepted;
 /*
             for (var i = 0; i<txs.pendingAgrees.length; i++) {
                 txs.pendingAgrees[i].agreeing = true;

@@ -65,8 +65,8 @@
                           <td>{{ x.price | currency }}</td>
                           <td>{{ x.txDate | date }}</td>
                           <td ng-if="x.pending" align="center" style="padding:0"><img src="t3.gif" alt="Loading" style="max-height: 36px; max-width: 36px"/></td>
-                          <td ng-if="!x.pending && !x.agreeing" align="center"><button type="button" class="btn btn-default disabled btn-xs">No matches yet</button></td>
-                          <td ng-if="!x.pending && x.agreeing" align="center"><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewOfferModal" ng-click="viewTx(x)">View Offers</button></td>
+                          <td ng-if="!x.pending && !x.agreeing" align="center"><button type="button" class="btn btn-default disabled btn-xs" style="width: 100px">No matches yet</button></td>
+                          <td ng-if="!x.pending && x.agreeing" align="center"><button type="button" class="btn btn-success btn-xs" style="width: 100px" data-toggle="modal" data-target="#ViewOfferModal" ng-click="viewTx(x)">View Offers</button></td>
                       </tr>
                   </tbody>
               </table>

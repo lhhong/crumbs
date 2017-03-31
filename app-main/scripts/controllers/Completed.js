@@ -11,10 +11,13 @@ angular.module('sbAdminApp')
     console.log("loaded");
     $scope.balance = 0;
 
-    $scope.bought = [];
-    $scope.sold = [];
-
     var reloadData = function() {
+        txService.getEther(function(balance) {
+            $scope.balance = balance;
+        });
+        $scope.bought = [];
+        $scope.sold = [];
+
         txService.getTransactions(function(txs) {
             for (var i = 0; i<txs.pendingAgrees.length; i++) {
                 txs.pendingAgrees[i].agreeing = true;
