@@ -18,3 +18,5 @@ mock_data/Product.pyc
 mock_data/Record.pyc
 /**/*.backup
 /**/*.log
+/builing_dir/build/
+/builing_dir/dist/
