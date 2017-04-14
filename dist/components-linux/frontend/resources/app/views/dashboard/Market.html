@@ -1,0 +1,166 @@
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header"><i class="fa fa-shopping-cart fa-fw"></i><em><strong>Market</strong></em></h1>
+    </div>
+</div>
+<div uib-alert ng-if="alert" class="alert-danger" close="closeAlert()" dismiss-on-timeout="3000">Error: Please wait for previous transaction to complete uploading.</div>
+
+<div class="alert alert-info">
+    Current Balance: <em>{{ balance| currency }}</em>
+</div>
+<div class="col-lg-12">
+  <input type="text" ng-model="searchText.sender.name" placeholder="Search by Store name" />
+  <input type="text" ng-model="searchText.item" placeholder="Search by Product" />
+</div>
+<br><br>
+
+
+<!-- All Requests on the Market -->
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong> All Requests </strong>
+    </div>
+    <!-- /.panel-heading -->
+    <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th class="col-md-2" ng-click="sortData('product')">
+                        Product <div ng-class="getSortClass('product')"></div>
+                    </th>
+                    <th class="col-md-1" ng-click="sortData('qty')">
+                        Quantity <div ng-class="getSortClass('qty')"></div>
+                    </th>
+                    <th class="col-md-1" ng-click="sortData('storename')">
+                        Store Name <div ng-class="getSortClass('storename')"></div>
+                    </th>
+                    <th class="col-md-1" ng-click="sortData('location')">
+                        Location <div ng-class="getSortClass('location')"></div>
+                    </th>
+                    <th class="col-md-1" ng-click="sortData('expiryDate')">
+                        Buying On <div ng-class="getSortClass('expiryDate')"></div>
+                    </th>
+                    <th class="col-md-1" ng-click="sortData('price')">
+                        Price <div ng-class="getSortClass('price')"></div>
+                    </th>
+                    <th class="col-md-1" >
+                        Details
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="x in purchasesTx| filter:searchText | orderBy:sortColumn:reverseSort">
+                    <td>{{ x.item }}</td>
+                    <td>{{ x.quantity }}</td>
+                    <td>{{ x.sender.name }}</td>
+                    <td>{{ x.sender.location }}</td>
+                    <td>{{ x.txDate | date }}</td>
+                    <td>{{ x.price + x.transportPrice | currency }}</td>
+                    <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#txOnMarketModal" ng-click="viewOffer(x,1)">Sell On Market</button></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- /.table-responsive -->
+    </div>
+    <!-- /.panel-body -->
+</div>
+
+<!-- All Offers on the Market -->
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong> All Offers</strong>
+  </div>
+  <!-- /.panel-heading -->
+  <div class="panel-body">
+      <div class="table-responsive">
+          <table class="table table-striped">
+              <thead>
+                  <tr>
+                      <th class="col-md-2" ng-click="sortData('product')">
+                          Product <div ng-class="getSortClass('product')"></div>
+                      </th>
+                      <th class="col-md-1" ng-click="sortData('qty')">
+                          Quantity <div ng-class="getSortClass('qty')"></div>
+                      </th>
+                      <th class="col-md-1" ng-click="sortData('storename')">
+                          Store Name <div ng-class="getSortClass('storename')"></div>
+                      </th>
+                      <th class="col-md-1" ng-click="sortData('location')">
+                          Location <div ng-class="getSortClass('location')"></div>
+                      </th>
+                      <th class="col-md-1" ng-click="sortData('expiryDate')">
+                          Expires On <div ng-class="getSortClass('expiryDate')"></div>
+                      </th>
+                      <th class="col-md-1" ng-click="sortData('price')">
+                          Price <div ng-class="getSortClass('price')"></div>
+                      </th>
+                      <th class="col-md-1" >
+                          Details
+                      </th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr ng-repeat="x in salesTx | filter:searchText | orderBy:sortColumn:reverseSort" >
+                      <td>{{ x.item }}</td>
+                      <td>{{ x.quantity }}</td>
+                      <td>{{ x.sender.name }}</td>
+                      <td>{{ x.sender.location }}</td>
+                      <td>{{ x.expiry | date }}</td>
+                      <td>{{ x.price + x.transportPrice | currency }}</td>
+                      <td><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#txOnMarketModal" ng-click="viewOffer(x,0)">Buy On Market</button></td>
+
+                  </tr>
+              </tbody>
+          </table>
+      </div>
+      <!-- /.table-responsive -->
+  </div>
+  <!-- /.panel-body -->
+</div>
+
+<!-- Modal for View Requests -->
+<div class="modal fade" id="txOnMarketModal" tabindex="-1" role="dialog" aria-labelledby="txOnMarketLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" ng-if="isSell">Selling {{txViewed.item}} on Market</h4>
+                <h4 class="modal-title" ng-if="!isSell">Buying {{txViewed.item}} on Market</h4>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info" ng-if="isSell">
+                    Please select the expiry date of the product you are offering.</em>
+                </div>
+                <div class="alert alert-info" ng-if="!isSell">
+                    Please select a pickup date for your request.</em>
+                </div>
+
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th ng-if="isSell">Expiry Date</th>
+                        <th ng-if="!isSell">Pickup Date</th>
+                        <th>Transport Price</th>
+                        <th>Total Price</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td><input class="tbl_input" type="date" ng-model="date"> </td>
+                        <td>{{ transportPrice | currency }}</td>
+                        <td>{{ txViewed.price+transportPrice | currency }}</td>
+                        <td><button type="button" class="btn btn-success btn-txViews" ng-if="isSell" ng-click="acceptOffer(txViewed)">Sell</button></td>
+                        <td><button type="button" class="btn btn-success btn-txViews" ng-if="!isSell" ng-click="acceptOffer(txViewed)">Buy</button></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

@@ -1,0 +1,40 @@
+<div class="navbar-default sidebar" role="navigation">
+    <div class="sidebar-nav navbar-collapse">
+        <ul class="nav in" id="side-menu">
+
+            <li ui-sref-active="active">
+                <a ui-sref="dashboard.mainpage"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="dashboard.MyPredictions"><i class="fa fa-bar-chart-o fa-fw"></i> MyPredictions</a>
+            </li>
+            <li ng-class="{active: collapseVar==1}">{{dropDown}}
+                <a href="" ng-click="check(1)"><i class="fa fa-bitcoin fa-fw"></i> MyTransactions<span
+                        class="fa arrow"></span></a>
+                <ul class="nav nav-second-level" uib-collapse="collapseVar!=1">
+                    <li ui-sref-active="active">
+                        <a ui-sref="dashboard.InProgressSelling">Sales (In progress)</a>
+                    </li>
+                    <li ui-sref-active="active">
+                        <a ui-sref="dashboard.InProgressBuying">Purchases (In progress)</a>
+                    </li>
+                    <li ui-sref-active="active">
+                        <a ui-sref="dashboard.Completed">Completed</a>
+                    </li>
+                    <!--
+                    <li ui-sref-active="active">
+                        <a ui-sref="dashboard.InProgress">In Progress (Old)</a>
+                    </li>
+                    -->
+                </ul>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="dashboard.Market"><i class="fa fa-shopping-cart fa-fw"></i> Market</a>
+            </li>
+            <li ui-sref-active="active">
+                <a ui-sref="dashboard.Donations"><i class="fa fa-group fa-fw"></i> Donations</a>
+            </li>
+        </ul>
+    </div>
+    <!-- /.sidebar-collapse -->
+</div>

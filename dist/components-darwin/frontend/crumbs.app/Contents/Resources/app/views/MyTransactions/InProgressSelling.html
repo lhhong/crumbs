@@ -1,0 +1,199 @@
+<style>
+    #overlay {
+        background: rgba(255,255,255,0.8);
+        color: #666666;
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        z-index: 5000;
+        top: 0;
+        left: 0;
+        float: left;
+        text-align: center;
+        padding-top: 25%;
+    }
+</style>
+<div ng-hide="reloaded" id="overlay">
+    <img src="loader.gif" alt="Loading" /><br/>
+    <h1 class="page-header">Loading...</h1>
+</div>
+<div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header"><i class="fa fa-clock-o fa-fw"></i><em><strong>Sales</strong> (In progress)</em></h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <div uib-alert ng-if="alert" class="alert-danger" close="closeAlert()" dismiss-on-timeout="3000">Error: Please wait for previous transaction to complete uploading.</div>
+    <div uib-alert ng-if="txAlert" class="alert-success" close="closeTxAlert()" dismiss-on-timeout="10000">New Offer Created for {{txDetails}}.</div>
+
+    <div class="alert alert-info">
+        Current Balance: <em>{{ balance| currency }}</em>
+    </div>
+
+    <!-- Table for Offers Made -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong>Offers Made</strong>
+      </div>
+      <!-- /.panel-heading -->
+      <div class="panel-body">
+          <div class="table-responsive">
+              <table class="table table-striped" width="100%">
+                  <thead>
+                      <tr>
+                          <th ng-click="sortData('item')" class="col-md-4">
+                            Product <div ng-class="getSortClass('item')"></div>
+                          </th>
+                          <th ng-click="sortData('quantity')" class="col-md-2">
+                            Quantity <div ng-class="getSortClass('quantity')"></div>
+                          </th>
+                          <th ng-click="sortData('price')" class="col-md-2">
+                            Price <div ng-class="getSortClass('price')"></div>
+                          </th>
+                          <th ng-click="sortData('expiry')" class="col-md-2">
+                              Expires On <div ng-class="getSortClass('expiry')"></div>
+                          </th>
+                          <th class="col-md-2">
+                          </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr ng-repeat="x in offers | filter:searchText | orderBy:sortColumn:reverseSort" ng-if="x.sell" ng-style="getBackground(x.pending)">
+                          <td>{{ x.item }}</td>
+                          <td>{{ x.quantity }}</td>
+                          <td>{{ (x.price) | currency }}</td>
+                          <td>{{ x.expiry | date }}</td>
+                          <td ng-if="x.pending" align="center" style="padding:0"><img src="t3.gif" alt="Loading" style="max-height: 36px; max-width: 36px"/></td>
+                          <td ng-if="!x.pending && !x.agreeing" align="center"><button type="button" class="btn btn-default disabled btn-xs" style="width: 100px">No matches yet</button></td>
+                          <td ng-if="!x.pending && x.agreeing" align="center"><button type="button" class="btn btn-success btn-xs" style="width: 100px" data-toggle="modal" data-target="#ViewRequestModal" ng-click="viewTx(x)">View Requests</button></td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+          <!-- /.table-responsive -->
+      </div>
+      <!-- /.panel-body -->
+    </div>
+
+    <!-- Table for Pending Confirmation -->
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong>Pending Confirmation</strong>
+      </div>
+      <!-- /.panel-heading -->
+      <div class="panel-body">
+          <div class="table-responsive">
+              <table class="table table-striped" width="100%">
+                  <thead>
+                      <tr>
+                          <th ng-click="sortData('item')" class="col-md-4">
+                              Product <div ng-class="getSortClass('item')"></div>
+                          </th>
+                          <th ng-click="sortData('quantity')" class="col-md-2">
+                              Quantity <div ng-class="getSortClass('quantity')"></div>
+                          </th>
+                          <th ng-click="sortData('price')" class="col-md-2">
+                              Price <div ng-class="getSortClass('price')"></div>
+                          </th>
+                          <th ng-click="sortData('txDate')" class="col-md-2">
+                              Expires On <div ng-class="getSortClass('txDate')"></div>
+                          </th>
+                          <th class="col-md-2">
+                          </th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr ng-repeat="x in accepts | filter:searchText | orderBy:sortColumn:reverseSort" ng-if="!x.sell" ng-style="getBackground(x.pending)">
+                          <td>{{ x.item }}</td>
+                          <td>{{ x.quantity }}</td>
+                          <td>{{ (x.price) | currency }}</td>
+                          <td>{{ x.expiry | date }}</td>
+                          <td ng-if="x.pending" align="center" style="padding:0"><img src="t3.gif" alt="Loading" style="max-height: 36px; max-width: 36px"/></td>
+                          <td ng-if="!x.pending" align="center"><button type="button" class="btn btn-success btn-xs" style="width: 100px" data-toggle="modal" data-target="#ViewDetailsModal1" ng-click="viewTx(x)">View Details</button></td>
+                      </tr>
+                  </tbody>
+              </table>
+          </div>
+          <!-- /.table-responsive -->
+      </div>
+      <!-- /.panel-body -->
+    </div>
+
+    <!-- Modal for View Requests -->
+    <div class="modal fade" id="ViewRequestModal" tabindex="-1" role="dialog" aria-labelledby="ViewRequestModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">View Requests for {{ txView.item }}</h4>
+                </div>
+                <div class="modal-body">
+                  <table class="table table-hover">
+                      <thead>
+                      <tr>
+                          <th>Store Name</th>
+                          <th>Location</th>
+                          <th>Pickup Date</th>
+                          <th>Transport Cost</th>
+                          <th>Total Cost</th>
+                          <th></th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                          <td>{{ txView.accepter.name }}</td>
+                          <td>{{ txView.accepter.location }}</td>
+                          <td>{{ txView.txDate | date}}</td>
+                          <td>{{ txView.transportPrice | currency }}</td>
+                          <td>{{ txView.price + txView.transportPrice | currency }}</td>
+                          <td><button ng-click="agree(txView.uuid)" type="button" class="btn btn-success btn-txViews">Sell</button></td>
+                      </tr>
+                      </tbody>
+                  </table>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+    <!-- Modal for View Details -->
+    <div class="modal fade" id="ViewDetailsModal1" tabindex="-1" role="dialog" aria-labelledby="ViewDetailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">View Details for {{ txView.item }}</h4>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Store Name</th>
+                            <th>Location</th>
+                            <th>Pickup Date</th>
+                            <th>Transport Cost</th>
+                            <th>Total Cost</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>{{ txView.sender.name }}</td>
+                            <td>{{ txView.sender.location }}</td>
+                            <td>{{ txView.txDate | date}}</td>
+                            <td>{{ txView.transportPrice | currency }}</td>
+                            <td>{{ txView.price + txView.transportPrice | currency }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+</div>

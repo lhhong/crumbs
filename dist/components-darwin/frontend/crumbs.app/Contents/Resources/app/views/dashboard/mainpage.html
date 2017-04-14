@@ -1,0 +1,63 @@
+<div>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Crumbs <em>Dashboard</em></h1>
+        </div>
+    <!-- /.col-lg-12 -->
+    </div>
+    <!-- Display shortcuts and grid buttons -->
+    <div class="row">
+        <div class="alert alert-danger" ng-if="!valid">
+            Predictions have not been run. Go to my predictions to run analysis.</em>
+        </div>
+        <stats ng-if="valid" number="{{ excess }}" comments="New Excess" colour="red" type="bar-chart-o" goto="dashboard.MyPredictions"></stats>
+        <stats ng-if="valid" number="{{ shortage }}" comments="New Shortage" colour="yellow" type="bar-chart-o" goto="dashboard.MyPredictions"></stats>
+        <stats ng-if="!valid" number="-" comments="New Excess" colour="red" type="bar-chart-o" goto="dashboard.MyPredictions"></stats>
+        <stats ng-if="!valid" number="-" comments="New Shortage" colour="yellow" type="bar-chart-o" goto="dashboard.MyPredictions"></stats>
+        <stats number="{{ numOfSalesToApprove }}" comments="Sales to Approve" colour="green" type="shopping-cart" goto="dashboard.InProgressSelling"></stats>
+        <stats number="{{ numOfPurchasesToApprove }}" comments="Purchases to Approve" colour="primary" type="shopping-cart" goto="dashboard.InProgressBuying"></stats>
+    </div>
+
+    <!-- Plot Charts -->
+    <div class="row">
+        <div class="col-lg-6 col-sm-12" id="doughnut-chart" ng-controller="ChartCtrl">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-table fa-fw"></i>  <em><strong>Year in Review</strong> (as of 1 Jan 17)</em>
+                </div>
+                <div class="panel-body">
+                    <canvas id="doughnut" class="chart chart-doughnut chart-xs" chart-colours="colours" data="donut.data" labels="donut.labels" legend="true" colours="donutcolours"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-sm-12" id="line-chart" ng-controller="ChartCtrl">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-bar-chart-o fa-fw"></i>  <em><strong>Monthly Summary</strong></em>
+                </div>
+                <div class="panel-body">
+                    <canvas id="line" class="chart chart-line chart-xl" data="lineMonth.data" labels="lineMonth.labels" legend="true"
+                    click="lineMonth.onClick" series="lineMonth.series" colours="lineMonthColours"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-6 col-sm-12" id="radar-chart" ng-controller="ChartCtrl">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <i class="fa fa-spinner fa-fw"></i>  <em><strong>Breakdown by Category</strong></em>
+                </div>
+                <div class="panel-body">
+                    <canvas id="area" class="chart chart-radar" data="radar.data" labels="radar.labels" series=radar.series click="onClick" legend="true" colours="radarcolours"></canvas>
+                </div>
+                <div class="panel-body">
+                    <!-- /.<p class="text-muted text-center"><small>*Wasted is defined as excess food that is either thrown away or sold at low or zero cost</small></p>-->
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>

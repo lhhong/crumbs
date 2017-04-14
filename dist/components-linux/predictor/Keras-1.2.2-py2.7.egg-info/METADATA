@@ -1,0 +1,28 @@
+Metadata-Version: 2.0
+Name: Keras
+Version: 1.2.2
+Summary: Deep Learning for Python
+Home-page: https://github.com/fchollet/keras
+Author: Francois Chollet
+Author-email: francois.chollet@gmail.com
+License: MIT
+Download-URL: https://github.com/fchollet/keras/tarball/1.2.2
+Platform: UNKNOWN
+Requires-Dist: pyyaml
+Requires-Dist: six
+Requires-Dist: theano
+Provides-Extra: h5py
+Requires-Dist: h5py; extra == 'h5py'
+Provides-Extra: tests
+Requires-Dist: coverage (==3.7.1); extra == 'tests'
+Requires-Dist: pytest; extra == 'tests'
+Requires-Dist: pytest-cov; extra == 'tests'
+Requires-Dist: pytest-pep8; extra == 'tests'
+Requires-Dist: pytest-xdist; extra == 'tests'
+Requires-Dist: python-coveralls; extra == 'tests'
+Provides-Extra: visualize
+Requires-Dist: pydot-ng; extra == 'visualize'
+
+UNKNOWN
+
+
