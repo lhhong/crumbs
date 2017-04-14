@@ -67,8 +67,8 @@ public class PredictionCacheSrvc {
 	}
 
 	public void removeCache(String name) {
-		excessCache.removeIf(excess -> excess.getName().equals(name));
-		shortageCache.removeIf(shortage -> shortage.getName().equals(name));
+		excessCache.removeIf(excess -> excess.getName().equalsIgnoreCase(name));
+		shortageCache.removeIf(shortage -> shortage.getName().equalsIgnoreCase(name));
 		needsCalc.add(name);
 	}
 
