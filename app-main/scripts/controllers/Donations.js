@@ -90,7 +90,7 @@ angular.module('sbAdminApp')
 
     $scope.completeAlert = false;
 
-    $scope.closeTxAlert = function(index) {
+    $scope.closeCompleteAlert = function(index) {
         $scope.completeAlert = false;
     };
 
@@ -98,8 +98,7 @@ angular.module('sbAdminApp')
         txService.agree(uuid, function(response) {
             console.log("Agree sent");
             $scope.reloaded = false;
-        }, function() {
-            $scope.alert = true;
+            $scope.completeAlert = true;
         })
         reloadData();
     };
