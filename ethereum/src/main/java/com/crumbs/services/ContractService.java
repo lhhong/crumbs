@@ -7,6 +7,7 @@ import com.crumbs.components.SendingTxListener;
 import com.crumbs.entities.CrumbsContract;
 import com.crumbs.repositories.CrumbsContractRepo;
 import com.crumbs.util.TxCancelledException;
+import org.apache.commons.io.IOUtils;
 import org.ethereum.core.CallTransaction;
 import org.ethereum.core.Transaction;
 import org.ethereum.solidity.compiler.CompilationResult;
@@ -65,15 +66,8 @@ public class ContractService {
 	 * @throws IOException file error
 	 */
 	private String getBin() throws IOException {
-		StringBuilder bin = new StringBuilder("");
-		ClassLoader loader = getClass().getClassLoader();
-		File file = new File(loader.getResource("crumbs_tx").getFile());
-		Scanner scanner = new Scanner(file);
-		while (scanner.hasNextLine()) {
-			bin.append(scanner.nextLine());
-		}
-		scanner.close();
-		return bin.toString();
+		InputStream is = getClass().getResourceAsStream("crumbs_tx");
+		return IOUtils.toString(is);
 	}
 
 	/**
@@ -82,7 +76,9 @@ public class ContractService {
 	 * @throws IOException file error
 	 */
 	private String getAbi() throws IOException {
-		ClassLoader loader = getClass().getClassLoader();
+		InputStream is = getClass().getResourceAsStream("crumbs_tx-abi");
+		return IOUtils.toString(is);
+		/*ClassLoader loader = getClass().getClassLoader();
 		StringBuilder abi = new StringBuilder("");
 		File file = new File(loader.getResource("crumbs_tx-abi").getFile());
 		Scanner scanner = new Scanner(file);
@@ -90,7 +86,7 @@ public class ContractService {
 			abi.append(scanner.nextLine());
 		}
 		scanner.close();
-		return abi.toString();
+		return abi.toString();*/
 	}
 
 	/**
