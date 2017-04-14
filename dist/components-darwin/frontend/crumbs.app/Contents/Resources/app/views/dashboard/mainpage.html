@@ -8,7 +8,7 @@
     <!-- Display shortcuts and grid buttons -->
     <div class="row">
         <div class="alert alert-danger" ng-if="!valid">
-            Predictions have not been run. Go to my predictions to run analysis.</em>
+            Predictions have not been run. Go to MyPredictions to run analysis.</em>
         </div>
         <stats ng-if="valid" number="{{ excess }}" comments="New Excess" colour="red" type="bar-chart-o" goto="dashboard.MyPredictions"></stats>
         <stats ng-if="valid" number="{{ shortage }}" comments="New Shortage" colour="yellow" type="bar-chart-o" goto="dashboard.MyPredictions"></stats>

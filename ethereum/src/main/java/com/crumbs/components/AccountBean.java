@@ -56,7 +56,7 @@ public class AccountBean {
 	 * @param key secure key of the account to be topped up
 	 */
 	public void topUp(ECKey key) {
-		if (ethereumBean.getAccountBal(key.getAddress()).compareTo(CrumbsUtil.etherToWei(35000)) < 0) {
+		if (ethereumBean.getAccountBal(key.getAddress()).compareTo(CrumbsUtil.etherToWei(3000)) < 0) {
 			logger.info("topping up ether");
 			try {
 				ethereumBean.sendEtherFromRich(key.getAddress());
