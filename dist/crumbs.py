@@ -100,19 +100,20 @@ inplace_change(configPath, r'peer_ip = \d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', 'pee
 
 #run services
 backendLog = open('backend.log','w+')
-predictorLog = open('predictor.log','w+')
 
-backend = p.Popen(['java','-jar','ethereum-1.0-SNAPSHOT.jar'], stdout=backendLog)
+backend = p.Popen(['java','-jar','ethereum-1.0.jar'], stdout=backendLog)
 
 if hostSystem == 'Linux':
-    predictor = p.Popen(['components-linux/predictor/nn_crumbs'], stdout=predictorLog)
+    predictor = p.Popen(['components-linux/predictor/nn_crumbs'])
+if hostSystem == 'Darwin':
+    predictor = p.Popen(['components-linux/predictor/nn_crumbs.app/Contents/MacOS/nn_crumbs'])
 
 
 print('backend pid: ' + str(backend.pid))
 print('predictor pid: ' + str(predictor.pid))
 
+#show splash screen
 root = tk.Tk()
-
 appl = Splash(root)
 center(root)
 root.mainloop()
