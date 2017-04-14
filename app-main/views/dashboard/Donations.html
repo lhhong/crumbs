@@ -4,6 +4,7 @@
     </div>
 </div>
 <div uib-alert ng-if="txAlert" class="alert-success" close="closeTxAlert()" dismiss-on-timeout="10000">New Donation Created for {{txDetails}}.</div>
+<div uib-alert ng-if="completeAlert" class="alert-success" close="closeCompleteAlert()" dismiss-on-timeout="10000">Donation Confirmed for {{txName}}.</div>
 
 <div class="alert alert-info">
     Current Balance: <em>{{ balance| currency }}</em>
@@ -50,7 +51,7 @@
 
                     <td ng-if="x.pending" align="center" style="padding:0"><img src="t3.gif" alt="Loading" style="max-height: 36px; max-width: 36px"/></td>
                     <td ng-if="!x.pending && !x.agreeing" align="center"><button type="button" class="btn btn-default disabled btn-xs" style="width: 100px">No matches yet</button></td>
-                    <td ng-if="!x.pending && x.agreeing" align="center"><button ng-click="agree(x.uuid)" type="button" class="btn btn-success btn-xs" style="width: 100px" >Confirm</button></td>
+                    <td ng-if="!x.pending && x.agreeing" align="center"><button ng-click="agree(x.uuid, x.item)" type="button" class="btn btn-success btn-xs" style="width: 100px" >Confirm</button></td>
                 </tr>
                 </tbody>
             </table>

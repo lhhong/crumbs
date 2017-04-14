@@ -62,12 +62,6 @@ angular.module('sbAdminApp')
         return false;
     };
 
-    $scope.txView = {};
-
-    $scope.viewTx = function(tx) {
-        $scope.txView = tx;
-    };
-
     $interval(function() {
         reloadData();
     }, 3000)
@@ -93,13 +87,16 @@ angular.module('sbAdminApp')
     $scope.closeCompleteAlert = function(index) {
         $scope.completeAlert = false;
     };
-
-    $scope.agree = function(uuid) {
+    $scope.txName = "null";
+    console.log($scope.txName);
+    $scope.agree = function(uuid, item) {
         txService.agree(uuid, function(response) {
             console.log("Agree sent");
             $scope.reloaded = false;
             $scope.completeAlert = true;
         })
+        $scope.txName = item;
+        console.log(item);
         reloadData();
     };
 
