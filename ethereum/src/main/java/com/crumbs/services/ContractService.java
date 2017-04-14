@@ -66,7 +66,7 @@ public class ContractService {
 	 * @throws IOException file error
 	 */
 	private String getBin() throws IOException {
-		InputStream is = getClass().getResourceAsStream("crumbs_tx");
+		InputStream is = getClass().getClassLoader().getResourceAsStream("crumbs_tx");
 		return IOUtils.toString(is);
 	}
 
@@ -76,7 +76,7 @@ public class ContractService {
 	 * @throws IOException file error
 	 */
 	private String getAbi() throws IOException {
-		InputStream is = getClass().getResourceAsStream("crumbs_tx-abi");
+		InputStream is = getClass().getClassLoader().getResourceAsStream("crumbs_tx-abi");
 		return IOUtils.toString(is);
 		/*ClassLoader loader = getClass().getClassLoader();
 		StringBuilder abi = new StringBuilder("");
