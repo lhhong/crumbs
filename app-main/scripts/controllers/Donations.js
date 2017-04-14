@@ -13,7 +13,8 @@ angular.module('sbAdminApp')
     var reloadData = function() {
         txService.getEther(function(balance) {
             $scope.balance = balance;
-        })
+        });
+        $scope.tempDonationsCompleted = [];
         txService.getTransactions(function(txs) {
             $scope.txs = txs;
             for (var i = 0; i<txs.pendingOffers.length; i++) {
@@ -25,70 +26,40 @@ angular.module('sbAdminApp')
                 txs.pendingAccepts[i].pending = true;
             }
             $scope.accepts = txs.pendingAccepts.concat(txs.successfulAccepts);
-
+            $scope.agrees = txs.offersAccepted;
+/*
             for (var i = 0; i<txs.pendingAgrees.length; i++) {
                 txs.pendingAgrees[i].agreeing = true;
                 txs.pendingAgrees[i].pending = true;
             }
+            */
             for (var i = 0; i<txs.offersAccepted.length; i++) {
                 txs.offersAccepted[i].agreeing = true;
             }
-            $scope.agrees = txs.pendingAgrees.concat(txs.offersAccepted);
+            // For completed donations
+            for (var i = 0; i<txs.pendingAgrees.length; i++) {
+                txs.pendingAgrees[i].agreeing = true;
+                txs.pendingAgrees[i].pending = true;
+                if (txs.pendingAgrees[i].sell) {
+                    $scope.tempDonationsCompleted.push(txs.pendingAgrees[i]);
+                }
+            }
+            //$scope.agrees = txs.pendingAgrees.concat(txs.offersAccepted);
             $scope.offers = $scope.offers.concat($scope.agrees);
 
             // Get donations
             $scope.donations = $scope.offers.filter($scope.getDonations);
+
             $scope.reloaded = true;
 
-        }, function() {
-            //add mock data here when server not running
-            $scope.offers = [{
-                sell: true,
-                item: "Orange",
-                quantity: 100,
-                price: 2,
-                accepter: {
-                    name: "ShengSiong"
-                },
-                agreeing: true,
-                transportCost: 123
-            },{
-                sell: true,
-                item: "Mango",
-                quantity: 120,
-                price: 2,
-            },{
-                sell: true,
-                item: "Banana",
-                quantity: 200,
-                price: 2,
-            },{
-                sell: false,
-                item: "Mango",
-                quantity: 110,
-                price: 3,
-            },{
-                sell: false,
-                item: "Apple",
-                quantity: 100,
-                price: 2,
-                accepter: {
-                    name: "ShengSiong"
-                },
-                agreeing: true,
-                transportCost: 123
-            }]; //Offers you made
+        });
 
-            $scope.accepts = [{
-                sell: true,
-                item: "Mango",
-                quantity: 120,
-                price: 2,
-            }
-            ]; //Offers that you accepted and waiting for other party to agree
-            $scope.agrees = []; //Offers accepted waiting for you to agree, or agreed but not included in block chain
+        txService.getSold(function(txs) {
+            $scope.donationsCompleted = $scope.tempDonationsCompleted.concat(txs);
+            $scope.donationsCompleted = $scope.donationsCompleted.filter($scope.getDonations);
+        });
 
-        })
+
         $scope.reloaded = true;
     };
 
@@ -123,6 +94,15 @@ angular.module('sbAdminApp')
 
     $scope.closeTxAlert = function(index) {
         $scope.txAlert = false;
+    };
+
+    $scope.agree = function(uuid) {
+        txService.agree(uuid, function(response) {
+            console.log("Agree sent");
+            $scope.reloaded = false;
+        }, function() {
+            $scope.alert = true;
+        })
     };
 
   }]);

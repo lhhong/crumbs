@@ -15,23 +15,23 @@ angular.module('sbAdminApp')
         txService.getEther(function(balance) {
             $scope.balance = balance;
         });
-        $scope.bought = [];
-        $scope.sold = [];
+        $scope.tempBought = [];
+        $scope.tempSold = [];
 
         txService.getTransactions(function(txs) {
             for (var i = 0; i<txs.pendingAgrees.length; i++) {
                 txs.pendingAgrees[i].agreeing = true;
                 txs.pendingAgrees[i].pending = true;
                 if (txs.pendingAgrees[i].sell) {
-                    $scope.sold.push(txs.pendingAgrees[i]);
+                    $scope.tempSold.push(txs.pendingAgrees[i]);
                 }
                 else {
-                    $scope.bought.push(txs.pendingAgrees[i]);
+                    $scope.tempBought.push(txs.pendingAgrees[i]);
                 }
             }
         });
         txService.getBought(function(txs) {
-            $scope.bought = $scope.bought.concat(txs);
+            $scope.bought = $scope.tempBought.concat(txs);
             $scope.bought = $scope.bought.filter($scope.filterOutDonations);
         }, function() {
             $scope.bought = [
@@ -53,7 +53,7 @@ angular.module('sbAdminApp')
             ];
         })
         txService.getSold(function(txs) {
-            $scope.sold = $scope.sold.concat(txs);
+            $scope.sold = $scope.tempSold.concat(txs);
             $scope.sold = $scope.sold.filter($scope.filterOutDonations);
         }, function() {
             $scope.sold = [
