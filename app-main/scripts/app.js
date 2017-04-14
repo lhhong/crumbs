@@ -246,6 +246,7 @@ angular
 	.state('dashboard.Profile',{
         url:'/Profile',
         templateUrl:'views/user_profile/Profile.html',
+		controller:'ProfileCtrl',
         resolve: {
             loadMyFile:function($ocLazyLoad) {
                 return $ocLazyLoad.load({
