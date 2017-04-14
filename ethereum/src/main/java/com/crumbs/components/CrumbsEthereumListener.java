@@ -2,6 +2,7 @@ package com.crumbs.components;
 
 import com.crumbs.entities.CrumbsContract;
 import com.crumbs.repositories.CrumbsContractRepo;
+import org.apache.commons.io.IOUtils;
 import org.ethereum.core.*;
 import org.ethereum.facade.Ethereum;
 import org.ethereum.listener.EthereumListenerAdapter;
@@ -11,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Scanner;
 
@@ -52,23 +55,17 @@ public class CrumbsEthereumListener extends EthereumListenerAdapter {
 					crumbsContractRepo = bean.getCrumbsContractRepo();
 				}
 				CrumbsContract crumbsContract = new CrumbsContract();
-				ClassLoader loader = getClass().getClassLoader();
-				StringBuilder abi = new StringBuilder("");
-				File file = new File(loader.getResource("crumbs_tx-abi").getFile());
-				Scanner scanner;
+				InputStream is = getClass().getClassLoader().getResourceAsStream("crumbs_tx-abi");
+				String abi = null;
 				try {
-					scanner = new Scanner(file);
-				} catch (FileNotFoundException e) {
+					abi = IOUtils.toString(is);
+				} catch (IOException e) {
 					e.printStackTrace();
 					return;
 				}
-				while (scanner.hasNextLine()) {
-					abi.append(scanner.nextLine());
-				}
-				scanner.close();
 
 				crumbsContract.setContractName("crumbs_tx");
-				crumbsContract.setAbi(abi.toString());
+				crumbsContract.setAbi(abi);
 				crumbsContract.setTxHash(tx.getHash());
 				crumbsContract.setContractAddr(tx.getContractAddress());
 				crumbsContract.setIncluded(true);
