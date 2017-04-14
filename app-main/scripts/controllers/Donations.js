@@ -59,7 +59,6 @@ angular.module('sbAdminApp')
             $scope.donationsCompleted = $scope.donationsCompleted.filter($scope.getDonations);
         });
 
-
         $scope.reloaded = true;
     };
 
@@ -103,6 +102,7 @@ angular.module('sbAdminApp')
         }, function() {
             $scope.alert = true;
         })
+        reloadData();
     };
 
   }]);

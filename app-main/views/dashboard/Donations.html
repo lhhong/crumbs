@@ -43,8 +43,11 @@
                     <td>{{ x.item }}</td>
                     <td>{{ x.quantity }}</td>
                     <td>{{ x.expiry | date }}</td>
-                    <td>{{ x.accepter.name }}</td>
-                    <td>{{ x.txDate | date }}</td>
+                    <td ng-if="x.agreeing">{{ x.accepter.name }}</td>
+                    <td ng-if="!x.agreeing"> - </td>
+                    <td ng-if="x.agreeing">{{ x.txDate | date }}</td>
+                    <td ng-if="!x.agreeing"> - </td>
+
                     <td ng-if="x.pending" align="center" style="padding:0"><img src="t3.gif" alt="Loading" style="max-height: 36px; max-width: 36px"/></td>
                     <td ng-if="!x.pending && !x.agreeing" align="center"><button type="button" class="btn btn-default disabled btn-xs" style="width: 100px">No matches yet</button></td>
                     <td ng-if="!x.pending && x.agreeing" align="center"><button ng-click="agree(x.uuid)" type="button" class="btn btn-success btn-xs" style="width: 100px" >Confirm</button></td>
