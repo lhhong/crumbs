@@ -17,63 +17,26 @@ angular.module('sbAdminApp')
         });
         $scope.tempBought = [];
         $scope.tempSold = [];
-
         txService.getTransactions(function(txs) {
             for (var i = 0; i<txs.pendingAgrees.length; i++) {
                 txs.pendingAgrees[i].agreeing = true;
                 txs.pendingAgrees[i].pending = true;
-                if (txs.pendingAgrees[i].sell) {
+                if (txs.pendingAgrees[i].sell && txs.pendingAgrees[i].price != 0) {
                     $scope.tempSold.push(txs.pendingAgrees[i]);
                 }
-                else {
+                else if (!txs.pendingAgrees[i].sell && txs.pendingAgrees[i].price != 0) {
                     $scope.tempBought.push(txs.pendingAgrees[i]);
                 }
             }
         });
         txService.getBought(function(txs) {
-            $scope.bought = $scope.tempBought.concat(txs);
-            $scope.bought = $scope.bought.filter($scope.filterOutDonations);
-        }, function() {
-            $scope.bought = [
-                {
-                    accepter:{name:'NTUC'},
-                    item: 'Apples',
-                    quantity: 300,
-                    price: 2,
-                    txDate: 1492003145123,
-                    expiry: 1492503145123
-                },{
-                    accepter:{name:'Giant'},
-                    item: 'Oranges',
-                    quantity: 300,
-                    price: 2,
-                    txDate: 1491903145123,
-                    expiry: 1492503145123
-                }
-            ];
-        })
+            $scope.tempBought = $scope.tempBought.concat(txs);
+            $scope.bought = $scope.tempBought;
+        });
         txService.getSold(function(txs) {
-            $scope.sold = $scope.tempSold.concat(txs);
-            $scope.sold = $scope.sold.filter($scope.filterOutDonations);
-        }, function() {
-            $scope.sold = [
-                {
-                    accepter:{name:'NTUC'},
-                    item: 'Apples',
-                    quantity: 300,
-                    price: 2,
-                    txDate: 1491503145123,
-                    expiry: 1492303145123
-                },{
-                    accepter:{name:'Cold Storage'},
-                    item: 'Oranges',
-                    quantity: 300,
-                    price: 2,
-                    txDate: 1491503145123,
-                    expiry: 1492303145123
-                }
-            ];
-        })
+            $scope.tempSold = $scope.tempSold.concat(txs);
+            $scope.sold = $scope.tempSold;
+        });
     }
 
     $scope.filterOutDonations = function(item){
@@ -85,7 +48,8 @@ angular.module('sbAdminApp')
 
     $interval(function() {
         reloadData();
-    }, 5000)
+        console.log($scope.sold);
+    }, 3000)
     reloadData();
 
   }]);

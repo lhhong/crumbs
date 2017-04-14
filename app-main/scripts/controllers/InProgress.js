@@ -43,7 +43,6 @@ angular.module('sbAdminApp')
             $scope.agrees = $scope.agrees.filter($scope.filterOutDonations);
             $scope.offers = $scope.offers.filter($scope.filterOutDonations);
             $scope.reloaded = true;
-            console.log($scope.offers);
 
         }, function() {
             //add mock data here when server not running

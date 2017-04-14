@@ -11,7 +11,7 @@
         <stats ng-if="valid" number="{{ excess }}" comments="New Excess" colour="red" type="bar-chart-o" goto="dashboard.MyPredictions"></stats>
         <stats ng-if="valid" number="{{ shortage }}" comments="New Shortage" colour="yellow" type="bar-chart-o" goto="dashboard.MyPredictions"></stats>
         <stats ng-if="!valid" number="-" comments="New Excess" colour="red" type="bar-chart-o" goto="dashboard.MyPredictions"></stats>
-        <stats ng-if="!valid" number="-" comments="New Shortage" colour="green" type="bar-chart-o" goto="dashboard.MyPredictions"></stats>
+        <stats ng-if="!valid" number="-" comments="New Shortage" colour="yellow" type="bar-chart-o" goto="dashboard.MyPredictions"></stats>
         <stats number="{{ numOfSalesToApprove }}" comments="Sales to Approve" colour="green" type="shopping-cart" goto="dashboard.InProgressSelling"></stats>
         <stats number="{{ numOfPurchasesToApprove }}" comments="Purchases to Approve" colour="primary" type="shopping-cart" goto="dashboard.InProgressBuying"></stats>
     </div>

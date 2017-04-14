@@ -40,16 +40,14 @@ angular.module('sbAdminApp')
             for (var i = 0; i<txs.pendingAgrees.length; i++) {
                 txs.pendingAgrees[i].agreeing = true;
                 txs.pendingAgrees[i].pending = true;
-                if (txs.pendingAgrees[i].sell) {
+                if (txs.pendingAgrees[i].sell && txs.pendingAgrees[i].price == 0) {
                     $scope.tempDonationsCompleted.push(txs.pendingAgrees[i]);
                 }
             }
             //$scope.agrees = txs.pendingAgrees.concat(txs.offersAccepted);
             $scope.offers = $scope.offers.concat($scope.agrees);
-
             // Get donations
             $scope.donations = $scope.offers.filter($scope.getDonations);
-
             $scope.reloaded = true;
 
         });
