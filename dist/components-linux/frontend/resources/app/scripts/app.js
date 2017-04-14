@@ -245,7 +245,16 @@ angular
     })
 	.state('dashboard.Profile',{
         url:'/Profile',
-        templateUrl:'views/user_profile/Profile.html'
+        templateUrl:'views/user_profile/Profile.html',
+		controller:'ProfileCtrl',
+        resolve: {
+            loadMyFile:function($ocLazyLoad) {
+                return $ocLazyLoad.load({
+                    name:'sbAdminApp',
+                    files:['scripts/controllers/Profile.js']
+                })
+            }
+        }
     })
 	.state('dashboard.chart',{
 		templateUrl:'views/chart.html',
