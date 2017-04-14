@@ -406,25 +406,9 @@ public class TransactionService {
 		return uuid;
 	}
 
-	/**
-	 * @deprecated due to getRegInfo() deprecated
-	 */
 	public Member checkAndGetRegInfo() {
-		Member retrieved = getRegInfo();
-		if (retrieved == null) {
-			return null;
-		}
 		List<Member> stored = memberRepo.findByOwn(true);
-		if (stored.size() != 1) {
-			logger.info("No stored own account");
-			stored.forEach(s -> memberRepo.delete(s));
-		}
-		else if (!stored.get(0).equals(retrieved)) {
-			logger.info("Invalid account stored, refreshing");
-			memberRepo.delete(stored.get(0));
-			memberRepo.save(retrieved);
-		}
-		return retrieved;
+		return stored.get(0);
 	}
 
 	/**

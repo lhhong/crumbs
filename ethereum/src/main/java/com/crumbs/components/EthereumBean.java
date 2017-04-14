@@ -131,7 +131,7 @@ public class EthereumBean{
 	}
 
 	public void sendEtherFromRich (byte[] receiveAddr) throws TxCancelledException {
-		sendTransaction(createTx(RICH_KEY, receiveAddr, 90000L , null));
+		sendTransaction(createTx(RICH_KEY, receiveAddr, 49200L , null));
 	}
 
 	//whole chunk of createTx to create a Transaction object based on different raw input type
