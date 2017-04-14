@@ -4,11 +4,11 @@ block_cipher = None
 
 
 a = Analysis(['nn_crumbs.py'],
-             pathex=['/home/low/crumbs/testMain'],
+             pathex=['/Users/signapoop/Desktop/Crumbs/crumbs/builing_dir'],
              binaries=[],
              datas=[],
              hiddenimports=[],
-             hookspath=["hooks"],
+             hookspath=['hooks'],
              runtime_hooks=[],
              excludes=[],
              win_no_prefer_redirects=False,

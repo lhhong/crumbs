@@ -69,7 +69,9 @@ if hostSystem == 'Linux':
     addresses = ips.split()
 elif hostSystem == 'Darwin':
     for NUMBER in [0,5]:
-        addresses.push(commands.getoutput('ipconfig getifaddr en' + str(NUMBER)))
+        addr = commands.getoutput('ipconfig getifaddr en' + str(NUMBER))
+        if len(addr) > 1:
+            addresses.append(addr)
 elif hostSystem == 'Windows':
     ips = commands.getoutput("ipconfig | where {$_ -match 'IPv4.+\s(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' } | out-null; $Matches[1]")
     addresses = ips.split()
@@ -106,7 +108,7 @@ backend = p.Popen(['java','-jar','ethereum-1.0.jar'], stdout=backendLog)
 if hostSystem == 'Linux':
     predictor = p.Popen(['components-linux/predictor/nn_crumbs'])
 if hostSystem == 'Darwin':
-    predictor = p.Popen(['components-linux/predictor/nn_crumbs.app/Contents/MacOS/nn_crumbs'])
+    predictor = p.Popen(['components-darwin/predictor/nn_crumbs.app/Contents/MacOS/nn_crumbs'])
 
 
 print('backend pid: ' + str(backend.pid))
@@ -125,7 +127,7 @@ root.destroy()
 if hostSystem == 'Linux':
     frontend = p.Popen(['components-linux/frontend/crumbs'])
 elif hostSystem == 'Darwin':
-    frontend = p.Popen(['components-linux/frontend/crumbs.app/Contents/MacOS/crumbs'])
+    frontend = p.Popen(['components-darwin/frontend/crumbs.app/Contents/MacOS/crumbs'])
 
 print('frontend pid: ' + str(frontend.pid))
 
