@@ -1,7 +1,7 @@
 from PIL import Image, ImageTk
 import easygui
 import commands
-import subprocess as p
+import subprocess as p 
 import platform 
 import os
 import re
@@ -10,6 +10,14 @@ import atexit
 from time import sleep
 import signal
 import Tkinter as tk
+
+dir_path = os.path.dirname(os.path.realpath(__file__))
+print(dir_path)
+cwd = os.getcwd()
+print(cwd)
+os.chdir(dir_path)
+cwd = os.getcwd()
+print(cwd)
 
 IMAGE_PATH = "LoadingPageDesign.ppm"
 
@@ -63,6 +71,7 @@ hostSystem = platform.system()
 
 #retrieve private ips
 ip = "127.0.0.1"
+peer = "127.0.0.1"
 addresses = []
 if hostSystem == 'Linux':
     ips = p.check_output(['hostname', '-I'])
@@ -80,9 +89,9 @@ elif hostSystem == 'Windows':
 for address in addresses:
     print(address)
 if len(addresses) == 0:
-    ip = easygui.enterbox(msg='Unable to detect your IP address, please enter the desired IP address to use.\nIf remained at 127.0.0.1, the application will not be able to communicate across computers', title='No IP detected', default='127.0.0.1', strip=True)
-    if not re.match(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', peer):
-        easygui.msgbox('Invalid IP address entered')
+    ip = easygui.enterbox(msg='Unable to detect your IP address,\nplease enter the desired IP address to use.\n\nIf remained at 127.0.0.1,\nthe application will not communicate across computers.', title='No IP detected', default='127.0.0.1', strip=True)
+    if not re.match(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', ip):
+        easygui.msgbox('Invalid IP address entered. IPv4 addresses are in the format xxx.xxx.xxx.xxx')
         sys.exit(0)
 elif len(addresses) != 1:
     ip = easygui.choicebox(msg='Multiple IP addresses detected, please select IP address to be used', title='Select your IP', choices=addresses)
@@ -91,12 +100,14 @@ else:
 
 #enter ip of peers
 if ip != '127.0.0.1':
-    peer = easygui.enterbox(msg='Your ip address is : ' + ip + '\nplease enter a peer ip address', title='IP Resolution', strip=True)
-    if peer:
-        print(peer)
-if not re.match(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', peer):
-    easygui.msgbox('Invalid IP address entered')
-    sys.exit(0)
+    peerIp = easygui.enterbox(msg='Your IP address is : ' + ip + '\n\nEnter IP used by the other computer', title='IP Resolution', strip=True)
+    if peerIp:
+        print(peerIp)
+        if not re.match(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', peer):
+            easygui.msgbox('Invalid IP address entered. IPv4 addresses are in the format xxx.xxx.xxx.xxx')
+            sys.exit(0)
+        else:
+            peer = peerIp
 inplace_change(configPath, r'ip_addr = \d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', 'ip_addr = ' + ip)
 inplace_change(configPath, r'peer_ip = \d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}', 'peer_ip = ' + peer)
 
