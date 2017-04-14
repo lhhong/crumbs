@@ -47,32 +47,8 @@ angular.module('sbAdminApp')
     	]
     };
 
-    $scope.pie = {
-    	labels : ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
-    	data : [300, 500, 100]
-    };
-
-    $scope.polar = {
-    	labels : ["Download Sales", "In-Store Sales", "Mail-Order Sales", "Tele Sales", "Corporate Sales"],
-    	data : [300, 500, 100, 40, 120]
-    };
-
-    $scope.dynamic = {
-    	labels : ["Download Sales", "In-Store Sales", "Mail-Order Sales", "Tele Sales", "Corporate Sales"],
-    	data : [300, 500, 100, 40, 120],
-    	type : 'PolarArea',
-
-    	toggle : function ()
-    	{
-    		this.type = this.type === 'PolarArea' ?
-    	    'Pie' : 'PolarArea';
-		}
-    };
     $scope.donutcolours = ["#2DBAD5", "#66CD00", "#DB2929"];
     $scope.radarcolours = ["#66CD00", "#EE0000"];
     $scope.lineMonthColours = ["#2DBAD5", "#66CD00", "#EE0000"];
 
-    /*["rgba(224, 108, 112, 1)",
-            "rgba(224, 108, 112, 1)",
-            "rgba(224, 108, 112, 1)"]*/
 }]);

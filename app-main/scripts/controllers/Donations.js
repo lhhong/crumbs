@@ -27,12 +27,7 @@ angular.module('sbAdminApp')
             }
             $scope.accepts = txs.pendingAccepts.concat(txs.successfulAccepts);
             $scope.agrees = txs.offersAccepted;
-/*
-            for (var i = 0; i<txs.pendingAgrees.length; i++) {
-                txs.pendingAgrees[i].agreeing = true;
-                txs.pendingAgrees[i].pending = true;
-            }
-            */
+
             for (var i = 0; i<txs.offersAccepted.length; i++) {
                 txs.offersAccepted[i].agreeing = true;
             }
@@ -44,7 +39,7 @@ angular.module('sbAdminApp')
                     $scope.tempDonationsCompleted.push(txs.pendingAgrees[i]);
                 }
             }
-            //$scope.agrees = txs.pendingAgrees.concat(txs.offersAccepted);
+
             $scope.offers = $scope.offers.concat($scope.agrees);
             // Get donations
             $scope.donations = $scope.offers.filter($scope.getDonations);
@@ -91,6 +86,12 @@ angular.module('sbAdminApp')
 
     $scope.closeTxAlert = function(index) {
         $scope.txAlert = false;
+    };
+
+    $scope.completeAlert = false;
+
+    $scope.closeTxAlert = function(index) {
+        $scope.completeAlert = false;
     };
 
     $scope.agree = function(uuid) {

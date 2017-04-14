@@ -26,16 +26,11 @@ angular.module('sbAdminApp')
             }
             $scope.accepts = txs.pendingAccepts.concat(txs.successfulAccepts);
             $scope.agrees = txs.offersAccepted;
-/*
-            for (var i = 0; i<txs.pendingAgrees.length; i++) {
-                txs.pendingAgrees[i].agreeing = true;
-                txs.pendingAgrees[i].pending = true;
-            }
-            */
+
             for (var i = 0; i<txs.offersAccepted.length; i++) {
                 txs.offersAccepted[i].agreeing = true;
             }
-            //$scope.agrees = txs.pendingAgrees.concat(txs.offersAccepted);
+
             $scope.offers = $scope.offers.concat($scope.agrees);
 
             // Filter out donations
@@ -43,54 +38,6 @@ angular.module('sbAdminApp')
             $scope.agrees = $scope.agrees.filter($scope.filterOutDonations);
             $scope.offers = $scope.offers.filter($scope.filterOutDonations);
             $scope.reloaded = true;
-
-        }, function() {
-            //add mock data here when server not running
-            $scope.offers = [{
-                sell: true,
-                item: "Orange",
-                quantity: 100,
-                price: 2,
-                accepter: {
-                    name: "ShengSiong"
-                },
-                agreeing: true,
-                transportCost: 123
-            },{
-                sell: true,
-                item: "Mango",
-                quantity: 120,
-                price: 2,
-            },{
-                sell: true,
-                item: "Banana",
-                quantity: 200,
-                price: 2,
-            },{
-                sell: false,
-                item: "Mango",
-                quantity: 110,
-                price: 3,
-            },{
-                sell: false,
-                item: "Apple",
-                quantity: 100,
-                price: 2,
-                accepter: {
-                    name: "ShengSiong"
-                },
-                agreeing: true,
-                transportCost: 123
-            }]; //Offers you made
-
-            $scope.accepts = [{
-                sell: true,
-                item: "Mango",
-                quantity: 120,
-                price: 2,
-            }
-            ]; //Offers that you accepted and waiting for other party to agree
-            $scope.agrees = []; //Offers accepted waiting for you to agree, or agreed but not included in block chain
 
         })
         $scope.reloaded = true;
@@ -140,7 +87,7 @@ angular.module('sbAdminApp')
             console.log("Agree sent");
             $scope.reloaded = false;
             $('.modal-backdrop').remove();
-            $state.go('dashboard.Completed');
+            $state.go('dashboard.Completed', {txSent: true, txDetails: $scope.txView.item });
         }, function() {
             $scope.alert = true;
         })

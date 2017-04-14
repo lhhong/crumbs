@@ -7,7 +7,7 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('CompletedCtrl', ['$scope', '$interval', 'txService' ,function($scope, $interval, txService) {
+  .controller('CompletedCtrl', ['$scope', '$interval', 'txService', '$stateParams' ,function($scope, $interval, txService, $stateParams) {
     console.log("loaded");
     $scope.balance = 0;
 
@@ -31,11 +31,11 @@ angular.module('sbAdminApp')
         });
         txService.getBought(function(txs) {
             $scope.tempBought = $scope.tempBought.concat(txs);
-            $scope.bought = $scope.tempBought;
+            $scope.bought = $scope.tempBought.filter($scope.filterOutDonations);
         });
         txService.getSold(function(txs) {
             $scope.tempSold = $scope.tempSold.concat(txs);
-            $scope.sold = $scope.tempSold;
+            $scope.sold = $scope.tempSold.filter($scope.filterOutDonations);
         });
     }
 
@@ -51,5 +51,12 @@ angular.module('sbAdminApp')
         console.log($scope.sold);
     }, 3000)
     reloadData();
+
+    $scope.txAlert = $stateParams.txSent;
+    $scope.txDetails = $stateParams.txDetails;
+
+    $scope.closeTxAlert = function(index) {
+        $scope.txAlert = false;
+    };
 
   }]);

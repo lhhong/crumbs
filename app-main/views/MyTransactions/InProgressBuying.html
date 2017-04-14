@@ -110,7 +110,7 @@
                           <td>{{ x.price | currency }}</td>
                           <td>{{ x.txDate | date }}</td>
                           <td ng-if="x.pending" align="center" style="padding:0"><img src="t3.gif" alt="Loading" style="max-height: 36px; max-width: 36px"/></td>
-                          <td ng-if="!x.pending" align="center"><button type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#ViewDetailsModal2" ng-click="viewTx(x)">View Details</button></td>
+                          <td ng-if="!x.pending" align="center"><button type="button" class="btn btn-success btn-xs" style="width: 100px" data-toggle="modal" data-target="#ViewDetailsModal2" ng-click="viewTx(x)">View Details</button></td>
                       </tr>
                   </tbody>
               </table>

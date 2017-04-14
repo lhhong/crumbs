@@ -93,9 +93,6 @@ angular
 					name:'sbAdminApp',
 					files:[
 						'scripts/controllers/main.js',
-						'scripts/directives/timeline/timeline.js',
-						'scripts/directives/notifications/notifications.js',
-						'scripts/directives/chat/chat.js',
 						'scripts/directives/dashboard/stats/stats.js',
 						'scripts/services/transaction-service.js',
 					    'scripts/services/prediction-service.js'
@@ -121,9 +118,6 @@ angular
 					name:'sbAdminApp',
 					files:[
 						'scripts/controllers/main.js',
-						'scripts/directives/timeline/timeline.js',
-						'scripts/directives/notifications/notifications.js',
-						'scripts/directives/chat/chat.js',
 						'scripts/directives/dashboard/stats/stats.js',
 						'scripts/services/transaction-service.js',
 						'scripts/controllers/chartContoller.js',
@@ -208,6 +202,7 @@ angular
 		url:'/Completed',
 		templateUrl:'views/MyTransactions/Completed.html',
 		controller: 'CompletedCtrl',
+		params: {txSent: false, txDetails: null },
 		resolve: {
 			loadMyFile:function($ocLazyLoad) {
 				return $ocLazyLoad.load({
@@ -252,10 +247,6 @@ angular
         url:'/Profile',
         templateUrl:'views/user_profile/Profile.html'
     })
-	.state('dashboard.form',{
-		templateUrl:'views/form.html',
-		url:'/form'
-	})
 	.state('dashboard.chart',{
 		templateUrl:'views/chart.html',
 		url:'/chart',
@@ -275,33 +266,5 @@ angular
 				})
 			}
 		}
-	})
-	.state('dashboard.table',{
-		templateUrl:'views/table.html',
-		url:'/table'
-	})
-	.state('dashboard.panels-wells',{
-		templateUrl:'views/ui-elements/panels-wells.html',
-		url:'/panels-wells'
-	})
-	.state('dashboard.buttons',{
-		templateUrl:'views/ui-elements/buttons.html',
-		url:'/buttons'
-	})
-	.state('dashboard.notifications',{
-		templateUrl:'views/ui-elements/notifications.html',
-		url:'/notifications'
-	})
-	.state('dashboard.typography',{
-		templateUrl:'views/ui-elements/typography.html',
-		url:'/typography'
-	})
-	.state('dashboard.icons',{
-		templateUrl:'views/ui-elements/icons.html',
-		url:'/icons'
-	})
-	.state('dashboard.grid',{
-		templateUrl:'views/ui-elements/grid.html',
-		url:'/grid'
 	})
 }]);

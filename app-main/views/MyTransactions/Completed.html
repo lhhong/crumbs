@@ -5,6 +5,8 @@
         </div>
         <!-- /.col-lg-12 -->
     </div>
+    <div uib-alert ng-if="txAlert" class="alert-success" close="closeTxAlert()" dismiss-on-timeout="10000">Transaction Completed for {{txDetails}}.</div>
+
     <div class="alert alert-info">
         Current Balance: <em>{{ balance| currency }}</em>
     </div>
