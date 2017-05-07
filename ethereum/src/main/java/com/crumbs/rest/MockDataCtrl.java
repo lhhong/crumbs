@@ -12,8 +12,6 @@ import com.crumbs.repositories.AccountRepo;
 import com.crumbs.services.ContractService;
 import com.crumbs.services.InventoryService;
 import com.crumbs.services.TransactionService;
-import com.crumbs.services.WebSocketSrvc;
-import com.crumbs.util.CrumbsUtil;
 import com.crumbs.util.DateUtil;
 import com.crumbs.util.TxCancelledException;
 import org.ethereum.crypto.ECKey;
@@ -47,9 +45,6 @@ public class MockDataCtrl {
 
 	@Autowired
 	private ContractService contractService;
-
-	@Autowired
-	private WebSocketSrvc webSocketSrvc;
 
 	@Autowired
 	private InventoryService inventoryService;
@@ -168,36 +163,6 @@ public class MockDataCtrl {
 			r.setProduct(p);
 		});
 		inventoryService.storeProduct(p);
-	}
-
-	@RequestMapping(value = "/sample-contract", method = GET)
-	@ResponseBody
-	public void sendSampleContract() throws IOException {
-		contractService.testContract();
-	}
-
-	@RequestMapping(value = "/modify-sample-contract", method = GET)
-	@ResponseBody
-	public void modifySampleContract() throws IOException, TxCancelledException {
-		contractService.modifyMortalGreeting();
-	}
-
-	@RequestMapping(value = "/test-sample-contract", method = GET)
-	@ResponseBody
-	public void testSampleContract() throws IOException {
-		contractService.callMortalGreet();
-	}
-
-	@RequestMapping(value = "/bestBlock", method = GET, produces = APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public String getBestBlock() throws IOException {
-		return ethereumBean.getBestBlock();
-	}
-
-	@RequestMapping(value = "/adminInfo", method = GET, produces = APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public String getAdminInfo() throws IOException {
-		return ethereumBean.getAdminInfo();
 	}
 
 	@RequestMapping(value = "/sendMockTx", method = POST, produces = APPLICATION_JSON_VALUE)
