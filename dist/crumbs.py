@@ -100,7 +100,7 @@ else:
 
 #enter ip of peers
 if ip != '127.0.0.1':
-    peerIp = easygui.enterbox(msg='Your IP address is : ' + ip + '\n\nEnter IP used by the other computer', title='IP Resolution', strip=True)
+    peerIp = easygui.enterbox(msg='Your IP address is : ' + ip + '\n\nEnter IP used by the other computer (optional)', title='IP Resolution', strip=True)
     if peerIp:
         print(peerIp)
         if not re.match(r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$', peer):
