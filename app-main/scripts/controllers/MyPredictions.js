@@ -288,8 +288,8 @@ angular.module('sbAdminApp')
         var predictions = $scope.demand;
         var paddingLeft = [null,null,null,null,null,null,null];
         var predictionChart = new Chart(ctx).Line({
-            labels: ["Apr 7", "", "Apr 9", "", "Apr 11", "", "Apr 13", "", "Apr 15", "", "Apr 17", "", "Apr 19",
-                        "", "Apr 21", "", "Apr 23", "", "Apr 25", "", "Apr 27"],
+            labels: ["May 4", "", "May 6", "", "May 8", "", "May 10", "", "May 12", "", "May 14", "", "May 16",
+                        "", "May 18", "", "May 20", "", "May 22", "", "May 24"],
             datasets: [
                 {
                 // plotting past demand
