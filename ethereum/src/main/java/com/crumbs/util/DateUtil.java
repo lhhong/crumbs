@@ -27,7 +27,7 @@ public class DateUtil {
 
 	public static LocalDate todayLocalDate() {
 		//mock todau's date as 15th April
-		return LocalDate.ofYearDay(2017,104);
+		return LocalDate.of(2017,5,11);
 	}
 
 	public static Date addDays(Date date, long days) {
